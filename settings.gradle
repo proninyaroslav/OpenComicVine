@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        // For Kotlin 1.8 support of Compose Compiler
+        maven {
+            url "https://androidx.dev/storage/compose-compiler/repository/"
+        }
+    }
+}
+rootProject.name = "OpenComicVine"
+include ':app'

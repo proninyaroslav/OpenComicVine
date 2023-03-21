@@ -1,0 +1,2529 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "f50d1c83a985d6aba876ed999833151b",
+    "entities": [
+      {
+        "tableName": "PagingWikiCharacterItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `info_id` INTEGER NOT NULL, `info_name` TEXT NOT NULL, `info_gender` TEXT NOT NULL, `info_dateAdded` INTEGER NOT NULL, `info_dateLastUpdated` INTEGER NOT NULL, `info_image_iconUrl` TEXT NOT NULL, `info_image_mediumUrl` TEXT NOT NULL, `info_image_screenUrl` TEXT NOT NULL, `info_image_screenLargeUrl` TEXT NOT NULL, `info_image_smallUrl` TEXT NOT NULL, `info_image_superUrl` TEXT NOT NULL, `info_image_thumbUrl` TEXT NOT NULL, `info_image_tinyUrl` TEXT NOT NULL, `info_image_originalUrl` TEXT NOT NULL, `info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.id",
+            "columnName": "info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.name",
+            "columnName": "info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.gender",
+            "columnName": "info_gender",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateAdded",
+            "columnName": "info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateLastUpdated",
+            "columnName": "info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.iconUrl",
+            "columnName": "info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.mediumUrl",
+            "columnName": "info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenUrl",
+            "columnName": "info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenLargeUrl",
+            "columnName": "info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.smallUrl",
+            "columnName": "info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.superUrl",
+            "columnName": "info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.thumbUrl",
+            "columnName": "info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.tinyUrl",
+            "columnName": "info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.originalUrl",
+            "columnName": "info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.imageTags",
+            "columnName": "info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "WikiCharacterItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingRecentCharacterItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `info_id` INTEGER NOT NULL, `info_name` TEXT NOT NULL, `info_gender` TEXT NOT NULL, `info_dateAdded` INTEGER NOT NULL, `info_dateLastUpdated` INTEGER NOT NULL, `info_image_iconUrl` TEXT NOT NULL, `info_image_mediumUrl` TEXT NOT NULL, `info_image_screenUrl` TEXT NOT NULL, `info_image_screenLargeUrl` TEXT NOT NULL, `info_image_smallUrl` TEXT NOT NULL, `info_image_superUrl` TEXT NOT NULL, `info_image_thumbUrl` TEXT NOT NULL, `info_image_tinyUrl` TEXT NOT NULL, `info_image_originalUrl` TEXT NOT NULL, `info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.id",
+            "columnName": "info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.name",
+            "columnName": "info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.gender",
+            "columnName": "info_gender",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateAdded",
+            "columnName": "info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateLastUpdated",
+            "columnName": "info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.iconUrl",
+            "columnName": "info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.mediumUrl",
+            "columnName": "info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenUrl",
+            "columnName": "info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenLargeUrl",
+            "columnName": "info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.smallUrl",
+            "columnName": "info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.superUrl",
+            "columnName": "info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.thumbUrl",
+            "columnName": "info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.tinyUrl",
+            "columnName": "info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.originalUrl",
+            "columnName": "info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.imageTags",
+            "columnName": "info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "RecentCharacterItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingWikiIssueItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `info_id` INTEGER NOT NULL, `info_name` TEXT, `info_issueNumber` TEXT NOT NULL, `info_coverDate` INTEGER, `info_storeDate` INTEGER, `info_dateAdded` INTEGER NOT NULL, `info_dateLastUpdated` INTEGER NOT NULL, `info_volume_id` INTEGER NOT NULL, `info_volume_name` TEXT NOT NULL, `info_image_iconUrl` TEXT NOT NULL, `info_image_mediumUrl` TEXT NOT NULL, `info_image_screenUrl` TEXT NOT NULL, `info_image_screenLargeUrl` TEXT NOT NULL, `info_image_smallUrl` TEXT NOT NULL, `info_image_superUrl` TEXT NOT NULL, `info_image_thumbUrl` TEXT NOT NULL, `info_image_tinyUrl` TEXT NOT NULL, `info_image_originalUrl` TEXT NOT NULL, `info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.id",
+            "columnName": "info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.name",
+            "columnName": "info_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.issueNumber",
+            "columnName": "info_issueNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.coverDate",
+            "columnName": "info_coverDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.storeDate",
+            "columnName": "info_storeDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.dateAdded",
+            "columnName": "info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateLastUpdated",
+            "columnName": "info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.volume.id",
+            "columnName": "info_volume_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.volume.name",
+            "columnName": "info_volume_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.iconUrl",
+            "columnName": "info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.mediumUrl",
+            "columnName": "info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenUrl",
+            "columnName": "info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenLargeUrl",
+            "columnName": "info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.smallUrl",
+            "columnName": "info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.superUrl",
+            "columnName": "info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.thumbUrl",
+            "columnName": "info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.tinyUrl",
+            "columnName": "info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.originalUrl",
+            "columnName": "info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.imageTags",
+            "columnName": "info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "WikiIssueItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingRecentIssueItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `info_id` INTEGER NOT NULL, `info_name` TEXT, `info_issueNumber` TEXT NOT NULL, `info_coverDate` INTEGER, `info_storeDate` INTEGER, `info_dateAdded` INTEGER NOT NULL, `info_dateLastUpdated` INTEGER NOT NULL, `info_volume_id` INTEGER NOT NULL, `info_volume_name` TEXT NOT NULL, `info_image_iconUrl` TEXT NOT NULL, `info_image_mediumUrl` TEXT NOT NULL, `info_image_screenUrl` TEXT NOT NULL, `info_image_screenLargeUrl` TEXT NOT NULL, `info_image_smallUrl` TEXT NOT NULL, `info_image_superUrl` TEXT NOT NULL, `info_image_thumbUrl` TEXT NOT NULL, `info_image_tinyUrl` TEXT NOT NULL, `info_image_originalUrl` TEXT NOT NULL, `info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.id",
+            "columnName": "info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.name",
+            "columnName": "info_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.issueNumber",
+            "columnName": "info_issueNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.coverDate",
+            "columnName": "info_coverDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.storeDate",
+            "columnName": "info_storeDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.dateAdded",
+            "columnName": "info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateLastUpdated",
+            "columnName": "info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.volume.id",
+            "columnName": "info_volume_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.volume.name",
+            "columnName": "info_volume_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.iconUrl",
+            "columnName": "info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.mediumUrl",
+            "columnName": "info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenUrl",
+            "columnName": "info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenLargeUrl",
+            "columnName": "info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.smallUrl",
+            "columnName": "info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.superUrl",
+            "columnName": "info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.thumbUrl",
+            "columnName": "info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.tinyUrl",
+            "columnName": "info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.originalUrl",
+            "columnName": "info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.imageTags",
+            "columnName": "info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "RecentIssueItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingWikiVolumeItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `info_id` INTEGER NOT NULL, `info_name` TEXT NOT NULL, `info_countOfIssues` INTEGER NOT NULL, `info_dateAdded` INTEGER NOT NULL, `info_dateLastUpdated` INTEGER NOT NULL, `info_startYear` TEXT, `info_first_issue_id` INTEGER, `info_first_issue_name` TEXT, `info_first_issue_issueNumber` TEXT, `info_last_issue_id` INTEGER, `info_last_issue_name` TEXT, `info_last_issue_issueNumber` TEXT, `info_image_iconUrl` TEXT NOT NULL, `info_image_mediumUrl` TEXT NOT NULL, `info_image_screenUrl` TEXT NOT NULL, `info_image_screenLargeUrl` TEXT NOT NULL, `info_image_smallUrl` TEXT NOT NULL, `info_image_superUrl` TEXT NOT NULL, `info_image_thumbUrl` TEXT NOT NULL, `info_image_tinyUrl` TEXT NOT NULL, `info_image_originalUrl` TEXT NOT NULL, `info_image_imageTags` TEXT, `info_publisher_id` INTEGER, `info_publisher_name` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.id",
+            "columnName": "info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.name",
+            "columnName": "info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info._countOfIssues",
+            "columnName": "info_countOfIssues",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateAdded",
+            "columnName": "info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateLastUpdated",
+            "columnName": "info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.startYear",
+            "columnName": "info_startYear",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.firstIssue.id",
+            "columnName": "info_first_issue_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.firstIssue.name",
+            "columnName": "info_first_issue_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.firstIssue.issueNumber",
+            "columnName": "info_first_issue_issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.lastIssue.id",
+            "columnName": "info_last_issue_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.lastIssue.name",
+            "columnName": "info_last_issue_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.lastIssue.issueNumber",
+            "columnName": "info_last_issue_issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.image.iconUrl",
+            "columnName": "info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.mediumUrl",
+            "columnName": "info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenUrl",
+            "columnName": "info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenLargeUrl",
+            "columnName": "info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.smallUrl",
+            "columnName": "info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.superUrl",
+            "columnName": "info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.thumbUrl",
+            "columnName": "info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.tinyUrl",
+            "columnName": "info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.originalUrl",
+            "columnName": "info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.imageTags",
+            "columnName": "info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.publisher.id",
+            "columnName": "info_publisher_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.publisher.name",
+            "columnName": "info_publisher_name",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "WikiVolumeItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingRecentVolumeItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `info_id` INTEGER NOT NULL, `info_name` TEXT NOT NULL, `info_countOfIssues` INTEGER NOT NULL, `info_dateAdded` INTEGER NOT NULL, `info_dateLastUpdated` INTEGER NOT NULL, `info_startYear` TEXT, `info_first_issue_id` INTEGER, `info_first_issue_name` TEXT, `info_first_issue_issueNumber` TEXT, `info_last_issue_id` INTEGER, `info_last_issue_name` TEXT, `info_last_issue_issueNumber` TEXT, `info_image_iconUrl` TEXT NOT NULL, `info_image_mediumUrl` TEXT NOT NULL, `info_image_screenUrl` TEXT NOT NULL, `info_image_screenLargeUrl` TEXT NOT NULL, `info_image_smallUrl` TEXT NOT NULL, `info_image_superUrl` TEXT NOT NULL, `info_image_thumbUrl` TEXT NOT NULL, `info_image_tinyUrl` TEXT NOT NULL, `info_image_originalUrl` TEXT NOT NULL, `info_image_imageTags` TEXT, `info_publisher_id` INTEGER, `info_publisher_name` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.id",
+            "columnName": "info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.name",
+            "columnName": "info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info._countOfIssues",
+            "columnName": "info_countOfIssues",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateAdded",
+            "columnName": "info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.dateLastUpdated",
+            "columnName": "info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.startYear",
+            "columnName": "info_startYear",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.firstIssue.id",
+            "columnName": "info_first_issue_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.firstIssue.name",
+            "columnName": "info_first_issue_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.firstIssue.issueNumber",
+            "columnName": "info_first_issue_issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.lastIssue.id",
+            "columnName": "info_last_issue_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.lastIssue.name",
+            "columnName": "info_last_issue_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.lastIssue.issueNumber",
+            "columnName": "info_last_issue_issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.image.iconUrl",
+            "columnName": "info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.mediumUrl",
+            "columnName": "info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenUrl",
+            "columnName": "info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.screenLargeUrl",
+            "columnName": "info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.smallUrl",
+            "columnName": "info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.superUrl",
+            "columnName": "info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.thumbUrl",
+            "columnName": "info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.tinyUrl",
+            "columnName": "info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.originalUrl",
+            "columnName": "info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.image.imageTags",
+            "columnName": "info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.publisher.id",
+            "columnName": "info_publisher_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "info.publisher.name",
+            "columnName": "info_publisher_name",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "RecentVolumeItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoriteInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `entityId` INTEGER NOT NULL, `entityType` TEXT NOT NULL, `dateAdded` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "entityId",
+            "columnName": "entityId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "entityType",
+            "columnName": "entityType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateAdded",
+            "columnName": "dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_FavoriteInfo_entityId_entityType",
+            "unique": true,
+            "columnNames": [
+              "entityId",
+              "entityType"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_FavoriteInfo_entityId_entityType` ON `${TABLE_NAME}` (`entityId`, `entityType`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesCharacterItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_gender` TEXT NOT NULL, `item_info_dateAdded` INTEGER NOT NULL, `item_info_dateLastUpdated` INTEGER NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.gender",
+            "columnName": "item_info_gender",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.dateAdded",
+            "columnName": "item_info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.dateLastUpdated",
+            "columnName": "item_info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesCharacterItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesIssueItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT, `item_info_issueNumber` TEXT NOT NULL, `item_info_coverDate` INTEGER, `item_info_storeDate` INTEGER, `item_info_dateAdded` INTEGER NOT NULL, `item_info_dateLastUpdated` INTEGER NOT NULL, `item_info_volume_id` INTEGER NOT NULL, `item_info_volume_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.issueNumber",
+            "columnName": "item_info_issueNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.coverDate",
+            "columnName": "item_info_coverDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.storeDate",
+            "columnName": "item_info_storeDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.dateAdded",
+            "columnName": "item_info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.dateLastUpdated",
+            "columnName": "item_info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.volume.id",
+            "columnName": "item_info_volume_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.volume.name",
+            "columnName": "item_info_volume_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesIssueItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesVolumeItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_countOfIssues` INTEGER NOT NULL, `item_info_dateAdded` INTEGER NOT NULL, `item_info_dateLastUpdated` INTEGER NOT NULL, `item_info_startYear` TEXT, `item_info_first_issue_id` INTEGER, `item_info_first_issue_name` TEXT, `item_info_first_issue_issueNumber` TEXT, `item_info_last_issue_id` INTEGER, `item_info_last_issue_name` TEXT, `item_info_last_issue_issueNumber` TEXT, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, `item_info_publisher_id` INTEGER, `item_info_publisher_name` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info._countOfIssues",
+            "columnName": "item_info_countOfIssues",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.dateAdded",
+            "columnName": "item_info_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.dateLastUpdated",
+            "columnName": "item_info_dateLastUpdated",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.startYear",
+            "columnName": "item_info_startYear",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.firstIssue.id",
+            "columnName": "item_info_first_issue_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.firstIssue.name",
+            "columnName": "item_info_first_issue_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.firstIssue.issueNumber",
+            "columnName": "item_info_first_issue_issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.lastIssue.id",
+            "columnName": "item_info_last_issue_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.lastIssue.name",
+            "columnName": "item_info_last_issue_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.lastIssue.issueNumber",
+            "columnName": "item_info_last_issue_issueNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.publisher.id",
+            "columnName": "item_info_publisher_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "item.info.publisher.name",
+            "columnName": "item_info_publisher_name",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesVolumeItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesConceptItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesConceptItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesLocationItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesLocationItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesMovieItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesMovieItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesObjectItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesObjectItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesPersonItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesPersonItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesStoryArcItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesStoryArcItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PagingFavoritesTeamItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`index` INTEGER NOT NULL, `item_dateAdded` INTEGER NOT NULL, `item_info_id` INTEGER NOT NULL, `item_info_name` TEXT NOT NULL, `item_info_image_iconUrl` TEXT NOT NULL, `item_info_image_mediumUrl` TEXT NOT NULL, `item_info_image_screenUrl` TEXT NOT NULL, `item_info_image_screenLargeUrl` TEXT NOT NULL, `item_info_image_smallUrl` TEXT NOT NULL, `item_info_image_superUrl` TEXT NOT NULL, `item_info_image_thumbUrl` TEXT NOT NULL, `item_info_image_tinyUrl` TEXT NOT NULL, `item_info_image_originalUrl` TEXT NOT NULL, `item_info_image_imageTags` TEXT, PRIMARY KEY(`index`))",
+        "fields": [
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.dateAdded",
+            "columnName": "item_dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.id",
+            "columnName": "item_info_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.name",
+            "columnName": "item_info_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.iconUrl",
+            "columnName": "item_info_image_iconUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.mediumUrl",
+            "columnName": "item_info_image_mediumUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenUrl",
+            "columnName": "item_info_image_screenUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.screenLargeUrl",
+            "columnName": "item_info_image_screenLargeUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.smallUrl",
+            "columnName": "item_info_image_smallUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.superUrl",
+            "columnName": "item_info_image_superUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.thumbUrl",
+            "columnName": "item_info_image_thumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.tinyUrl",
+            "columnName": "item_info_image_tinyUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.originalUrl",
+            "columnName": "item_info_image_originalUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item.info.image.imageTags",
+            "columnName": "item_info_image_imageTags",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "index"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "FavoritesTeamItemRemoteKeys",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `prevOffset` INTEGER, `nextOffset` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prevOffset",
+            "columnName": "prevOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nextOffset",
+            "columnName": "nextOffset",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SearchHistoryInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`query` TEXT NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`query`))",
+        "fields": [
+          {
+            "fieldPath": "query",
+            "columnName": "query",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "query"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f50d1c83a985d6aba876ed999833151b')"
+    ]
+  }
+}

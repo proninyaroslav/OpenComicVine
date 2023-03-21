@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">OpenComicVine</string>
+    <string name="comic_vine_api_url" translatable="false">https://comicvine.gamespot.com/api</string>
+    <string name="project_page_url" translatable="false">https://github.com/proninyaroslav/OpenComicVine</string>
+    <string name="comic_vine_page_url" translatable="false">https://comicvine.gamespot.com</string>
+    <string name="project_changelog_url" translatable="false">https://github.com/proninyaroslav/OpenComicVine/blob/HEAD/NEWS.md</string>
+    <string name="gpl_3_url" translatable="false">https://www.gnu.org/licenses/gpl-3.0.html</string>
+    <string-array name="pref_theme_items" translatable="false">
+        <item>@string/pref_theme_item_system</item>
+        <item>@string/pref_theme_item_dark</item>
+        <item>@string/pref_theme_item_light</item>
+    </string-array>
+</resources>

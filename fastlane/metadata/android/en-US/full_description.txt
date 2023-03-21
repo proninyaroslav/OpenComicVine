@@ -1,0 +1,12 @@
+📋 Features
+* Free and Open Source software (FOSS)
+* Comic Vine Wiki
+* Viewing Comic Vine details of characters, issues, volumes and more
+* Recently added Comic Vine issues, characters and more
+* Search
+* Favorites
+* Material 3 Design
+* Night theme
+* Responsive UI for different devices form factors
+
+For more information, please see here: <a href="https://github.com/proninyaroslav/OpenComicVine/blob/HEAD/README.md">https://github.com/proninyaroslav/OpenComicVine/blob/HEAD/README.md</a>
