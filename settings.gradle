@@ -11,10 +11,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        // For Kotlin 1.8 support of Compose Compiler
-        maven {
-            url "https://androidx.dev/storage/compose-compiler/repository/"
-        }
     }
 }
 rootProject.name = "OpenComicVine"
