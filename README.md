@@ -2,7 +2,8 @@
 
 <p><img src="fastlane/metadata/android/en-US/images/icon.png" width="150"></p>
 <h2><b>OpenComicVine</b></h2>
-<h4>Comic Vine client for Android.</h4>
+<h4>Comic Vine client for Android, website on comics.
+</h4>
 
 <h4>Comic Vine project: <a href="https://comicvine.gamespot.com">https://comicvine.gamespot.com</a>
 
