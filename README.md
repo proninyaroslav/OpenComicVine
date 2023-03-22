@@ -15,7 +15,7 @@
 
 ![Current version](https://img.shields.io/github/release/proninyaroslav/OpenComicVine.svg?logo=github)
 [![Releases](https://img.shields.io/github/downloads/proninyaroslav/OpenComicVine/total.svg)](https://github.com/proninyaroslav/OpenComicVine/releases)
-[![Chat - Telegram](https://img.shields.io/badge/chat-Telegram-blue.svg)]()
+[![Chat - Telegram](https://img.shields.io/badge/chat-Telegram-blue.svg)](https://t.me/OpenComicVine)
 
 </div>
 
