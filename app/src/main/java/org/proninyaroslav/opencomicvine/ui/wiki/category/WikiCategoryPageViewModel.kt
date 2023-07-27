@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.wiki.category
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingCharacterRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingIssueRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingVolumeRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -56,12 +56,10 @@ class WikiCategoryPageViewModel @Inject constructor(
     charactersRemoteMediatorFactory: CharactersRemoteMediatorFactory,
     issuesRemoteMediatorFactory: IssuesRemoteMediatorFactory,
     volumesRemoteMediatorFactory: VolumesRemoteMediatorFactory,
-) : StoreViewModel<WikiCategoryPageEvent, Unit, WikiCategoryPageEffect>(initialState = Unit) {
+) : ViewModel() {
 
-    init {
-        on<WikiCategoryPageEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     private val charactersRemoteMediator = charactersRemoteMediatorFactory.create()
@@ -127,13 +125,4 @@ class WikiCategoryPageViewModel @Inject constructor(
                 entityType = FavoriteInfo.EntityType.Volume,
             )
         )
-}
-
-sealed interface WikiCategoryPageEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : WikiCategoryPageEvent
-}
-
-sealed interface WikiCategoryPageEffect {
-    data class GetFavoriteFailed(val error: FavoritesRepository.Result.Failed) :
-        WikiCategoryPageEffect
 }

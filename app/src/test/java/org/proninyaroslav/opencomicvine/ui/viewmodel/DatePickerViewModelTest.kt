@@ -49,11 +49,9 @@ class DatePickerViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(
-                DatePickerEvent.Show(
-                    dialogType = 1,
-                    range = range,
-                )
+            viewModel.show(
+                dialogType = 1,
+                range = range,
             )
             runCurrent()
         }
@@ -75,7 +73,7 @@ class DatePickerViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DatePickerEvent.Hide)
+            viewModel.hide()
             runCurrent()
         }
 

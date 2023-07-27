@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
@@ -100,35 +101,31 @@ fun <D : BaseItem> DetailsCategoryPage(
     var longClickLink by remember { mutableStateOf<Uri?>(null) }
     val clipboardManager = LocalClipboardManager.current
     val snackbarState = LocalAppSnackbarState.current
+    val networkState by networkConnection.state.collectAsStateWithLifecycle()
+    val switchFavoriteState by favoritesViewModel.switchFavorite.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(favoritesViewModel) {
-        favoritesViewModel.effect.collect { effect ->
-            when (effect) {
-                is FavoritesEffect.SwitchFavoriteFailed -> when (val error = effect.error) {
-                    is FavoritesRepository.Result.Failed.IO -> coroutineScope.launch {
-                        snackbarState.showSnackbar(
-                            context.getString(
-                                R.string.error_add_delete_from_favorites,
-                                error.exception
-                            )
+    LaunchedEffect(switchFavoriteState) {
+        when (val s = switchFavoriteState) {
+            is SwitchFavoriteState.Failed -> when (val error = s.error) {
+                is FavoritesRepository.Result.Failed.IO -> coroutineScope.launch {
+                    snackbarState.showSnackbar(
+                        context.getString(
+                            R.string.error_add_delete_from_favorites,
+                            error.exception
                         )
-                    }
+                    )
                 }
-                is FavoritesEffect.Added -> {}
-                is FavoritesEffect.Removed -> {}
             }
+
+            else -> {}
         }
     }
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> {
-                    onRefresh()
-                }
-            }
+    LaunchedEffect(networkState, onRefresh) {
+        if (networkState is NetworkState.Reestablished) {
+            onRefresh()
         }
     }
 
@@ -168,11 +165,9 @@ fun <D : BaseItem> DetailsCategoryPage(
                     FavoriteFilledTonalActionButton(
                         isFavorite = isFavorite,
                         onClick = {
-                            favoritesViewModel.event(
-                                FavoritesEvent.SwitchFavorite(
-                                    entityId = type.id,
-                                    entityType = type.toEntityType(),
-                                )
+                            favoritesViewModel.switchFavorite(
+                                entityId = type.id,
+                                entityType = type.toEntityType(),
                             )
                         },
                     )
@@ -237,6 +232,7 @@ fun <D : BaseItem> DetailsCategoryPage(
                             )
                         }
                     }
+
                     DescriptionContextMenuAction.ShareLink -> {
                         onShareLink(longClickLink!!)
                         longClickLink = null

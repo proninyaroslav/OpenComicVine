@@ -19,45 +19,51 @@
 
 package org.proninyaroslav.opencomicvine.ui.about
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.AppInfoProvider
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AboutViewModel @Inject constructor(
     private val errorReportService: ErrorReportService,
     appInfoProvider: AppInfoProvider,
-) : StoreViewModel<AboutEvent, AboutState, Unit>(load(appInfoProvider)) {
+) : ViewModel() {
 
-    init {
-        on<AboutEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
-    }
-
-    companion object {
-        private fun load(appInfoProvider: AppInfoProvider): AboutState {
-            return when (val res = appInfoProvider.getAppInfo()) {
-                is AppInfoProvider.State.Success -> res.run {
+    val state: StateFlow<AboutState> = flow {
+        when (val res = appInfoProvider.getAppInfo()) {
+            is AppInfoProvider.State.Success -> res.run {
+                emit(
                     AboutState.Loaded(
                         appName = appName,
                         version = version,
                     )
-                }
-                is AppInfoProvider.State.Failed -> AboutState.LoadFailed(res)
+                )
             }
+
+            is AppInfoProvider.State.Failed -> emit(AboutState.LoadFailed(res))
         }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = AboutState.Initial,
+    )
+
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 }
 
-sealed interface AboutEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : AboutEvent
-}
-
 sealed interface AboutState {
+    object Initial : AboutState
+
     data class Loaded(
         val appName: String,
         val version: String,

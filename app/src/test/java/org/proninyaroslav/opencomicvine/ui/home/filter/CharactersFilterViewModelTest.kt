@@ -15,8 +15,6 @@ import org.junit.Test
 import org.proninyaroslav.opencomicvine.data.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.getDaysOfCurrentWeek
-import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersFilterEffect
-import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersFilterEvent
 import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersFilterState
 import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersFilterViewModel
 
@@ -95,7 +93,8 @@ class CharactersFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(CharactersFilterEvent.ChangeFilters(filter))
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
@@ -130,33 +129,25 @@ class CharactersFilterViewModelTest {
                 isNeedApply = false,
             ),
         )
-        val expectedEffects = listOf(
-            CharactersFilterEffect.Applied,
-        )
         val actualStates = mutableListOf<CharactersFilterState>()
-        val actualEffects = mutableListOf<CharactersFilterEffect>()
 
         coEvery { pref.setRecentCharactersFilters(filter) } just runs
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(CharactersFilterEvent.ChangeFilters(filter))
             runCurrent()
-            viewModel.event(CharactersFilterEvent.Apply)
+            viewModel.changeFilters(filter)
             runCurrent()
-            viewModel.event(CharactersFilterEvent.ChangeFilters(filter))
+            viewModel.apply()
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         verify { pref.recentCharactersFilters }
         coVerify { pref.setRecentCharactersFilters(filter) }

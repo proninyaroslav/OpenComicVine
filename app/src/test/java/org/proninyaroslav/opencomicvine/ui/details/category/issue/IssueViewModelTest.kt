@@ -25,8 +25,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.IssuesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEffect
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEvent
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsState
 import java.io.IOException
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingIssueRepository as RecentIssueItemRepository
@@ -269,7 +267,7 @@ class IssueViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -337,7 +335,7 @@ class IssueViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -386,7 +384,7 @@ class IssueViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -470,10 +468,10 @@ class IssueViewModelTest {
 
         dispatcher.scheduler.apply {
             coEvery { issuesRepo.getItemDetailsById(id) } returns failedResult
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
             coEvery { issuesRepo.getItemDetailsById(id) } returns successResult
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -501,6 +499,10 @@ class IssueViewModelTest {
         val expectedStates = listOf(
             DetailsState.Initial,
             DetailsState.Loading,
+            DetailsState.CacheLoadFailed(
+                details = null,
+                exception = exception
+            ),
             DetailsState.Loaded(
                 details = IssueDetailsItem(
                     details = issueDetails,
@@ -519,12 +521,8 @@ class IssueViewModelTest {
                 ),
             ),
         )
-        val expectedEffects = listOf(
-            DetailsEffect.CacheLoadFailed(exception),
-        )
         val actualStates =
             mutableListOf<DetailsState<IssueDetailsItem, IssueViewModel.RelatedEntities>>()
-        val actualEffects = mutableListOf<DetailsEffect>()
 
         coEvery { issuesRepo.getItemDetailsById(id) } returns result
         coEvery { wikiIssueItemRepo.getItemById(id) } returns
@@ -535,19 +533,14 @@ class IssueViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         coVerify { issuesRepo.getItemDetailsById(id) }
         coVerify { wikiIssueItemRepo.getItemById(id) }
@@ -564,7 +557,7 @@ class IssueViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(DetailsEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

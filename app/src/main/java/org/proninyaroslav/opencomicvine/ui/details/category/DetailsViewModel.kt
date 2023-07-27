@@ -19,41 +19,45 @@
 
 package org.proninyaroslav.opencomicvine.ui.details.category
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.data.item.BaseItem
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import java.io.IOException
 
 abstract class DetailsViewModel<DetailsItem : BaseItem, RelatedEntities : DetailsViewModel.RelatedEntities>(
-    ioDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher,
     private val errorReportService: ErrorReportService,
-) : StoreViewModel<DetailsEvent, DetailsState<DetailsItem, RelatedEntities>, DetailsEffect>(
-    DetailsState.Initial
-) {
-    init {
-        on<DetailsEvent.Load> { event ->
-            if (isLoadNotAllowed()) {
-                return@on
-            }
-            emitState(DetailsState.Loading)
-            viewModelScope.launch(ioDispatcher) {
-                loadCache(event.id)
-            }
-            viewModelScope.launch {
-                loadRemote(event.id)
-            }
-        }
+) : ViewModel() {
 
-        on<DetailsEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
+    private val _state = MutableStateFlow<DetailsState<DetailsItem, RelatedEntities>>(
+        DetailsState.Initial
+    )
+    val state: StateFlow<DetailsState<DetailsItem, RelatedEntities>> = _state
+
+    fun load(id: Int) {
+        if (isLoadNotAllowed()) {
+            return
         }
+        _state.value = DetailsState.Loading
+        viewModelScope.launch(ioDispatcher) {
+            loadCache(id)
+        }
+        viewModelScope.launch {
+            loadRemote(id)
+        }
+    }
+
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     protected abstract suspend fun onLoadRemote(entityId: Int): RemoteFetchResult<DetailsItem, RelatedEntities>
@@ -67,7 +71,9 @@ abstract class DetailsViewModel<DetailsItem : BaseItem, RelatedEntities : Detail
         when (this) {
             DetailsState.Initial,
             is DetailsState.CacheLoaded,
+            is DetailsState.CacheLoadFailed,
             is DetailsState.LoadFailed -> false
+
             is DetailsState.Loaded,
             DetailsState.Loading -> true
         }
@@ -76,38 +82,37 @@ abstract class DetailsViewModel<DetailsItem : BaseItem, RelatedEntities : Detail
     private suspend fun loadCache(id: Int) {
         when (val res = onLoadCache(id)) {
             is CacheFetchResult.Success -> res.details?.let {
-                emitState(DetailsState.CacheLoaded(details = it))
+                _state.value = DetailsState.CacheLoaded(details = it)
             }
-            is CacheFetchResult.Failed.IO -> emitEffect(
-                DetailsEffect.CacheLoadFailed(
+
+            is CacheFetchResult.Failed.IO -> {
+                _state.value = DetailsState.CacheLoadFailed(
+                    details = null,
                     exception = res.exception,
                 )
-            )
+            }
         }
     }
 
     private suspend fun loadRemote(id: Int) {
         when (val res = onLoadRemote(id)) {
             is RemoteFetchResult.Success -> res.run {
-                emitState(
-                    DetailsState.Loaded(
-                        details = details,
-                        relatedEntities = relatedEntities,
-                    )
+                _state.value = DetailsState.Loaded(
+                    details = details,
+                    relatedEntities = relatedEntities,
                 )
             }
+
             is RemoteFetchResult.Failed -> {
                 val current = state.value
-                emitState(
-                    DetailsState.LoadFailed(
-                        details = when (current) {
-                            is DetailsState.CacheLoaded -> current.details
-                            is DetailsState.Loaded -> current.details
-                            is DetailsState.LoadFailed -> current.details
-                            else -> null
-                        },
-                        error = res.error,
-                    )
+                _state.value = DetailsState.LoadFailed(
+                    details = when (current) {
+                        is DetailsState.CacheLoaded -> current.details
+                        is DetailsState.Loaded -> current.details
+                        is DetailsState.LoadFailed -> current.details
+                        else -> null
+                    },
+                    error = res.error,
                 )
             }
         }
@@ -137,12 +142,6 @@ abstract class DetailsViewModel<DetailsItem : BaseItem, RelatedEntities : Detail
     }
 }
 
-sealed interface DetailsEvent {
-    data class Load(val id: Int) : DetailsEvent
-
-    data class ErrorReport(val info: ErrorReportInfo) : DetailsEvent
-}
-
 sealed interface DetailsState<out D : BaseItem, out R : DetailsViewModel.RelatedEntities> {
     object Initial : DetailsState<Nothing, Nothing>
 
@@ -161,10 +160,9 @@ sealed interface DetailsState<out D : BaseItem, out R : DetailsViewModel.Related
         val details: D?,
         val error: ComicVineResult.Failed,
     ) : DetailsState<D, R>
-}
 
-sealed interface DetailsEffect {
-    data class CacheLoadFailed(
+    data class CacheLoadFailed<D : BaseItem, R : DetailsViewModel.RelatedEntities>(
+        val details: D?,
         val exception: IOException,
-    ) : DetailsEffect
+    ) : DetailsState<D, R>
 }

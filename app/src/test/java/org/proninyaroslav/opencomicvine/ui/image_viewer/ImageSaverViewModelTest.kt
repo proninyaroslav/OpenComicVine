@@ -66,14 +66,11 @@ class ImageSaverViewModelTest {
             ImageSaverState.SaveSuccess(
                 uri = localUri,
                 mimeType = mimeType,
+                readyToShare = false,
             ),
-        )
-        val expectedEffects = listOf(
-            ImageSaverEffect.SaveSuccess,
         )
 
         val actualStates = mutableListOf<ImageSaverState>()
-        val actualEffects = mutableListOf<ImageSaverEffect>()
 
         every { url.getCompressFormatByImageType() } returns compressFormat
         every { bitmap.compress(compressFormat, 80, any()) } returns true
@@ -88,18 +85,13 @@ class ImageSaverViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(ImageSaverEvent.Save(bitmap = bitmap, url = url))
+            viewModel.save(bitmap = bitmap, url = url)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
     }
 
     @Test
@@ -115,17 +107,11 @@ class ImageSaverViewModelTest {
             ImageSaverState.SaveSuccess(
                 uri = localUri,
                 mimeType = mimeType,
-            ),
-        )
-        val expectedEffects = listOf(
-            ImageSaverEffect.ReadyToShare(
-                uri = localUri,
-                mimeType = mimeType,
+                readyToShare = true,
             ),
         )
 
         val actualStates = mutableListOf<ImageSaverState>()
-        val actualEffects = mutableListOf<ImageSaverEffect>()
 
         every { url.getCompressFormatByImageType() } returns compressFormat
         every { bitmap.compress(compressFormat, 80, any()) } returns true
@@ -140,18 +126,13 @@ class ImageSaverViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(ImageSaverEvent.SaveForSharing(bitmap = bitmap, url = url))
+            viewModel.save(bitmap = bitmap, url = url, saveAndShare = true)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
     }
 
     @Test
@@ -167,14 +148,8 @@ class ImageSaverViewModelTest {
                 ImageStore.Result.Failed(null),
             )
         )
-        val expectedEffects = listOf(
-            ImageSaverEffect.SaveFailed.StoreError(
-                ImageStore.Result.Failed(null),
-            )
-        )
 
         val actualStates = mutableListOf<ImageSaverState>()
-        val actualEffects = mutableListOf<ImageSaverEffect>()
 
         every { url.getCompressFormatByImageType() } returns compressFormat
         every { bitmap.compress(compressFormat, 80, any()) } returns true
@@ -189,18 +164,13 @@ class ImageSaverViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(ImageSaverEvent.Save(bitmap = bitmap, url = url))
+            viewModel.save(bitmap = bitmap, url = url)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
     }
 
     @Test
@@ -213,12 +183,8 @@ class ImageSaverViewModelTest {
             ImageSaverState.Saving,
             ImageSaverState.SaveFailed.UnsupportedFormat,
         )
-        val expectedEffects = listOf(
-            ImageSaverEffect.SaveFailed.UnsupportedFormat,
-        )
 
         val actualStates = mutableListOf<ImageSaverState>()
-        val actualEffects = mutableListOf<ImageSaverEffect>()
 
         every { url.getCompressFormatByImageType() } returns null
         every { url.toString() } returns urlStr
@@ -226,18 +192,13 @@ class ImageSaverViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(ImageSaverEvent.Save(bitmap = bitmap, url = url))
+            viewModel.save(bitmap = bitmap, url = url)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
     }
 
     @Test
@@ -249,7 +210,7 @@ class ImageSaverViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(ImageSaverEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

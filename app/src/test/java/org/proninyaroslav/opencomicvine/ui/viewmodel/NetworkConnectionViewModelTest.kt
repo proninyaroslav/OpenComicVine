@@ -86,22 +86,15 @@ class NetworkConnectionViewModelTest {
         val expectedStates = listOf(
             NetworkState.ConnectionAvailable,
             NetworkState.NoConnection,
-            NetworkState.ConnectionAvailable,
-        )
-        val expectedEffects = listOf(
-            NetworkEffect.Reestablished,
+            NetworkState.Reestablished
         )
         val actualStates = mutableListOf<NetworkState>()
-        val actualEffects = mutableListOf<NetworkEffect>()
 
         val sharedFlow = MutableSharedFlow<Boolean>()
         coEvery { connectivityManager.observeNetworkAvailability } returns sharedFlow
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
-        }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
         }
         dispatcher.scheduler.apply {
             runCurrent()
@@ -111,9 +104,7 @@ class NetworkConnectionViewModelTest {
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         coVerify { connectivityManager.observeNetworkAvailability }
         confirmVerified(connectivityManager)

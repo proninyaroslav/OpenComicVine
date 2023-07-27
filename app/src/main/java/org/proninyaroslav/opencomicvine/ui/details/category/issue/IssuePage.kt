@@ -21,17 +21,18 @@ package org.proninyaroslav.opencomicvine.ui.details.category.issue
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.proninyaroslav.opencomicvine.R
 import org.proninyaroslav.opencomicvine.ui.details.DetailsPage
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsCategoryPage
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEffect
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEvent
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsState
-import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesEvent
 import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesViewModel
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
 
@@ -53,17 +54,16 @@ fun IssuePage(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel) {
-        viewModel.event(DetailsEvent.Load(issueId))
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is DetailsEffect.CacheLoadFailed -> {
-                    Log.e(
-                        TAG,
-                        "Unable to load issue info from cache, id = $issueId",
-                        effect.exception
-                    )
-                }
-            }
+        viewModel.load(issueId)
+    }
+    LaunchedEffect(state) {
+        val s = state
+        if (s is DetailsState.CacheLoadFailed) {
+            Log.e(
+                TAG,
+                "Unable to load issue info from cache, id = $issueId",
+                s.exception
+            )
         }
     }
 
@@ -89,6 +89,7 @@ fun IssuePage(
                         storyArcs = storyArcs,
                     )
                 }
+
                 else -> null
             }
         )
@@ -131,24 +132,22 @@ fun IssuePage(
                 toSourceError = viewModel::toSourceError,
                 onLoadPage = onLoadPage,
                 onFavoriteClick = { entityId, entityType ->
-                    favoritesViewModel.event(
-                        FavoritesEvent.SwitchFavorite(
-                            entityId = entityId,
-                            entityType = entityType,
-                        )
+                    favoritesViewModel.switchFavorite(
+                        entityId = entityId,
+                        entityType = entityType,
                     )
                 },
-                onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+                onReport = viewModel::errorReport,
             )
         },
         networkConnection = networkConnection,
         favoritesViewModel = favoritesViewModel,
         isExpandedWidth = isExpandedWidth,
-        onRefresh = { viewModel.event(DetailsEvent.Load(issueId)) },
+        onRefresh = { viewModel.load(issueId) },
         onBackPressed = onBackPressed,
         onOpenLink = onOpenLink,
         onShareLink = onShareLink,
-        onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+        onReport = viewModel::errorReport,
         modifier = modifier,
     ) { loading ->
         IssueAssociatedImages(

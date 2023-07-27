@@ -14,8 +14,6 @@ import org.junit.Before
 import org.junit.Test
 import org.proninyaroslav.opencomicvine.data.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
-import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.VolumesFilterEffect
-import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.VolumesFilterEvent
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.VolumesFilterState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.VolumesFilterViewModel
 
@@ -99,7 +97,8 @@ class VolumesFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(VolumesFilterEvent.ChangeSort(sort))
+            runCurrent()
+            viewModel.changeSort(sort)
             runCurrent()
         }
 
@@ -128,7 +127,8 @@ class VolumesFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(VolumesFilterEvent.ChangeFilters(filter))
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
@@ -173,11 +173,7 @@ class VolumesFilterViewModelTest {
                 isNeedApply = false,
             ),
         )
-        val expectedEffects = listOf(
-            VolumesFilterEffect.Applied,
-        )
         val actualStates = mutableListOf<VolumesFilterState>()
-        val actualEffects = mutableListOf<VolumesFilterEffect>()
 
         coEvery { pref.setWikiVolumesSort(sort) } just runs
         coEvery { pref.setWikiVolumesFilters(filter) } just runs
@@ -185,26 +181,22 @@ class VolumesFilterViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(VolumesFilterEvent.ChangeSort(sort))
             runCurrent()
-            viewModel.event(VolumesFilterEvent.ChangeFilters(filter))
+            viewModel.changeSort(sort)
             runCurrent()
-            viewModel.event(VolumesFilterEvent.Apply)
+            viewModel.changeFilters(filter)
             runCurrent()
-            viewModel.event(VolumesFilterEvent.ChangeSort(sort))
+            viewModel.apply()
             runCurrent()
-            viewModel.event(VolumesFilterEvent.ChangeFilters(filter))
+            viewModel.changeSort(sort)
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         verify { pref.wikiVolumesSort }
         verify { pref.wikiVolumesFilters }

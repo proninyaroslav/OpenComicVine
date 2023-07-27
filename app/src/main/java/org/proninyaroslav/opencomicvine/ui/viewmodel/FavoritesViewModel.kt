@@ -19,182 +19,96 @@
 
 package org.proninyaroslav.opencomicvine.ui.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.FavoriteInfo
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.DateProvider
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
     private val favoritesRepo: FavoritesRepository,
     private val dateProvider: DateProvider,
-    @IoDispatcher ioDispatcher: CoroutineDispatcher,
-) : StoreViewModel<FavoritesEvent, FavoritesState, FavoritesEffect>(
-    initialState = FavoritesState.Initial
-) {
-    init {
-        on<FavoritesEvent.SwitchFavorite> { event ->
-            viewModelScope.launch(ioDispatcher) {
-                switchFavorite(
-                    entityId = event.entityId,
-                    entityType = event.entityType,
-                )
-            }
-        }
-    }
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+) : ViewModel() {
 
-    private suspend fun switchFavorite(
-        entityId: Int,
-        entityType: FavoriteInfo.EntityType,
-    ) {
-        val res = favoritesRepo.get(
-            entityId = entityId,
-            entityType = entityType,
-        )
-        when (res) {
-            is FavoritesRepository.Result.Success -> {
-                if (res.data != null) {
-                    when (val deleteRes = favoritesRepo.delete(res.data)) {
-                        is FavoritesRepository.Result.Failed -> {
-                            emitState(
-                                FavoritesState.SwitchFavoriteFailed(
+    val switchFavorite = SwitchFavorite()
+
+    inner class SwitchFavorite {
+        private val _state = MutableStateFlow<SwitchFavoriteState>(SwitchFavoriteState.Initial)
+        val state: StateFlow<SwitchFavoriteState> = _state
+
+        operator fun invoke(
+            entityId: Int,
+            entityType: FavoriteInfo.EntityType,
+        ) {
+            val res = favoritesRepo.get(
+                entityId = entityId,
+                entityType = entityType,
+            )
+            viewModelScope.launch(ioDispatcher) {
+                when (res) {
+                    is FavoritesRepository.Result.Success -> {
+                        if (res.data != null) {
+                            _state.value = when (val deleteRes = favoritesRepo.delete(res.data)) {
+                                is FavoritesRepository.Result.Failed -> SwitchFavoriteState.Failed(
+                                    deleteRes
+                                )
+
+                                is FavoritesRepository.Result.Success -> SwitchFavoriteState.Removed(
+                                    entityId, entityType
+                                )
+                            }
+                        } else {
+                            val addRes = favoritesRepo.add(
+                                FavoriteInfo(
                                     entityId = entityId,
                                     entityType = entityType,
-                                    error = deleteRes,
+                                    dateAdded = dateProvider.now,
                                 )
                             )
-                            emitEffect(
-                                FavoritesEffect.SwitchFavoriteFailed(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                    error = deleteRes,
+                            _state.value = when (addRes) {
+                                is FavoritesRepository.Result.Failed -> SwitchFavoriteState.Failed(
+                                    addRes
                                 )
-                            )
-                        }
-                        is FavoritesRepository.Result.Success -> {
-                            emitState(
-                                FavoritesState.Removed(
-                                    entityId = entityId,
-                                    entityType = entityType,
+
+                                is FavoritesRepository.Result.Success -> SwitchFavoriteState.Added(
+                                    entityId, entityType
                                 )
-                            )
-                            emitEffect(
-                                FavoritesEffect.Removed(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                )
-                            )
+                            }
                         }
                     }
-                } else {
-                    val addRes = favoritesRepo.add(
-                        FavoriteInfo(
-                            entityId = entityId,
-                            entityType = entityType,
-                            dateAdded = dateProvider.now,
-                        )
-                    )
-                    when (addRes) {
-                        is FavoritesRepository.Result.Failed -> {
-                            emitState(
-                                FavoritesState.SwitchFavoriteFailed(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                    error = addRes,
-                                )
-                            )
-                            emitEffect(
-                                FavoritesEffect.SwitchFavoriteFailed(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                    error = addRes,
-                                )
-                            )
-                        }
-                        is FavoritesRepository.Result.Success -> {
-                            emitState(
-                                FavoritesState.Added(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                )
-                            )
-                            emitEffect(
-                                FavoritesEffect.Added(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                )
-                            )
-                        }
+
+                    is FavoritesRepository.Result.Failed -> {
+                        _state.value = SwitchFavoriteState.Failed(res)
                     }
                 }
             }
-            is FavoritesRepository.Result.Failed -> {
-                emitState(
-                    FavoritesState.SwitchFavoriteFailed(
-                        entityId = entityId,
-                        entityType = entityType,
-                        error = res,
-                    )
-                )
-                emitEffect(
-                    FavoritesEffect.SwitchFavoriteFailed(
-                        entityId = entityId,
-                        entityType = entityType,
-                        error = res,
-                    )
-                )
-            }
         }
     }
 }
 
-sealed interface FavoritesEvent {
-    data class SwitchFavorite(
-        val entityId: Int,
-        val entityType: FavoriteInfo.EntityType,
-    ) : FavoritesEvent
-}
-
-sealed interface FavoritesState {
-    object Initial : FavoritesState
+sealed interface SwitchFavoriteState {
+    object Initial : SwitchFavoriteState
 
     data class Added(
         val entityId: Int,
-        val entityType: FavoriteInfo.EntityType
-    ) : FavoritesState
+        val entityType: FavoriteInfo.EntityType,
+    ) : SwitchFavoriteState
 
     data class Removed(
         val entityId: Int,
-        val entityType: FavoriteInfo.EntityType
-    ) : FavoritesState
-
-    data class SwitchFavoriteFailed(
-        val entityId: Int,
         val entityType: FavoriteInfo.EntityType,
-        val error: FavoritesRepository.Result.Failed,
-    ) : FavoritesState
-}
+    ) : SwitchFavoriteState
 
-sealed interface FavoritesEffect {
-    data class Added(
-        val entityId: Int,
-        val entityType: FavoriteInfo.EntityType
-    ) : FavoritesEffect
-
-    data class Removed(
-        val entityId: Int,
-        val entityType: FavoriteInfo.EntityType
-    ) : FavoritesEffect
-
-    data class SwitchFavoriteFailed(
-        val entityId: Int,
-        val entityType: FavoriteInfo.EntityType,
+    data class Failed(
         val error: FavoritesRepository.Result.Failed
-    ) : FavoritesEffect
+    ) : SwitchFavoriteState
 }

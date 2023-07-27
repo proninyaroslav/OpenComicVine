@@ -15,8 +15,6 @@ import org.junit.Test
 import org.proninyaroslav.opencomicvine.data.preferences.PrefFavoritesSort
 import org.proninyaroslav.opencomicvine.data.preferences.PrefSortDirection
 import org.proninyaroslav.opencomicvine.model.AppPreferences
-import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterEffect
-import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterEvent
 import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterState
 import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterViewModel
 
@@ -87,7 +85,8 @@ class FavoritesFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(FavoritesFilterEvent.ChangeSort(sort))
+            runCurrent()
+            viewModel.changeSort(sort)
             runCurrent()
         }
 
@@ -115,33 +114,25 @@ class FavoritesFilterViewModelTest {
                 isNeedApply = false,
             ),
         )
-        val expectedEffects = listOf(
-            FavoritesFilterEffect.Applied,
-        )
         val actualStates = mutableListOf<FavoritesFilterState>()
-        val actualEffects = mutableListOf<FavoritesFilterEffect>()
 
         coEvery { pref.setFavoriteCharactersSort(sort) } just runs
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(FavoritesFilterEvent.ChangeSort(sort))
             runCurrent()
-            viewModel.event(FavoritesFilterEvent.Apply)
+            viewModel.changeSort(sort)
             runCurrent()
-            viewModel.event(FavoritesFilterEvent.ChangeSort(sort))
+            viewModel.apply()
+            runCurrent()
+            viewModel.changeSort(sort)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         verify { pref.favoriteCharactersSort }
         coVerify { pref.setFavoriteCharactersSort(sort) }

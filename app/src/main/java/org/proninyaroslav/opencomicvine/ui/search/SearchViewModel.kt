@@ -19,27 +19,35 @@
 
 package org.proninyaroslav.opencomicvine.ui.search
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.LoadState
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.data.item.SearchItem
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.paging.SearchSource
 import org.proninyaroslav.opencomicvine.model.paging.SearchSourceFactory
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     searchSourceFactory: SearchSourceFactory,
     private val errorReportService: ErrorReportService,
-) : StoreViewModel<SearchEvent, SearchState, SearchEffect>(SearchState.Initial) {
-    private val queryState = MutableStateFlow(state.value.toQueryState())
+) : ViewModel() {
+    private val _state = MutableStateFlow<SearchState>(SearchState.Initial)
+    private val queryState: Flow<SearchSource.Query> = _state.map { it.toQueryState() }
+
+    val state: StateFlow<SearchState> = _state
 
     val searchList: Flow<PagingData<SearchItem>> = Pager(
         config = PagingConfig(
@@ -50,45 +58,30 @@ class SearchViewModel @Inject constructor(
         },
     ).flow.cachedIn(viewModelScope)
 
-    init {
-        on<SearchEvent.ChangeQuery> { event ->
-            viewModelScope.launch {
-                val query = event.query.trim()
-                val state = SearchState.QueryChanged(query)
-                queryState.emit(state.toQueryState())
-                emitState(state)
-            }
-        }
+    fun changeQuery(query: String) {
+        _state.value = SearchState.QueryChanged(query.trim())
+    }
 
-        on<SearchEvent.Search> {
-            val stateValue = state.value
-            if (stateValue is SearchState.Submitted) {
-                return@on
-            }
-            emitState(SearchState.Submitted(state.value.query))
-            emitEffect(SearchEffect.Refresh)
+    fun search() {
+        if (_state.value is SearchState.Submitted) {
+            return
         }
+        _state.value = SearchState.Submitted(_state.value.query)
+    }
 
-        on<SearchEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     fun <T> toMediatorError(state: LoadState): T? =
         ComicVineSource.stateToError(state)
 
-    private fun SearchState.toQueryState() = when {
-        this is SearchState.Initial || query.isBlank() -> SearchSource.Query.Empty
-        else -> SearchSource.Query.Value(query)
-    }
-}
-
-sealed interface SearchEvent {
-    data class ChangeQuery(val query: String) : SearchEvent
-
-    object Search : SearchEvent
-
-    data class ErrorReport(val info: ErrorReportInfo) : SearchEvent
+    private fun SearchState.toQueryState() =
+        if (query.isBlank()) {
+            SearchSource.Query.Empty
+        } else {
+            SearchSource.Query.Value(query)
+        }
 }
 
 sealed interface SearchState {
@@ -101,8 +94,4 @@ sealed interface SearchState {
     data class QueryChanged(override val query: String) : SearchState
 
     data class Submitted(override val query: String) : SearchState
-}
-
-sealed interface SearchEffect {
-    object Refresh : SearchEffect
 }

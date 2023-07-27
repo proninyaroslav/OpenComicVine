@@ -19,8 +19,11 @@
 
 package org.proninyaroslav.opencomicvine.ui.wiki.category.filter
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiVolumesFilter
@@ -28,25 +31,21 @@ import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiVolumesFilterBu
 import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiVolumesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class VolumesFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            VolumesFilterEvent,
-            VolumesFilterState,
-            VolumesFilterEffect,
-            >(VolumesFilterState.Initial) {
-
+) : ViewModel() {
+    private val _state = MutableStateFlow<VolumesFilterState>(VolumesFilterState.Initial)
     private val stateCache = FilterStateCache(
         FilterStateCache.State(
             sort = VolumesFilterState.Initial.sort,
             filter = VolumesFilterState.Initial.filterBundle,
         )
     )
+
+    val state: StateFlow<VolumesFilterState> = _state
 
     init {
         viewModelScope.launch {
@@ -58,81 +57,62 @@ class VolumesFilterViewModel @Inject constructor(
                     filter = currentFilters,
                 )
             )
-            emitState(
-                VolumesFilterState.Loaded(
-                    sort = currentSort,
-                    filterBundle = currentFilters,
-                )
+            _state.value = VolumesFilterState.Loaded(
+                sort = currentSort,
+                filterBundle = currentFilters,
             )
         }
+    }
 
-        on<VolumesFilterEvent.ChangeSort> { event ->
-            state.value.run {
-                emitState(
-                    VolumesFilterState.SortChanged(
-                        sort = event.sort,
-                        filterBundle = filterBundle,
-                        isNeedApply = isNeedApply(
-                            sort = event.sort,
-                            filter = filterBundle,
-                        ),
-                    )
-                )
-            }
+    fun changeSort(sort: PrefWikiVolumesSort) {
+        state.value.run {
+            _state.value = VolumesFilterState.SortChanged(
+                sort = sort,
+                filterBundle = filterBundle,
+                isNeedApply = isNeedApply(
+                    sort = sort,
+                    filter = filterBundle,
+                ),
+            )
         }
+    }
 
-        on<VolumesFilterEvent.ChangeFilters> { event ->
-            state.value.run {
-                emitState(
-                    VolumesFilterState.FiltersChanged(
+    fun changeFilters(filterBundle: PrefWikiVolumesFilterBundle) {
+        state.value.run {
+            _state.value = VolumesFilterState.FiltersChanged(
+                sort = sort,
+                filterBundle = filterBundle,
+                isNeedApply = isNeedApply(
+                    sort = sort,
+                    filter = filterBundle,
+                ),
+            )
+        }
+    }
+
+    fun apply() {
+        val value = state.value
+        val newState = VolumesFilterState.Applied(
+            sort = value.sort,
+            filterBundle = value.filterBundle,
+        )
+        viewModelScope.launch {
+            newState.run {
+                pref.setWikiVolumesSort(sort)
+                pref.setWikiVolumesFilters(filterBundle)
+                stateCache.save(
+                    FilterStateCache.State(
                         sort = sort,
-                        filterBundle = event.filterBundle,
-                        isNeedApply = isNeedApply(
-                            sort = sort,
-                            filter = event.filterBundle,
-                        ),
+                        filter = filterBundle,
                     )
                 )
             }
-        }
-
-        on<VolumesFilterEvent.Apply> {
-            val value = state.value
-            val newState = VolumesFilterState.Applied(
-                sort = value.sort,
-                filterBundle = value.filterBundle,
-            )
-            viewModelScope.launch {
-                newState.run {
-                    pref.setWikiVolumesSort(sort)
-                    pref.setWikiVolumesFilters(filterBundle)
-                    stateCache.save(
-                        FilterStateCache.State(
-                            sort = sort,
-                            filter = filterBundle,
-                        )
-                    )
-                }
-                emitEffect(VolumesFilterEffect.Applied)
-                emitState(newState)
-            }
+            _state.value = newState
         }
     }
 
     private fun isNeedApply(sort: PrefWikiVolumesSort, filter: PrefWikiVolumesFilterBundle) =
         stateCache.current.let { sort != it.sort || filter != it.filter }
-}
-
-sealed interface VolumesFilterEvent {
-    data class ChangeSort(
-        val sort: PrefWikiVolumesSort
-    ) : VolumesFilterEvent
-
-    data class ChangeFilters(
-        val filterBundle: PrefWikiVolumesFilterBundle,
-    ) : VolumesFilterEvent
-
-    object Apply : VolumesFilterEvent
 }
 
 sealed interface VolumesFilterState {
@@ -169,8 +149,4 @@ sealed interface VolumesFilterState {
         override val sort: PrefWikiVolumesSort,
         override val filterBundle: PrefWikiVolumesFilterBundle,
     ) : VolumesFilterState
-}
-
-sealed interface VolumesFilterEffect {
-    object Applied : VolumesFilterEffect
 }

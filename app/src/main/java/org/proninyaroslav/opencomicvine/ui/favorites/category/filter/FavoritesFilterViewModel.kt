@@ -19,73 +19,59 @@
 
 package org.proninyaroslav.opencomicvine.ui.favorites.category.filter
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefFavoritesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            FavoritesFilterEvent,
-            FavoritesFilterState,
-            FavoritesFilterEffect,
-            >(FavoritesFilterState.Initial) {
-
+) : ViewModel() {
+    private val _state = MutableStateFlow<FavoritesFilterState>(FavoritesFilterState.Initial)
     private val stateCache = FilterStateCache<PrefFavoritesSort, Nothing>(
         FilterStateCache.State(sort = FavoritesFilterState.Initial.sort)
     )
+
+    val state: StateFlow<FavoritesFilterState> = _state
 
     init {
         viewModelScope.launch {
             val currentSort = pref.favoriteCharactersSort.first()
             stateCache.save(FilterStateCache.State(sort = currentSort))
-            emitState(
-                FavoritesFilterState.Loaded(
-                    sort = currentSort,
-                )
+            _state.value = FavoritesFilterState.Loaded(
+                sort = currentSort,
             )
-        }
-
-        on<FavoritesFilterEvent.ChangeSort> { event ->
-            emitState(
-                FavoritesFilterState.SortChanged(
-                    sort = event.sort,
-                    isNeedApply = event.sort != stateCache.current.sort,
-                )
-            )
-        }
-
-        on<FavoritesFilterEvent.Apply> {
-            val value = state.value
-            val newState = FavoritesFilterState.Applied(
-                sort = value.sort,
-            )
-            viewModelScope.launch {
-                newState.run {
-                    pref.setFavoriteCharactersSort(sort)
-                    stateCache.save(FilterStateCache.State(sort = sort))
-                }
-                emitEffect(FavoritesFilterEffect.Applied)
-                emitState(newState)
-            }
         }
     }
-}
 
-sealed interface FavoritesFilterEvent {
-    data class ChangeSort(
-        val sort: PrefFavoritesSort,
-    ) : FavoritesFilterEvent
+    fun changeSort(sort: PrefFavoritesSort) {
+        _state.value = FavoritesFilterState.SortChanged(
+            sort = sort,
+            isNeedApply = sort != stateCache.current.sort,
+        )
+    }
 
-    object Apply : FavoritesFilterEvent
+    fun apply() {
+        val value = state.value
+        val newState = FavoritesFilterState.Applied(
+            sort = value.sort,
+        )
+        viewModelScope.launch {
+            newState.run {
+                pref.setFavoriteCharactersSort(sort)
+                stateCache.save(FilterStateCache.State(sort = sort))
+            }
+            _state.value = newState
+        }
+    }
 }
 
 sealed interface FavoritesFilterState {
@@ -107,8 +93,4 @@ sealed interface FavoritesFilterState {
     data class Applied(
         override val sort: PrefFavoritesSort,
     ) : FavoritesFilterState
-}
-
-sealed interface FavoritesFilterEffect {
-    object Applied : FavoritesFilterEffect
 }

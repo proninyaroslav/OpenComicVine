@@ -68,7 +68,7 @@ class FavoritesPageViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(FavoritesPageEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

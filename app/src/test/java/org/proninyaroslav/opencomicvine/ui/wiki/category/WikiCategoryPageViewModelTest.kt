@@ -55,7 +55,7 @@ class WikiCategoryPageViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(WikiCategoryPageEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

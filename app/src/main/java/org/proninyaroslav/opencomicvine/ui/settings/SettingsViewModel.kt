@@ -19,16 +19,20 @@
 
 package org.proninyaroslav.opencomicvine.ui.settings
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.data.preferences.PrefTheme
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.repo.ApiKeyRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,92 +40,64 @@ class SettingsViewModel @Inject constructor(
     private val apiKeyRepo: ApiKeyRepository,
     private val pref: AppPreferences,
     private val errorReportService: ErrorReportService,
-) : StoreViewModel<SettingsEvent, SettingsState, SettingsEffect>(SettingsState.Initial) {
+) : ViewModel() {
 
-    override val state: StateFlow<SettingsState> = merge(
-        combine(
-            apiKeyRepo.get(),
-            pref.searchHistorySize,
-            pref.theme,
-        ) { apiKeyRes, searchHistorySize, theme ->
-            SettingsState.Loaded(
-                apiKey = when (apiKeyRes) {
-                    is ApiKeyRepository.GetResult.Success -> apiKeyRes.data
-                    else -> null
-                },
-                searchHistorySize = searchHistorySize,
-                theme = theme,
-            )
-        },
-        super.state,
-    ).stateIn(
+    val state: StateFlow<SettingsState> = combine(
+        apiKeyRepo.get(),
+        pref.searchHistorySize,
+        pref.theme,
+    ) { apiKeyRes, searchHistorySize, theme ->
+        SettingsState.Loaded(
+            apiKey = when (apiKeyRes) {
+                is ApiKeyRepository.GetResult.Success -> apiKeyRes.data
+                else -> null
+            },
+            searchHistorySize = searchHistorySize,
+            theme = theme,
+        )
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = SettingsState.Initial,
     )
 
-    init {
-        on<SettingsEvent.ChangeApiKey> { event ->
-            viewModelScope.launch {
-                changeApiKey(event)
-            }
-        }
+    val changeApiKey = ChangeApiKey()
 
-        on<SettingsEvent.ChangeSearchHistorySize> { event ->
-            viewModelScope.launch {
-                pref.setSearchHistorySize(event.size)
-                emitEffect(SettingsEffect.SearchHistorySizeChanged)
-            }
-        }
-
-        on<SettingsEvent.ChangeTheme> { event ->
-            viewModelScope.launch {
-                pref.setTheme(event.theme)
-                emitEffect(SettingsEffect.ThemeChanged)
-            }
-        }
-
-        on<SettingsEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
+    fun changeSearchHistorySize(size: Int) {
+        check(size >= 0)
+        viewModelScope.launch {
+            pref.setSearchHistorySize(size)
         }
     }
 
-    private suspend fun changeApiKey(event: SettingsEvent.ChangeApiKey) {
-        val currentState = state.value
-        val apiKey = event.apiKey.trim()
-        if (apiKey.isBlank()) {
-            emitState(
-                SettingsState.ChangeApiKeyFailed.EmptyKey(
-                    apiKey = apiKey,
-                    searchHistorySize = currentState.searchHistorySize,
-                    theme = currentState.theme,
-                )
-            )
-            return
-        }
-        when (val res = apiKeyRepo.set(apiKey)) {
-            is ApiKeyRepository.SaveResult.Success -> {
-                emitEffect(SettingsEffect.ApiKeyChanged)
-            }
-            is ApiKeyRepository.SaveResult.Failed.IO -> {
-                emitEffect(SettingsEffect.ChangeApiKeyFailed.SaveError(res))
-            }
-        }
-    }
-}
-
-sealed interface SettingsEvent {
-    data class ChangeApiKey(val apiKey: String) : SettingsEvent
-
-    data class ChangeSearchHistorySize(val size: Int) : SettingsEvent {
-        init {
-            check(size >= 0)
+    fun changeTheme(theme: PrefTheme) {
+        viewModelScope.launch {
+            pref.setTheme(theme)
         }
     }
 
-    data class ChangeTheme(val theme: PrefTheme) : SettingsEvent
+    fun errorReport(info: ErrorReportInfo) = errorReportService.report(info)
 
-    data class ErrorReport(val info: ErrorReportInfo) : SettingsEvent
+    inner class ChangeApiKey {
+        private val _state = MutableStateFlow<ChangeApiKeyState>(ChangeApiKeyState.Initial)
+        val state: StateFlow<ChangeApiKeyState> = _state
+
+        operator fun invoke(apiKey: String) {
+            viewModelScope.launch {
+                val apiKeyTrim = apiKey.trim()
+                if (apiKeyTrim.isBlank()) {
+                    _state.value = ChangeApiKeyState.Failed.EmptyKey
+                    return@launch
+                }
+                _state.value = when (val res = apiKeyRepo.set(apiKeyTrim)) {
+                    is ApiKeyRepository.SaveResult.Success -> ChangeApiKeyState.Success(apiKeyTrim)
+                    is ApiKeyRepository.SaveResult.Failed.IO -> ChangeApiKeyState.Failed.SaveError(
+                        res
+                    )
+                }
+            }
+        }
+    }
 }
 
 sealed interface SettingsState {
@@ -140,24 +116,16 @@ sealed interface SettingsState {
         override val searchHistorySize: Int,
         override val theme: PrefTheme
     ) : SettingsState
-
-    sealed interface ChangeApiKeyFailed : SettingsState {
-        data class EmptyKey(
-            override val apiKey: String?,
-            override val searchHistorySize: Int,
-            override val theme: PrefTheme
-        ) : ChangeApiKeyFailed
-    }
 }
 
-sealed interface SettingsEffect {
-    object ApiKeyChanged : SettingsEffect
+sealed interface ChangeApiKeyState {
+    object Initial : ChangeApiKeyState
 
-    object ThemeChanged : SettingsEffect
+    data class Success(val apiKey: String) : ChangeApiKeyState
 
-    object SearchHistorySizeChanged : SettingsEffect
+    sealed interface Failed : ChangeApiKeyState {
+        object EmptyKey : Failed
 
-    sealed interface ChangeApiKeyFailed : SettingsEffect {
-        data class SaveError(val error: ApiKeyRepository.SaveResult.Failed) : ChangeApiKeyFailed
+        data class SaveError(val error: ApiKeyRepository.SaveResult.Failed) : Failed
     }
 }

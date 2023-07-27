@@ -20,7 +20,11 @@
 package org.proninyaroslav.opencomicvine.ui.home.category
 
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.util.Pair
@@ -33,9 +37,15 @@ import org.proninyaroslav.opencomicvine.ui.components.DateRangePickerDialog
 import org.proninyaroslav.opencomicvine.ui.components.card.CharacterCard
 import org.proninyaroslav.opencomicvine.ui.components.list.EmptyListPlaceholder
 import org.proninyaroslav.opencomicvine.ui.home.HomePage
-import org.proninyaroslav.opencomicvine.ui.home.category.filter.*
-import org.proninyaroslav.opencomicvine.ui.viewmodel.*
-import java.util.*
+import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersDatePickerType
+import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersFilterState
+import org.proninyaroslav.opencomicvine.ui.home.category.filter.CharactersFilterViewModel
+import org.proninyaroslav.opencomicvine.ui.home.category.filter.charactersFilter
+import org.proninyaroslav.opencomicvine.ui.viewmodel.DatePickerState
+import org.proninyaroslav.opencomicvine.ui.viewmodel.DatePickerViewModel
+import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesViewModel
+import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
+import java.util.Date
 
 @Composable
 fun CharactersPage(
@@ -60,11 +70,9 @@ fun CharactersPage(
     }
     val datePickerState by datePickerViewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(filterViewModel) {
-        filterViewModel.effect.collect { effect ->
-            when (effect) {
-                CharactersFilterEffect.Applied -> characters.refresh()
-            }
+    LaunchedEffect(filterState, characters) {
+        if (filterState is CharactersFilterState.Applied) {
+            characters.refresh()
         }
     }
 
@@ -72,12 +80,14 @@ fun CharactersPage(
         show = when (datePickerState) {
             DatePickerState.Hide,
             DatePickerState.Initial -> false
+
             is DatePickerState.Show<*> -> true
         },
         titleText = R.string.date_picker_select_dates,
         initRange = when (val s = datePickerState) {
             DatePickerState.Hide,
             DatePickerState.Initial -> null
+
             is DatePickerState.Show<*> -> s.range
         },
         onPositiveClicked = { selection ->
@@ -91,16 +101,12 @@ fun CharactersPage(
                         selection = selection,
                     )
                     filter?.let {
-                        filterViewModel.event(
-                            CharactersFilterEvent.ChangeFilters(
-                                filterBundle = filter,
-                            )
-                        )
+                        filterViewModel.changeFilters(filterBundle = filter)
                     }
                 }
             }
         },
-        onHide = { datePickerViewModel.event(DatePickerEvent.Hide) },
+        onHide = datePickerViewModel::hide,
     )
 
     RecentCategoryPage(
@@ -122,16 +128,12 @@ fun CharactersPage(
             charactersFilter(
                 filterBundle = filterState.filterBundle,
                 onFiltersChanged = {
-                    filterViewModel.event(
-                        CharactersFilterEvent.ChangeFilters(filterBundle = it)
-                    )
+                    filterViewModel.changeFilters(filterBundle = it)
                 },
                 onDatePickerDialogShow = { type, date ->
-                    datePickerViewModel.event(
-                        DatePickerEvent.Show(
-                            dialogType = type,
-                            range = date.run { Pair(first.time, second.time) }
-                        )
+                    datePickerViewModel.show(
+                        dialogType = type,
+                        range = date.run { Pair(first.time, second.time) }
                     )
                 },
             )
@@ -142,7 +144,7 @@ fun CharactersPage(
             saveTemplate = R.string.cache_characters_list_error_template,
         ),
         showApplyButton = showApplyButton,
-        onApplyFilter = { filterViewModel.event(CharactersFilterEvent.Apply) },
+        onApplyFilter = filterViewModel::apply,
         viewModel = viewModel,
         networkConnection = networkConnection,
         favoritesViewModel = favoritesViewModel,

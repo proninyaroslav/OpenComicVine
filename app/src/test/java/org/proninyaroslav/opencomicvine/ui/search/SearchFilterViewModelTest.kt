@@ -90,7 +90,8 @@ class SearchFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(SearchFilterEvent.ChangeFilters(filter))
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
@@ -125,33 +126,25 @@ class SearchFilterViewModelTest {
                 isNeedApply = false,
             ),
         )
-        val expectedEffects = listOf(
-            SearchFilterEffect.Applied,
-        )
         val actualStates = mutableListOf<SearchFilterState>()
-        val actualEffects = mutableListOf<SearchFilterEffect>()
 
         coEvery { pref.setSearchFilter(filter) } just runs
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(SearchFilterEvent.ChangeFilters(filter))
             runCurrent()
-            viewModel.event(SearchFilterEvent.Apply)
+            viewModel.changeFilters(filter)
             runCurrent()
-            viewModel.event(SearchFilterEvent.ChangeFilters(filter))
+            viewModel.apply()
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         verify { pref.searchFilter }
         coVerify { pref.setSearchFilter(filter) }

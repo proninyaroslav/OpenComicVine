@@ -15,8 +15,6 @@ import org.junit.Test
 import org.proninyaroslav.opencomicvine.data.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.getDaysOfCurrentWeek
-import org.proninyaroslav.opencomicvine.ui.home.category.filter.VolumesFilterEffect
-import org.proninyaroslav.opencomicvine.ui.home.category.filter.VolumesFilterEvent
 import org.proninyaroslav.opencomicvine.ui.home.category.filter.VolumesFilterState
 import org.proninyaroslav.opencomicvine.ui.home.category.filter.VolumesFilterViewModel
 
@@ -95,7 +93,8 @@ class VolumesFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(VolumesFilterEvent.ChangeFilters(filter))
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
@@ -130,33 +129,25 @@ class VolumesFilterViewModelTest {
                 isNeedApply = false,
             ),
         )
-        val expectedEffects = listOf(
-            VolumesFilterEffect.Applied,
-        )
         val actualStates = mutableListOf<VolumesFilterState>()
-        val actualEffects = mutableListOf<VolumesFilterEffect>()
 
         coEvery { pref.setRecentVolumesFilters(filter) } just runs
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(VolumesFilterEvent.ChangeFilters(filter))
             runCurrent()
-            viewModel.event(VolumesFilterEvent.Apply)
+            viewModel.changeFilters(filter)
             runCurrent()
-            viewModel.event(VolumesFilterEvent.ChangeFilters(filter))
+            viewModel.apply()
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         verify { pref.recentVolumesFilters }
         coVerify { pref.setRecentVolumesFilters(filter) }

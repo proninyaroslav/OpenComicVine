@@ -19,8 +19,11 @@
 
 package org.proninyaroslav.opencomicvine.ui.wiki.category.filter
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiCharactersFilter
@@ -28,25 +31,21 @@ import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiCharactersFilte
 import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiCharactersSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            CharactersFilterEvent,
-            CharactersFilterState,
-            CharactersFilterEffect,
-            >(CharactersFilterState.Initial) {
-
+) : ViewModel() {
+    private val _state = MutableStateFlow<CharactersFilterState>(CharactersFilterState.Initial)
     private val stateCache = FilterStateCache(
         FilterStateCache.State(
             sort = CharactersFilterState.Initial.sort,
             filter = CharactersFilterState.Initial.filterBundle,
         )
     )
+
+    val state: StateFlow<CharactersFilterState> = _state
 
     init {
         viewModelScope.launch {
@@ -58,81 +57,62 @@ class CharactersFilterViewModel @Inject constructor(
                     filter = currentFilters,
                 )
             )
-            emitState(
-                CharactersFilterState.Loaded(
-                    sort = currentSort,
-                    filterBundle = currentFilters,
+            _state.value = CharactersFilterState.Loaded(
+                sort = currentSort,
+                filterBundle = currentFilters,
+            )
+        }
+    }
+
+    fun changeSort(sort: PrefWikiCharactersSort) {
+        state.value.run {
+            _state.value = CharactersFilterState.SortChanged(
+                sort = sort,
+                filterBundle = filterBundle,
+                isNeedApply = isNeedApply(
+                    sort = sort,
+                    filter = filterBundle,
                 )
             )
         }
+    }
 
-        on<CharactersFilterEvent.ChangeSort> { event ->
-            state.value.run {
-                emitState(
-                    CharactersFilterState.SortChanged(
-                        sort = event.sort,
-                        filterBundle = filterBundle,
-                        isNeedApply = isNeedApply(
-                            sort = event.sort,
-                            filter = filterBundle,
-                        )
-                    )
+    fun changeFilters(filterBundle: PrefWikiCharactersFilterBundle) {
+        state.value.run {
+            _state.value = CharactersFilterState.FiltersChanged(
+                sort = sort,
+                filterBundle = filterBundle,
+                isNeedApply = isNeedApply(
+                    sort = sort,
+                    filter = filterBundle,
                 )
-            }
+            )
         }
+    }
 
-        on<CharactersFilterEvent.ChangeFilters> { event ->
-            state.value.run {
-                emitState(
-                    CharactersFilterState.FiltersChanged(
+    fun apply() {
+        val value = state.value
+        val newState = CharactersFilterState.Applied(
+            sort = value.sort,
+            filterBundle = value.filterBundle,
+        )
+        viewModelScope.launch {
+            newState.run {
+                pref.setWikiCharactersSort(sort)
+                pref.setWikiCharactersFilters(filterBundle)
+                stateCache.save(
+                    FilterStateCache.State(
                         sort = sort,
-                        filterBundle = event.filterBundle,
-                        isNeedApply = isNeedApply(
-                            sort = sort,
-                            filter = event.filterBundle,
-                        )
+                        filter = filterBundle,
                     )
                 )
             }
-        }
-
-        on<CharactersFilterEvent.Apply> {
-            val value = state.value
-            val newState = CharactersFilterState.Applied(
-                sort = value.sort,
-                filterBundle = value.filterBundle,
-            )
-            viewModelScope.launch {
-                newState.run {
-                    pref.setWikiCharactersSort(sort)
-                    pref.setWikiCharactersFilters(filterBundle)
-                    stateCache.save(
-                        FilterStateCache.State(
-                            sort = sort,
-                            filter = filterBundle,
-                        )
-                    )
-                }
-                emitEffect(CharactersFilterEffect.Applied)
-                emitState(newState)
-            }
+            _state.value = newState
         }
     }
 
     private fun isNeedApply(sort: PrefWikiCharactersSort, filter: PrefWikiCharactersFilterBundle) =
         stateCache.current.let { sort != it.sort || filter != it.filter }
-}
-
-sealed interface CharactersFilterEvent {
-    data class ChangeSort(
-        val sort: PrefWikiCharactersSort
-    ) : CharactersFilterEvent
-
-    data class ChangeFilters(
-        val filterBundle: PrefWikiCharactersFilterBundle,
-    ) : CharactersFilterEvent
-
-    object Apply : CharactersFilterEvent
 }
 
 sealed interface CharactersFilterState {
@@ -170,8 +150,4 @@ sealed interface CharactersFilterState {
         override val sort: PrefWikiCharactersSort,
         override val filterBundle: PrefWikiCharactersFilterBundle,
     ) : CharactersFilterState
-}
-
-sealed interface CharactersFilterEffect {
-    object Applied : CharactersFilterEffect
 }

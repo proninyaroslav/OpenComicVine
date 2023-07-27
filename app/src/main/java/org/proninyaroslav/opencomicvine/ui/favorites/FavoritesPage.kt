@@ -110,6 +110,7 @@ fun FavoritesPage(
     val coroutineScope = rememberCoroutineScope()
     val snackbarState = LocalAppSnackbarState.current
     val context = LocalContext.current
+    val switchFavoriteState by favoritesViewModel.switchFavorite.state.collectAsStateWithLifecycle()
 
     val showNetworkUnavailable by remember(networkState, entities) {
         derivedStateOf {
@@ -117,11 +118,9 @@ fun FavoritesPage(
         }
     }
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> entities.onEach { it.retry() }
-            }
+    LaunchedEffect(networkState, entities) {
+        if (networkState is NetworkState.Reestablished) {
+            entities.onEach { it.retry() }
         }
     }
 
@@ -146,34 +145,32 @@ fun FavoritesPage(
         }
     }
 
-    LaunchedEffect(favoritesViewModel) {
-        favoritesViewModel.effect.collect { effect ->
-            when (effect) {
-                is FavoritesEffect.Added -> {}
-                is FavoritesEffect.Removed -> coroutineScope.launch {
-                    val res = snackbarState.showSnackbar(
-                        context.getString(R.string.removed_from_favorites_message),
-                        context.getString(R.string.undo),
-                        duration = SnackbarDuration.Short,
+    LaunchedEffect(switchFavoriteState) {
+        when (val s = switchFavoriteState) {
+            is SwitchFavoriteState.Failed -> coroutineScope.launch {
+                snackbarState.showSnackbar(
+                    context.getString(
+                        R.string.error_add_delete_from_favorites,
+                        s.error,
                     )
-                    if (res == SnackbarResult.ActionPerformed) {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = effect.entityId,
-                                entityType = effect.entityType,
-                            )
-                        )
-                    }
-                }
-                is FavoritesEffect.SwitchFavoriteFailed -> coroutineScope.launch {
-                    snackbarState.showSnackbar(
-                        context.getString(
-                            R.string.error_add_delete_from_favorites,
-                            effect.error,
-                        )
+                )
+            }
+
+            is SwitchFavoriteState.Removed -> coroutineScope.launch {
+                val res = snackbarState.showSnackbar(
+                    context.getString(R.string.removed_from_favorites_message),
+                    context.getString(R.string.undo),
+                    duration = SnackbarDuration.Short,
+                )
+                if (res == SnackbarResult.ActionPerformed) {
+                    favoritesViewModel.switchFavorite(
+                        entityId = s.entityId,
+                        entityType = s.entityType,
                     )
                 }
             }
+
+            else -> {}
         }
     }
 
@@ -218,14 +215,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onCharacterClicked = { onLoadPage(FavoritesPage.Character(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Character,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Character,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -237,14 +232,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onIssueClicked = { onLoadPage(FavoritesPage.Issue(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Issue,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Issue,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -256,14 +249,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onVolumeClicked = { onLoadPage(FavoritesPage.Volume(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Volume,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Volume,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -275,14 +266,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onConceptClicked = { onLoadPage(FavoritesPage.Concept(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Concept,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Concept,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -294,14 +283,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onLocationClicked = { onLoadPage(FavoritesPage.Location(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Location,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Location,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -313,14 +300,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onMovieClicked = { onLoadPage(FavoritesPage.Movie(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Movie,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Movie,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -332,14 +317,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onObjectClicked = { onLoadPage(FavoritesPage.Object(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Object,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Object,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -351,14 +334,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onPersonClicked = { onLoadPage(FavoritesPage.Person(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Person,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Person,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -370,14 +351,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onStoryArcClicked = { onLoadPage(FavoritesPage.StoryArc(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.StoryArc,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.StoryArc,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -389,14 +368,12 @@ fun FavoritesPage(
                     fullscreen = !isExpandedWidth,
                     onTeamClicked = { onLoadPage(FavoritesPage.Team(it)) },
                     onFavoriteClicked = {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = it,
-                                entityType = FavoriteInfo.EntityType.Team,
-                            )
+                        favoritesViewModel.switchFavorite(
+                            entityId = it,
+                            entityType = FavoriteInfo.EntityType.Team,
                         )
                     },
-                    onReport = { viewModel.event(FavoritesPageEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
         }

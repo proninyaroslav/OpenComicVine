@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.home
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingCharacterRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingIssueRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingVolumeRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -56,13 +56,7 @@ class HomeViewModel @Inject constructor(
     charactersRemoteMediatorFactory: CharactersRemoteMediatorFactory,
     issuesRemoteMediatorFactory: IssuesRemoteMediatorFactory,
     volumesRemoteMediatorFactory: VolumesRemoteMediatorFactory,
-) : StoreViewModel<HomeEvent, Unit, Unit>(Unit) {
-
-    init {
-        on<HomeEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
-    }
+) : ViewModel() {
 
     private val miniCharactersRemoteMediator = charactersRemoteMediatorFactory.create(
         endOfPaginationOffset = ComicVineSource.DEFAULT_MINI_PAGE_SIZE - 1,
@@ -107,6 +101,10 @@ class HomeViewModel @Inject constructor(
     fun <T> toMediatorError(state: LoadState): T? =
         ComicVineRemoteMediator.stateToError(state)
 
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
+    }
+
     private fun buildPagingConfig(): PagingConfig = PagingConfig(
         pageSize = ComicVineSource.DEFAULT_MINI_PAGE_SIZE,
         initialLoadSize = ComicVineSource.DEFAULT_MINI_PAGE_SIZE,
@@ -138,8 +136,4 @@ class HomeViewModel @Inject constructor(
                 entityType = FavoriteInfo.EntityType.Volume,
             )
         )
-}
-
-sealed interface HomeEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : HomeEvent
 }

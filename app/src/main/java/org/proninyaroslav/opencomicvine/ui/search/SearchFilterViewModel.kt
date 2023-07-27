@@ -19,74 +19,60 @@
 
 package org.proninyaroslav.opencomicvine.ui.search
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefSearchFilter
 import org.proninyaroslav.opencomicvine.data.preferences.PrefSearchFilterBundle
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            SearchFilterEvent,
-            SearchFilterState,
-            SearchFilterEffect,
-            >(SearchFilterState.Initial) {
-
+) : ViewModel() {
+    private val _state = MutableStateFlow<SearchFilterState>(SearchFilterState.Initial)
     private val stateCache = FilterStateCache<Nothing, PrefSearchFilterBundle>(
         FilterStateCache.State(filter = SearchFilterState.Initial.filterBundle)
     )
+    
+    val state: StateFlow<SearchFilterState> = _state
 
     init {
         viewModelScope.launch {
             val currentFilter = pref.searchFilter.first()
             stateCache.save(FilterStateCache.State(filter = currentFilter))
-            emitState(
-                SearchFilterState.Loaded(
-                    filterBundle = currentFilter,
-                )
+            _state.value = SearchFilterState.Loaded(
+                filterBundle = currentFilter,
             )
-        }
-
-        on<SearchFilterEvent.ChangeFilters> { event ->
-            emitState(
-                SearchFilterState.FiltersChanged(
-                    filterBundle = event.filter,
-                    isNeedApply = event.filter != stateCache.current.filter,
-                )
-            )
-        }
-
-        on<SearchFilterEvent.Apply> {
-            val value = state.value
-            val newState = SearchFilterState.Applied(
-                filterBundle = value.filterBundle,
-            )
-            viewModelScope.launch {
-                newState.run {
-                    pref.setSearchFilter(filterBundle)
-                    stateCache.save(FilterStateCache.State(filter = filterBundle))
-                }
-                emitEffect(SearchFilterEffect.Applied)
-                emitState(newState)
-            }
         }
     }
-}
 
-sealed interface SearchFilterEvent {
-    data class ChangeFilters(
-        val filter: PrefSearchFilterBundle,
-    ) : SearchFilterEvent
+    fun changeFilters(filter: PrefSearchFilterBundle) {
+        _state.value = SearchFilterState.FiltersChanged(
+            filterBundle = filter,
+            isNeedApply = filter != stateCache.current.filter,
+        )
+    }
 
-    object Apply : SearchFilterEvent
+    fun apply() {
+        val value = state.value
+        val newState = SearchFilterState.Applied(
+            filterBundle = value.filterBundle,
+        )
+        viewModelScope.launch {
+            newState.run {
+                pref.setSearchFilter(filterBundle)
+                stateCache.save(FilterStateCache.State(filter = filterBundle))
+            }
+            _state.value = SearchFilterState.Applied(filterBundle = value.filterBundle)
+        }
+    }
 }
 
 sealed interface SearchFilterState {
@@ -110,8 +96,4 @@ sealed interface SearchFilterState {
     data class Applied(
         override val filterBundle: PrefSearchFilterBundle,
     ) : SearchFilterState
-}
-
-sealed interface SearchFilterEffect {
-    object Applied : SearchFilterEffect
 }

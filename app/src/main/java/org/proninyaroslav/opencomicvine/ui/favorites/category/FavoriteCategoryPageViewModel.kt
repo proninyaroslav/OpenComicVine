@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.favorites.category
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +31,6 @@ import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.paging.favorites.*
 import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.*
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,66 +57,63 @@ class FavoriteCategoryPageViewModel @Inject constructor(
     volumesRemoteMediatorFactory: VolumesRemoteMediatorFactory,
     storyArcsRemoteMediatorFactory: StoryArcsRemoteMediatorFactory,
     teamsRemoteMediatorFactory: TeamsRemoteMediatorFactory,
-) : StoreViewModel<
-        FavoriteCategoryPageEvent,
-        Unit,
-        FavoriteCategoryPageEffect>
-    (Unit) {
+) : ViewModel() {
 
-    init {
-        on<FavoriteCategoryPageEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    private val _effect = MutableSharedFlow<FavoriteCategoryPageEffect>()
+    val effect: SharedFlow<FavoriteCategoryPageEffect> = _effect
+
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     private val charactersRemoteMediator = charactersRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val issuesRemoteMediator = issuesRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val conceptsRemoteMediator = conceptsRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val locationsRemoteMediator = locationsRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val moviesRemoteMediator = moviesRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val objectsRemoteMediator = objectRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val peopleRemoteMediator = peopleRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val volumesRemoteMediator = volumesRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val storyArcsRemoteMediator = storyArcsRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     private val teamsRemoteMediator = teamsRemoteMediatorFactory.create(
         scope = viewModelScope,
-        onRefresh = { emitEffect(FavoriteCategoryPageEffect.Refresh) },
+        onRefresh = { _effect.tryEmit(FavoriteCategoryPageEffect.Refresh) },
     )
 
     val charactersList: Flow<PagingData<FavoritesCharacterItem>> = Pager(
@@ -205,10 +202,6 @@ class FavoriteCategoryPageViewModel @Inject constructor(
     private fun buildPagingConfig(): PagingConfig = PagingConfig(
         pageSize = ComicVineSource.DEFAULT_PAGE_SIZE,
     )
-}
-
-sealed interface FavoriteCategoryPageEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : FavoriteCategoryPageEvent
 }
 
 sealed interface FavoriteCategoryPageEffect {

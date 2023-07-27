@@ -21,7 +21,12 @@ package org.proninyaroslav.opencomicvine.ui.details.category.character
 
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -32,10 +37,7 @@ import org.proninyaroslav.opencomicvine.R
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.details.DetailsPage
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsCategoryPage
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEffect
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEvent
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsState
-import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesEvent
 import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesViewModel
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
 
@@ -61,17 +63,16 @@ fun CharacterPage(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(viewModel) {
-        viewModel.event(DetailsEvent.Load(characterId))
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is DetailsEffect.CacheLoadFailed -> {
-                    Log.e(
-                        TAG,
-                        "Unable to load character info from cache, id = $characterId",
-                        effect.exception
-                    )
-                }
-            }
+        viewModel.load(characterId)
+    }
+    LaunchedEffect(state) {
+        val s = state
+        if (s is DetailsState.CacheLoadFailed) {
+            Log.e(
+                TAG,
+                "Unable to load character info from cache, id = $characterId",
+                s.exception
+            )
         }
     }
 
@@ -97,6 +98,7 @@ fun CharacterPage(
                         teamFriends = teamFriends,
                     )
                 }
+
                 else -> null
             }
         )
@@ -139,24 +141,22 @@ fun CharacterPage(
                 toSourceError = viewModel::toSourceError,
                 onLoadPage = onLoadPage,
                 onFavoriteClick = { entityId, entityType ->
-                    favoritesViewModel.event(
-                        FavoritesEvent.SwitchFavorite(
-                            entityId = entityId,
-                            entityType = entityType,
-                        )
+                    favoritesViewModel.switchFavorite(
+                        entityId = entityId,
+                        entityType = entityType,
                     )
                 },
-                onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+                onReport = viewModel::errorReport,
             )
         },
         networkConnection = networkConnection,
         favoritesViewModel = favoritesViewModel,
         isExpandedWidth = isExpandedWidth,
-        onRefresh = { viewModel.event(DetailsEvent.Load(characterId)) },
+        onRefresh = { viewModel.load(characterId) },
         onBackPressed = onBackPressed,
         onOpenLink = onOpenLink,
         onShareLink = onShareLink,
-        onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+        onReport = viewModel::errorReport,
         modifier = modifier,
     )
 }

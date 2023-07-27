@@ -53,9 +53,9 @@ import org.proninyaroslav.opencomicvine.ui.components.list.CardCellSize
 import org.proninyaroslav.opencomicvine.ui.components.list.EmptyListPlaceholder
 import org.proninyaroslav.opencomicvine.ui.components.list.PagingVerticalCardGrid
 import org.proninyaroslav.opencomicvine.ui.components.search_bar.*
+import org.proninyaroslav.opencomicvine.ui.search.history.AddToHistoryState
+import org.proninyaroslav.opencomicvine.ui.search.history.DeleteFromHistoryState
 import org.proninyaroslav.opencomicvine.ui.search.history.SearchHistory
-import org.proninyaroslav.opencomicvine.ui.search.history.SearchHistoryEffect
-import org.proninyaroslav.opencomicvine.ui.search.history.SearchHistoryEvent
 import org.proninyaroslav.opencomicvine.ui.search.history.SearchHistoryViewModel
 import org.proninyaroslav.opencomicvine.ui.viewmodel.*
 
@@ -91,6 +91,8 @@ fun SearchPage(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val searchHistoryList by searchHistoryViewModel.searchHistoryList.collectAsStateWithLifecycle()
+    val addToHistoryState by searchHistoryViewModel.addToHistory.state.collectAsStateWithLifecycle()
+    val deleteFromHistoryState by searchHistoryViewModel.deleteFromHistory.state.collectAsStateWithLifecycle()
     val searchList = viewModel.searchList.collectAsLazyPagingItems()
     val filterState by filterViewModel.state.collectAsStateWithLifecycle()
     val isNeedApplyFilter by remember(filterState) {
@@ -107,77 +109,76 @@ fun SearchPage(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val context = LocalContext.current
     val snackbarState = LocalAppSnackbarState.current
+    val networkState by networkConnection.state.collectAsStateWithLifecycle()
+    val switchFavoriteState by favoritesViewModel.switchFavorite.state.collectAsStateWithLifecycle()
     val scrollBehavior = rememberSearchTopAppBarScrollBehavior()
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> searchList.retry()
-            }
+    LaunchedEffect(networkState, searchList) {
+        if (networkState is NetworkState.Reestablished) {
+            searchList.retry()
         }
     }
 
-    LaunchedEffect(viewModel) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                SearchEffect.Refresh -> searchList.refresh()
-            }
+    LaunchedEffect(state, searchList) {
+        if (state is SearchState.Submitted) {
+            searchList.refresh()
         }
     }
 
-    LaunchedEffect(filterViewModel) {
-        filterViewModel.effect.collect { effect ->
-            when (effect) {
-                SearchFilterEffect.Applied -> searchList.refresh()
-            }
+    LaunchedEffect(filterState, searchList) {
+        if (filterState is SearchFilterState.Applied) {
+            searchList.refresh()
         }
     }
 
-    LaunchedEffect(favoritesViewModel) {
-        favoritesViewModel.effect.collect { effect ->
-            when (effect) {
-                is FavoritesEffect.SwitchFavoriteFailed -> when (val error = effect.error) {
-                    is FavoritesRepository.Result.Failed.IO -> coroutineScope.launch {
-                        snackbarState.showSnackbar(
-                            context.getString(
-                                R.string.error_add_delete_from_favorites,
-                                error.exception
-                            )
+    LaunchedEffect(switchFavoriteState) {
+        when (val s = switchFavoriteState) {
+            is SwitchFavoriteState.Failed -> when (val error = s.error) {
+                is FavoritesRepository.Result.Failed.IO -> coroutineScope.launch {
+                    snackbarState.showSnackbar(
+                        context.getString(
+                            R.string.error_add_delete_from_favorites,
+                            error.exception
                         )
-                    }
+                    )
                 }
-                is FavoritesEffect.Added -> {}
-                is FavoritesEffect.Removed -> {}
             }
+
+            else -> {}
         }
     }
 
-    LaunchedEffect(searchHistoryViewModel) {
-        searchHistoryViewModel.effect.collect { effect ->
-            when (effect) {
-                is SearchHistoryEffect.AddToHistoryFailed -> when (val error = effect.error) {
-                    is SearchHistoryRepository.Result.Failed.IO -> coroutineScope.launch {
-                        snackbarState.showSnackbar(
-                            context.getString(
-                                R.string.error_add_to_search_history_template,
-                                error.exception
-                            )
+    LaunchedEffect(addToHistoryState) {
+        when (val s = addToHistoryState) {
+            is AddToHistoryState.Failed -> when (val error = s.error) {
+                is SearchHistoryRepository.Result.Failed.IO -> coroutineScope.launch {
+                    snackbarState.showSnackbar(
+                        context.getString(
+                            R.string.error_add_to_search_history_template,
+                            error.exception
                         )
-                    }
+                    )
                 }
-                is SearchHistoryEffect.DeleteFromHistoryFailed -> when (val error = effect.error) {
-                    is SearchHistoryRepository.Result.Failed.IO -> coroutineScope.launch {
-                        snackbarState.showSnackbar(
-                            context.getString(
-                                R.string.error_delete_from_search_history_template,
-                                error.exception
-                            )
-                        )
-                    }
-                }
-                is SearchHistoryEffect.AddedToHistory -> {}
-                is SearchHistoryEffect.RemovedFromHistory -> {}
             }
+
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(deleteFromHistoryState) {
+        when (val s = deleteFromHistoryState) {
+            is DeleteFromHistoryState.Failed -> when (val error = s.error) {
+                is SearchHistoryRepository.Result.Failed.IO -> coroutineScope.launch {
+                    snackbarState.showSnackbar(
+                        context.getString(
+                            R.string.error_delete_from_search_history_template,
+                            error.exception
+                        )
+                    )
+                }
+            }
+
+            else -> {}
         }
     }
 
@@ -187,9 +188,7 @@ fun SearchPage(
             searchFilter(
                 filter = filterState.filterBundle,
                 onFilterChange = {
-                    filterViewModel.event(
-                        SearchFilterEvent.ChangeFilters(filter = it)
-                    )
+                    filterViewModel.changeFilters(it)
                 },
             )
         },
@@ -197,7 +196,7 @@ fun SearchPage(
         drawerState = drawerState,
         onClose = { coroutineScope.launch { drawerState.close() } },
         onApply = {
-            filterViewModel.event(SearchFilterEvent.Apply)
+            filterViewModel.apply()
             coroutineScope.launch { drawerState.close() }
         },
         onTypeChanged = {
@@ -209,19 +208,17 @@ fun SearchPage(
                 SearchTopBar(
                     state = state,
                     historyList = searchHistoryList,
-                    onQueryChanged = {
-                        viewModel.event(SearchEvent.ChangeQuery(it))
-                    },
+                    onQueryChanged = viewModel::changeQuery,
                     onSearch = {
                         if (isNeedApplyFilter) {
-                            filterViewModel.event(SearchFilterEvent.Apply)
+                            filterViewModel.apply()
                         }
-                        viewModel.event(SearchEvent.Search)
-                        searchHistoryViewModel.event(SearchHistoryEvent.AddToHistory(it))
+                        viewModel.search()
+                        searchHistoryViewModel.addToHistory(it)
                     },
                     onFilterButtonClick = { coroutineScope.launch { drawerState.fling() } },
                     onRemoveFromHistory = {
-                        searchHistoryViewModel.event(SearchHistoryEvent.DeleteFromHistory(it))
+                        searchHistoryViewModel.deleteFromHistory(it)
                     },
                     showFilterButton = showFilterButton,
                     isExpandedWidth = isExpandedWidth,
@@ -247,15 +244,13 @@ fun SearchPage(
                 isExpandedWidth = isExpandedWidth,
                 toMediatorError = viewModel::toMediatorError,
                 onSwitchFavorite = { entityId, entityType ->
-                    favoritesViewModel.event(
-                        FavoritesEvent.SwitchFavorite(
-                            entityId = entityId,
-                            entityType = entityType,
-                        )
+                    favoritesViewModel.switchFavorite(
+                        entityId = entityId,
+                        entityType = entityType,
                     )
                 },
                 onLoadPage = onLoadPage,
-                onReport = { viewModel.event(SearchEvent.ErrorReport(it)) },
+                onReport = viewModel::errorReport,
             )
         }
     }
@@ -333,6 +328,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Character(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Concept -> SearchItemCard(
                         conceptInfo = info,
                         isFavorite = isFavorite,
@@ -342,6 +338,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Concept(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Episode -> SearchItemCard(
                         episodeInfo = info,
                         isFavorite = isFavorite,
@@ -351,6 +348,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Episode(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Issue -> SearchItemCard(
                         issueInfo = info,
                         isFavorite = isFavorite,
@@ -360,6 +358,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Issue(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Location -> SearchItemCard(
                         locationInfo = info,
                         isFavorite = isFavorite,
@@ -369,6 +368,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Location(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Object -> SearchItemCard(
                         objectInfo = info,
                         isFavorite = isFavorite,
@@ -378,6 +378,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Object(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Person -> SearchItemCard(
                         personInfo = info,
                         isFavorite = isFavorite,
@@ -387,6 +388,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Person(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Series -> SearchItemCard(
                         seriesInfo = info,
                         isFavorite = isFavorite,
@@ -396,6 +398,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Series(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.StoryArc -> SearchItemCard(
                         storyArcInfo = info,
                         isFavorite = isFavorite,
@@ -405,6 +408,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.StoryArc(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Team -> SearchItemCard(
                         teamInfo = info,
                         isFavorite = isFavorite,
@@ -414,6 +418,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Team(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Video -> SearchItemCard(
                         videoInfo = info,
                         isFavorite = isFavorite,
@@ -423,6 +428,7 @@ private fun SearchResultList(
                         onClick = { onLoadPage(SearchPage.Video(info.id)) },
                         modifier = cardModifier,
                     )
+
                     is SearchInfo.Volume -> SearchItemCard(
                         volumeInfo = info,
                         isFavorite = isFavorite,

@@ -4,8 +4,10 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.*
@@ -49,7 +51,14 @@ class AboutViewModelTest {
     }
 
     @Test
-    fun load() {
+    fun load() = runTest {
+        dispatcher.scheduler.runCurrent()
+        assertEquals(
+            AboutState.Initial,
+            viewModel.state.first(),
+        )
+
+        dispatcher.scheduler.runCurrent()
         assertEquals(
             AboutState.Loaded(
                 appName = appInfo.appName,
@@ -60,13 +69,20 @@ class AboutViewModelTest {
     }
 
     @Test
-    fun `Load failed`() {
+    fun `Load failed`() = runTest {
         val error = AppInfoProvider.State.Failed(IOException())
 
         every { appInfoProvider.getAppInfo() } returns error
 
         viewModel = AboutViewModel(errorReportService, appInfoProvider)
 
+        dispatcher.scheduler.runCurrent()
+        assertEquals(
+            AboutState.Initial,
+            viewModel.state.first(),
+        )
+
+        dispatcher.scheduler.runCurrent()
         assertEquals(
             AboutState.LoadFailed(error),
             viewModel.state.value,
@@ -82,8 +98,7 @@ class AboutViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(AboutEvent.ErrorReport(info))
-        dispatcher.scheduler.runCurrent()
+        viewModel.errorReport(info)
 
         verify { errorReportService.report(info) }
         confirmVerified(errorReportService)

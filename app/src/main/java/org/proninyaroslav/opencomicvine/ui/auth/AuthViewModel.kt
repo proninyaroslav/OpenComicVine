@@ -19,116 +19,85 @@
 
 package org.proninyaroslav.opencomicvine.ui.auth
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.repo.ApiKeyRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val apiKeyRepo: ApiKeyRepository,
     private val errorReportService: ErrorReportService,
-) : StoreViewModel<AuthEvent, AuthState, AuthEffect>(AuthState.Initial) {
+) : ViewModel() {
 
-    init {
-        on<AuthEvent.ChangeApiKey> { event ->
-            if (isChangeNotAllowed()) {
-                return@on
-            }
-            emitState(AuthState.ApiKeyChanged(event.apiKey.trim()))
-        }
+    private val _state = MutableStateFlow(AuthState())
+    val state: StateFlow<AuthState> = _state
 
-        on<AuthEvent.Submit> {
-            if (isSubmitNotAllowed()) {
-                return@on
-            }
-            viewModelScope.launch { submit() }
-        }
-
-        on<AuthEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    fun changeApiKey(apiKey: String) {
+        _state.value = AuthState(apiKey = apiKey.trim())
     }
 
-    private suspend fun submit() {
-        val currentState = state.value
-        val apiKey = currentState.apiKey
+    val submit = Submit()
 
-        emitState(AuthState.SubmitInProgress(apiKey))
-        if (apiKey.isBlank()) {
-            emitState(AuthState.SubmitFailed.EmptyApiKey)
-            return
-        }
-        when (val res = apiKeyRepo.set(apiKey)) {
-            is ApiKeyRepository.SaveResult.Success -> {
-                emitState(AuthState.Submitted(apiKey))
-                emitEffect(AuthEffect.Submitted)
-            }
-            is ApiKeyRepository.SaveResult.Failed -> {
-                emitState(
-                    AuthState.SubmitFailed.SaveError(
-                        apiKey = apiKey,
-                        error = res,
-                    )
-                )
-            }
-        }
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
-    private fun isChangeNotAllowed() = when (state.value) {
-        is AuthState.SubmitInProgress -> true
-        else -> false
-    }
+    inner class Submit {
+        private val _submitState = MutableStateFlow<AuthSubmitState>(AuthSubmitState.Initial)
+        val state: StateFlow<AuthSubmitState> = _submitState
 
-    private fun isSubmitNotAllowed() = when (state.value) {
-        is AuthState.SubmitInProgress -> true
-        else -> false
+        operator fun invoke() {
+            if (_submitState.value == AuthSubmitState.SubmitInProgress) {
+                return
+            }
+            viewModelScope.launch {
+                val currentState = _state.value
+                val apiKey = currentState.apiKey
+
+                _submitState.value = AuthSubmitState.SubmitInProgress
+                if (apiKey.isBlank()) {
+                    _submitState.value = AuthSubmitState.SubmitFailed.EmptyApiKey
+                    return@launch
+                }
+                when (val res = apiKeyRepo.set(apiKey)) {
+                    is ApiKeyRepository.SaveResult.Success -> {
+                        _submitState.value = AuthSubmitState.Submitted
+                    }
+
+                    is ApiKeyRepository.SaveResult.Failed -> {
+                        _submitState.value = AuthSubmitState.SubmitFailed.SaveError(
+                            error = res,
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
-sealed interface AuthEvent {
-    data class ChangeApiKey(val apiKey: String) : AuthEvent
+data class AuthState(
+    val apiKey: String = ""
+)
 
-    object Submit : AuthEvent
+sealed interface AuthSubmitState {
+    object Initial : AuthSubmitState
 
-    data class ErrorReport(val info: ErrorReportInfo) : AuthEvent
-}
+    object SubmitInProgress : AuthSubmitState
 
-sealed interface AuthState {
-    val apiKey: String
+    object Submitted : AuthSubmitState
 
-    object Initial : AuthState {
-        override val apiKey: String = ""
-    }
-
-    data class ApiKeyChanged(
-        override val apiKey: String
-    ) : AuthState
-
-    data class SubmitInProgress(
-        override val apiKey: String
-    ) : AuthState
-
-    data class Submitted(
-        override val apiKey: String
-    ) : AuthState
-
-    sealed interface SubmitFailed : AuthState {
-        object EmptyApiKey : SubmitFailed {
-            override val apiKey: String = ""
-        }
+    sealed interface SubmitFailed : AuthSubmitState {
+        object EmptyApiKey : SubmitFailed
 
         data class SaveError(
-            override val apiKey: String,
             val error: ApiKeyRepository.SaveResult.Failed,
         ) : SubmitFailed
     }
-}
-
-sealed interface AuthEffect {
-    object Submitted : AuthEffect
 }

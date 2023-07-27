@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.auth
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,15 +27,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.proninyaroslav.opencomicvine.model.repo.ApiKeyRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthGuardViewModel @Inject constructor(
     apiKeyRepo: ApiKeyRepository,
-) : StoreViewModel<Unit, AuthGuardState, Unit>(AuthGuardState.Initial) {
-
-    override val state: StateFlow<AuthGuardState> = apiKeyRepo.get()
+) : ViewModel() {
+    val state: StateFlow<AuthGuardState> = apiKeyRepo.get()
         .map {
             when (it) {
                 is ApiKeyRepository.GetResult.Success -> AuthGuardState.Authorized

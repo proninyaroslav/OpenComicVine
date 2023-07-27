@@ -19,10 +19,13 @@
 
 package org.proninyaroslav.opencomicvine.ui.search.history
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -32,7 +35,6 @@ import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.DateProvider
 import org.proninyaroslav.opencomicvine.model.repo.SearchHistoryRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +44,7 @@ class SearchHistoryViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     private val dateProvider: DateProvider,
     private val pref: AppPreferences,
-) : StoreViewModel<SearchHistoryEvent, Unit, SearchHistoryEffect>(Unit) {
+) : ViewModel() {
 
     val searchHistoryList = searchHistoryRepo.observeAll()
         .onEach(::deleteOldItems)
@@ -52,32 +54,9 @@ class SearchHistoryViewModel @Inject constructor(
             initialValue = SearchHistoryRepository.Result.Success(emptyList()),
         )
 
-    init {
-        on<SearchHistoryEvent.AddToHistory> { event ->
-            viewModelScope.launch(ioDispatcher) {
-                val info = SearchHistoryInfo(
-                    query = event.query,
-                    date = dateProvider.now,
-                )
-                when (val res = searchHistoryRepo.insert(info)) {
-                    is SearchHistoryRepository.Result.Success ->
-                        emitEffect(SearchHistoryEffect.AddedToHistory(info))
-                    is SearchHistoryRepository.Result.Failed.IO ->
-                        emitEffect(SearchHistoryEffect.AddToHistoryFailed(res))
-                }
-            }
-        }
-        on<SearchHistoryEvent.DeleteFromHistory> { event ->
-            viewModelScope.launch(ioDispatcher) {
-                when (val res = searchHistoryRepo.delete(event.info)) {
-                    is SearchHistoryRepository.Result.Success ->
-                        emitEffect(SearchHistoryEffect.RemovedFromHistory(event.info))
-                    is SearchHistoryRepository.Result.Failed.IO ->
-                        emitEffect(SearchHistoryEffect.DeleteFromHistoryFailed(res))
-                }
-            }
-        }
-    }
+    val addToHistory = AddToHistory()
+
+    val deleteFromHistory = DeleteFromHistory()
 
     private fun deleteOldItems(res: SearchHistoryRepository.Result<List<SearchHistoryInfo>>) {
         if (res !is SearchHistoryRepository.Result.Success) {
@@ -93,24 +72,58 @@ class SearchHistoryViewModel @Inject constructor(
             }
         }
     }
+
+    inner class AddToHistory {
+        private val _state = MutableStateFlow<AddToHistoryState>(AddToHistoryState.Initial)
+        val state: StateFlow<AddToHistoryState> = _state
+
+        operator fun invoke(query: String) {
+            val info = SearchHistoryInfo(
+                query = query,
+                date = dateProvider.now,
+            )
+            viewModelScope.launch(ioDispatcher) {
+                _state.value = when (val res = searchHistoryRepo.insert(info)) {
+                    is SearchHistoryRepository.Result.Success -> AddToHistoryState.Success
+                    is SearchHistoryRepository.Result.Failed.IO -> AddToHistoryState.Failed(res)
+                }
+            }
+        }
+    }
+
+    inner class DeleteFromHistory {
+        private val _state = MutableStateFlow<DeleteFromHistoryState>(
+            DeleteFromHistoryState.Initial
+        )
+        val state: StateFlow<DeleteFromHistoryState> = _state
+
+        operator fun invoke(info: SearchHistoryInfo) {
+            viewModelScope.launch(ioDispatcher) {
+                _state.value = when (val res = searchHistoryRepo.delete(info)) {
+                    is SearchHistoryRepository.Result.Success -> DeleteFromHistoryState.Success
+                    is SearchHistoryRepository.Result.Failed.IO -> DeleteFromHistoryState.Failed(res)
+                }
+            }
+        }
+    }
 }
 
-sealed interface SearchHistoryEvent {
-    data class AddToHistory(val query: String) : SearchHistoryEvent
+sealed interface AddToHistoryState {
+    object Initial : AddToHistoryState
 
-    data class DeleteFromHistory(val info: SearchHistoryInfo) : SearchHistoryEvent
+    object Success : AddToHistoryState
+
+    data class Failed(
+        val error: SearchHistoryRepository.Result.Failed
+    ) : AddToHistoryState
 }
 
-sealed interface SearchHistoryEffect {
-    data class AddedToHistory(val info: SearchHistoryInfo) : SearchHistoryEffect
+sealed interface DeleteFromHistoryState {
+    object Initial : DeleteFromHistoryState
 
-    data class AddToHistoryFailed(
+    object Success : DeleteFromHistoryState
+
+    data class Failed(
         val error: SearchHistoryRepository.Result.Failed
-    ) : SearchHistoryEffect
-
-    data class RemovedFromHistory(val info: SearchHistoryInfo) : SearchHistoryEffect
-
-    data class DeleteFromHistoryFailed(
-        val error: SearchHistoryRepository.Result.Failed
-    ) : SearchHistoryEffect
+    ) : DeleteFromHistoryState
 }

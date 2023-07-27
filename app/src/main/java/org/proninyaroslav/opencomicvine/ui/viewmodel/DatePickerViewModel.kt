@@ -20,42 +20,27 @@
 package org.proninyaroslav.opencomicvine.ui.viewmodel
 
 import androidx.core.util.Pair
+import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class DatePickerViewModel @Inject constructor() :
-    StoreViewModel<
-            DatePickerEvent,
-            DatePickerState,
-            Unit
-            >(DatePickerState.Initial) {
+class DatePickerViewModel @Inject constructor() : ViewModel() {
+    private val _state = MutableStateFlow<DatePickerState>(DatePickerState.Initial)
+    val state: StateFlow<DatePickerState> = _state
 
-    init {
-        on<DatePickerEvent.Show<*>> { event ->
-            emitState(
-                DatePickerState.Show(
-                    dialogType = event.dialogType,
-                    range = event.range,
-                )
-            )
-        }
-
-        on<DatePickerEvent.Hide> {
-            emitState(DatePickerState.Hide)
-        }
+    fun <T> show(dialogType: T, range: Pair<Long, Long>?) {
+        _state.value = DatePickerState.Show(
+            dialogType = dialogType,
+            range = range,
+        )
     }
-}
 
-sealed interface DatePickerEvent {
-    data class Show<T>(
-        val dialogType: T,
-        val range: Pair<Long, Long>?
-    ) : DatePickerEvent
-
-    object Hide : DatePickerEvent
+    fun hide() {
+        _state.value = DatePickerState.Hide
+    }
 }
 
 sealed interface DatePickerState {

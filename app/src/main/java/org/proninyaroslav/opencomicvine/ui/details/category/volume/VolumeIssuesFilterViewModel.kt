@@ -19,52 +19,44 @@
 
 package org.proninyaroslav.opencomicvine.ui.details.category.volume
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefVolumeIssuesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class VolumeIssuesFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            VolumeIssuesFilterEvent,
-            VolumeIssuesFilterState,
-            VolumeIssuesFilterEffect,
-            >(VolumeIssuesFilterState.Initial) {
+) : ViewModel() {
+    private val _state = MutableStateFlow<VolumeIssuesFilterState>(VolumeIssuesFilterState.Initial)
+    val state: StateFlow<VolumeIssuesFilterState> = _state
 
     init {
         viewModelScope.launch {
             val currentSort = pref.volumeIssuesSort.first()
-            emitState(
-                VolumeIssuesFilterState.Loaded(
-                    sort = currentSort,
-                )
+            _state.value = VolumeIssuesFilterState.Loaded(
+                sort = currentSort,
             )
         }
+    }
 
-        on<VolumeIssuesFilterEvent.ChangeSort> { event ->
-            state.value.run {
-                emitState(
-                    VolumeIssuesFilterState.SortChanged(
-                        sort = event.sort,
-                    )
-                )
-            }
-            val value = state.value
-            val newState = VolumeIssuesFilterState.Applied(
-                sort = value.sort,
-            )
-            viewModelScope.launch {
-                saveToPref(newState)
-                emitEffect(VolumeIssuesFilterEffect.Applied)
-                emitState(newState)
-            }
+    fun changeSort(sort: PrefVolumeIssuesSort) {
+        state.value.run {
+            _state.value = VolumeIssuesFilterState.SortChanged(sort = sort)
+        }
+        val value = state.value
+        val newState = VolumeIssuesFilterState.Applied(
+            sort = value.sort,
+        )
+        viewModelScope.launch {
+            saveToPref(newState)
+            _state.value = newState
         }
     }
 
@@ -73,12 +65,6 @@ class VolumeIssuesFilterViewModel @Inject constructor(
             pref.setVolumeIssuesSort(sort)
         }
     }
-}
-
-sealed interface VolumeIssuesFilterEvent {
-    data class ChangeSort(
-        val sort: PrefVolumeIssuesSort
-    ) : VolumeIssuesFilterEvent
 }
 
 sealed interface VolumeIssuesFilterState {
@@ -99,8 +85,4 @@ sealed interface VolumeIssuesFilterState {
     data class Applied(
         override val sort: PrefVolumeIssuesSort,
     ) : VolumeIssuesFilterState
-}
-
-sealed interface VolumeIssuesFilterEffect {
-    object Applied : VolumeIssuesFilterEffect
 }

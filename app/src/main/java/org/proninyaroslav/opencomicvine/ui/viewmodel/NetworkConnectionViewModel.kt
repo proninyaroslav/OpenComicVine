@@ -19,42 +19,40 @@
 
 package org.proninyaroslav.opencomicvine.ui.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.model.network.AppConnectivityManager
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class NetworkConnectionViewModel @Inject constructor(
     private val connectivityManager: AppConnectivityManager,
-) : StoreViewModel<
-        Unit,
-        NetworkState,
-        NetworkEffect>(NetworkState.Initial) {
+) : ViewModel() {
+    private val _state = MutableStateFlow<NetworkState>(NetworkState.Initial)
+    val state: StateFlow<NetworkState> = _state
 
     init {
-        emitState(
-            if (connectivityManager.isNetworkAvailable()) {
-                NetworkState.ConnectionAvailable
-            } else {
-                NetworkState.NoConnection
-            }
-        )
+        _state.value = if (connectivityManager.isNetworkAvailable()) {
+            NetworkState.ConnectionAvailable
+        } else {
+            NetworkState.NoConnection
+        }
         viewModelScope.launch {
             connectivityManager.observeNetworkAvailability
                 .collect { isAvailable ->
-                    if (isAvailable && state.value is NetworkState.NoConnection) {
-                        emitEffect(NetworkEffect.Reestablished)
-                    }
-                    emitState(
-                        if (isAvailable) {
-                            NetworkState.ConnectionAvailable
+                    _state.value = if (isAvailable) {
+                        if (state.value is NetworkState.NoConnection) {
+                            NetworkState.Reestablished
                         } else {
-                            NetworkState.NoConnection
+                            NetworkState.ConnectionAvailable
                         }
-                    )
+                    } else {
+                        NetworkState.NoConnection
+                    }
                 }
         }
     }
@@ -66,8 +64,6 @@ sealed interface NetworkState {
     object NoConnection : NetworkState
 
     object ConnectionAvailable : NetworkState
-}
 
-sealed interface NetworkEffect {
-    object Reestablished : NetworkEffect
+    object Reestablished : NetworkState
 }

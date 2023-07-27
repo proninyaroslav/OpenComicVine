@@ -37,7 +37,6 @@ import org.proninyaroslav.opencomicvine.ui.components.error.NetworkNotAvailableS
 import org.proninyaroslav.opencomicvine.ui.home.category.*
 import org.proninyaroslav.opencomicvine.ui.removeBottomPadding
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
-import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkEffect
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkState
 
 sealed interface HomePage {
@@ -79,11 +78,9 @@ fun HomePage(
         }
     }
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> entities.onEach { it.retry() }
-            }
+    LaunchedEffect(networkState, entities) {
+        if (networkState is NetworkState.Reestablished) {
+            entities.onEach { it.retry() }
         }
     }
 
@@ -107,11 +104,6 @@ fun HomePage(
             }
         }
 
-//        HomeAppBarMenu(
-//            expanded = showMenu,
-//            onDismissRequest = { showMenu = false },
-//            onLoadPage = onLoadPage,
-//        ) {
         CategoriesList(
             isExpandedWidth = isExpandedWidth,
             contentPadding = newContentPadding,
@@ -135,7 +127,7 @@ fun HomePage(
                     onClick = { onLoadPage(HomePage.RecentIssues) },
                     fullscreen = !isExpandedWidth,
                     onIssueClick = { onLoadPage(HomePage.Issue(it)) },
-                    onReport = { viewModel.event(HomeEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport
                 )
             }
 
@@ -146,7 +138,7 @@ fun HomePage(
                     onClick = { onLoadPage(HomePage.RecentVolumes) },
                     fullscreen = !isExpandedWidth,
                     onVolumeClick = { onLoadPage(HomePage.Volume(it)) },
-                    onReport = { viewModel.event(HomeEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport
                 )
             }
 
@@ -157,10 +149,9 @@ fun HomePage(
                     onClick = { onLoadPage(HomePage.RecentCharacters) },
                     fullscreen = !isExpandedWidth,
                     onCharacterClicked = { onLoadPage(HomePage.Character(it)) },
-                    onReport = { viewModel.event(HomeEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport
                 )
             }
         }
-//        }
     }
 }

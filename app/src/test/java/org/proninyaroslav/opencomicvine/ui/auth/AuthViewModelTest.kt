@@ -45,8 +45,8 @@ class AuthViewModelTest {
     fun `Change API key`() = runTest {
         val key = "key"
         val expectedStates = listOf(
-            AuthState.Initial,
-            AuthState.ApiKeyChanged(key),
+            AuthState(),
+            AuthState(apiKey = key),
         )
         val actualStates = mutableListOf<AuthState>()
 
@@ -55,7 +55,7 @@ class AuthViewModelTest {
         }
 
         dispatcher.scheduler.run {
-            viewModel.event(AuthEvent.ChangeApiKey(key))
+            viewModel.changeApiKey(key)
             runCurrent()
         }
 
@@ -67,28 +67,37 @@ class AuthViewModelTest {
     fun `Submit API key`() = runTest {
         val key = "key"
         val expectedStates = listOf(
-            AuthState.Initial,
-            AuthState.ApiKeyChanged(key),
-            AuthState.SubmitInProgress(key),
-            AuthState.Submitted(key)
+            AuthState(),
+            AuthState(apiKey = key),
+        )
+        val expectedSubmitStates = listOf(
+            AuthSubmitState.Initial,
+            AuthSubmitState.SubmitInProgress,
+            AuthSubmitState.Submitted,
         )
         val actualStates = mutableListOf<AuthState>()
+        val actualSubmitStates = mutableListOf<AuthSubmitState>()
 
         coEvery { apiKeyRepo.set(key) } returns ApiKeyRepository.SaveResult.Success(Unit)
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
+        val submitStateJob = launch(UnconfinedTestDispatcher()) {
+            viewModel.submit.state.toList(actualSubmitStates)
+        }
 
         dispatcher.scheduler.run {
-            viewModel.event(AuthEvent.ChangeApiKey(key))
+            viewModel.changeApiKey(key)
             runCurrent()
-            viewModel.event(AuthEvent.Submit)
+            viewModel.submit()
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
+        assertEquals(expectedSubmitStates, actualSubmitStates)
         stateJob.cancel()
+        submitStateJob.cancel()
 
         coVerify { apiKeyRepo.set(key) }
         confirmVerified(apiKeyRepo)
@@ -99,28 +108,37 @@ class AuthViewModelTest {
         val key = "key"
         val error = ApiKeyRepository.SaveResult.Failed.IO(IOException())
         val expectedStates = listOf(
-            AuthState.Initial,
-            AuthState.ApiKeyChanged(key),
-            AuthState.SubmitInProgress(key),
-            AuthState.SubmitFailed.SaveError(key, error)
+            AuthState(),
+            AuthState(apiKey = key),
+        )
+        val expectedSubmitStates = listOf(
+            AuthSubmitState.Initial,
+            AuthSubmitState.SubmitInProgress,
+            AuthSubmitState.SubmitFailed.SaveError(error)
         )
         val actualStates = mutableListOf<AuthState>()
+        val actualSubmitStates = mutableListOf<AuthSubmitState>()
 
         coEvery { apiKeyRepo.set(key) } returns error
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
+        val submitStateJob = launch(UnconfinedTestDispatcher()) {
+            viewModel.submit.state.toList(actualSubmitStates)
+        }
 
         dispatcher.scheduler.run {
-            viewModel.event(AuthEvent.ChangeApiKey(key))
+            viewModel.changeApiKey(key)
             runCurrent()
-            viewModel.event(AuthEvent.Submit)
+            viewModel.submit()
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
+        assertEquals(expectedSubmitStates, actualSubmitStates)
         stateJob.cancel()
+        submitStateJob.cancel()
 
         coVerify { apiKeyRepo.set(key) }
         confirmVerified(apiKeyRepo)
@@ -129,23 +147,32 @@ class AuthViewModelTest {
     @Test
     fun `Empty API key error`() = runTest {
         val expectedStates = listOf(
-            AuthState.Initial,
-            AuthState.SubmitInProgress(""),
-            AuthState.SubmitFailed.EmptyApiKey,
+            AuthState(),
+        )
+        val expectedSubmitStates = listOf(
+            AuthSubmitState.Initial,
+            AuthSubmitState.SubmitInProgress,
+            AuthSubmitState.SubmitFailed.EmptyApiKey,
         )
         val actualStates = mutableListOf<AuthState>()
+        val actualSubmitStates = mutableListOf<AuthSubmitState>()
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
+        val submitStateJob = launch(UnconfinedTestDispatcher()) {
+            viewModel.submit.state.toList(actualSubmitStates)
+        }
 
         dispatcher.scheduler.run {
-            viewModel.event(AuthEvent.Submit)
+            viewModel.submit()
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
+        assertEquals(expectedSubmitStates, actualSubmitStates)
         stateJob.cancel()
+        submitStateJob.cancel()
     }
 
     @Test
@@ -153,34 +180,43 @@ class AuthViewModelTest {
         val key = "key"
         val error = ApiKeyRepository.SaveResult.Failed.IO(IOException())
         val expectedStates = listOf(
-            AuthState.Initial,
-            AuthState.ApiKeyChanged(key),
-            AuthState.SubmitInProgress(key),
-            AuthState.SubmitFailed.SaveError(key, error),
-            AuthState.SubmitInProgress(key),
-            AuthState.Submitted(key),
+            AuthState(),
+            AuthState(apiKey = key),
         )
         val actualStates = mutableListOf<AuthState>()
+        val expectedSubmitStates = listOf(
+            AuthSubmitState.Initial,
+            AuthSubmitState.SubmitInProgress,
+            AuthSubmitState.SubmitFailed.SaveError(error),
+            AuthSubmitState.SubmitInProgress,
+            AuthSubmitState.Submitted,
+        )
+        val actualSubmitStates = mutableListOf<AuthSubmitState>()
 
         coEvery { apiKeyRepo.set(key) } returns error
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
+        val submitStateJob = launch(UnconfinedTestDispatcher()) {
+            viewModel.submit.state.toList(actualSubmitStates)
+        }
 
         dispatcher.scheduler.run {
-            viewModel.event(AuthEvent.ChangeApiKey(key))
+            viewModel.changeApiKey(key)
             runCurrent()
-            viewModel.event(AuthEvent.Submit)
+            viewModel.submit()
             runCurrent()
 
             coEvery { apiKeyRepo.set(key) } returns ApiKeyRepository.SaveResult.Success(Unit)
-            viewModel.event(AuthEvent.Submit)
+            viewModel.submit()
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
+        assertEquals(expectedSubmitStates, actualSubmitStates)
         stateJob.cancel()
+        submitStateJob.cancel()
 
         coVerify(exactly = 2) { apiKeyRepo.set(key) }
         confirmVerified(apiKeyRepo)
@@ -195,8 +231,7 @@ class AuthViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(AuthEvent.ErrorReport(info))
-        dispatcher.scheduler.runCurrent()
+        viewModel.errorReport(info)
 
         verify { errorReportService.report(info) }
         confirmVerified(errorReportService)

@@ -55,7 +55,7 @@ class RecentCategoryPageViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(RecentCategoryPageEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

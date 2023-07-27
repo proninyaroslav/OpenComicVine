@@ -97,20 +97,18 @@ fun <T : FavoritesItem> FavoriteCategoryPage(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val snackbarState = LocalAppSnackbarState.current
+    val networkState by networkConnection.state.collectAsStateWithLifecycle()
+    val switchFavoriteState by favoritesViewModel.switchFavorite.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> items.retry()
-            }
+    LaunchedEffect(networkState, items) {
+        if (networkState is NetworkState.Reestablished) {
+            items.retry()
         }
     }
 
-    LaunchedEffect(filterViewModel) {
-        filterViewModel.effect.collect { effect ->
-            when (effect) {
-                FavoritesFilterEffect.Applied -> items.refresh()
-            }
+    LaunchedEffect(filterState, items) {
+        if (filterState is FavoritesFilterState.Applied) {
+            items.refresh()
         }
     }
 
@@ -124,34 +122,32 @@ fun <T : FavoritesItem> FavoriteCategoryPage(
         }
     }
 
-    LaunchedEffect(favoritesViewModel) {
-        favoritesViewModel.effect.collect { effect ->
-            when (effect) {
-                is FavoritesEffect.Added -> {}
-                is FavoritesEffect.Removed -> coroutineScope.launch {
-                    val res = snackbarState.showSnackbar(
-                        context.getString(R.string.removed_from_favorites_message),
-                        context.getString(R.string.undo),
-                        duration = SnackbarDuration.Short,
-                    )
-                    if (res == SnackbarResult.ActionPerformed) {
-                        favoritesViewModel.event(
-                            FavoritesEvent.SwitchFavorite(
-                                entityId = effect.entityId,
-                                entityType = effect.entityType,
-                            )
-                        )
-                    }
-                }
-                is FavoritesEffect.SwitchFavoriteFailed -> coroutineScope.launch {
-                    snackbarState.showSnackbar(
-                        context.getString(
-                            R.string.error_add_delete_from_favorites,
-                            effect.error,
-                        )
+    LaunchedEffect(switchFavoriteState) {
+        when (val s = switchFavoriteState) {
+            is SwitchFavoriteState.Removed -> coroutineScope.launch {
+                val res = snackbarState.showSnackbar(
+                    context.getString(R.string.removed_from_favorites_message),
+                    context.getString(R.string.undo),
+                    duration = SnackbarDuration.Short,
+                )
+                if (res == SnackbarResult.ActionPerformed) {
+                    favoritesViewModel.switchFavorite(
+                        entityId = s.entityId,
+                        entityType = s.entityType,
                     )
                 }
             }
+
+            is SwitchFavoriteState.Failed -> coroutineScope.launch {
+                snackbarState.showSnackbar(
+                    context.getString(
+                        R.string.error_add_delete_from_favorites,
+                        s.error,
+                    )
+                )
+            }
+
+            else -> {}
         }
     }
 
@@ -160,9 +156,7 @@ fun <T : FavoritesItem> FavoriteCategoryPage(
             favoritesFilter(
                 sort = filterState.sort,
                 onSortChanged = {
-                    filterViewModel.event(
-                        FavoritesFilterEvent.ChangeSort(sort = it)
-                    )
+                    filterViewModel.changeSort(sort = it)
                 },
             )
         },
@@ -170,7 +164,7 @@ fun <T : FavoritesItem> FavoriteCategoryPage(
         drawerState = drawerState,
         onClose = { coroutineScope.launch { drawerState.close() } },
         onApply = {
-            filterViewModel.event(FavoritesFilterEvent.Apply)
+            filterViewModel.apply()
             coroutineScope.launch { drawerState.close() }
         },
     ) {
@@ -214,7 +208,7 @@ fun <T : FavoritesItem> FavoriteCategoryPage(
                             context.getString(errorMessageTemplates.saveTemplate, it)
                         },
                         onRetry = { items.retry() },
-                        onReport = { viewModel.event(FavoriteCategoryPageEvent.ErrorReport(it)) },
+                        onReport = viewModel::errorReport,
                         compact = !fullscreen,
                     )
                 },
@@ -227,11 +221,9 @@ fun <T : FavoritesItem> FavoriteCategoryPage(
                     items[index]?.let {
                         FavoriteItem(
                             onFavoriteClick = {
-                                favoritesViewModel.event(
-                                    FavoritesEvent.SwitchFavorite(
-                                        entityId = it.id,
-                                        entityType = type.toEntityType(),
-                                    )
+                                favoritesViewModel.switchFavorite(
+                                    entityId = it.id,
+                                    entityType = type.toEntityType(),
                                 )
                             },
                         ) {

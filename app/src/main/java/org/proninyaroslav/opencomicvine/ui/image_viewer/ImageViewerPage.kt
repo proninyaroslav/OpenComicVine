@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
@@ -48,58 +49,59 @@ fun ImageViewerPage(
     onShare: (localImageUri: Uri, mimeType: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val imageState = rememberImageViewerState()
     val snackbarState = remember { SnackbarHostState() }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val currentOnShare by rememberUpdatedState(onShare)
 
-    LaunchedEffect(viewModel) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is ImageSaverEffect.SaveFailed.StoreError -> effect.error.run {
-                    coroutineScope.launch {
-                        val res = snackbarState.showSnackbar(
-                            message = context.run {
-                                getString(
-                                    R.string.save_image_failed,
-                                    exception?.run { toString() }
-                                        ?: getString(R.string.save_image_failed_unknown_error)
-                                )
-                            },
-                            actionLabel = if (exception == null) {
-                                null
-                            } else {
-                                context.getString(R.string.report)
-                            },
-                            duration = SnackbarDuration.Long,
-                        )
-                        if (res == SnackbarResult.ActionPerformed) {
-                            viewModel.event(
-                                ImageSaverEvent.ErrorReport(
-                                    ErrorReportInfo(exception)
-                                )
-                            )
-                        }
-                    }
-                }
-                ImageSaverEffect.SaveFailed.UnsupportedFormat -> coroutineScope.launch {
-                    snackbarState.showSnackbar(
-                        context.run {
+    LaunchedEffect(state) {
+        val s = state
+        when (s) {
+            is ImageSaverState.SaveFailed.StoreError -> s.error.run {
+                coroutineScope.launch {
+                    val res = snackbarState.showSnackbar(
+                        message = context.run {
                             getString(
                                 R.string.save_image_failed,
-                                getString(R.string.save_image_failed_unsupported_format)
+                                exception?.run { toString() }
+                                    ?: getString(R.string.save_image_failed_unknown_error)
                             )
-                        }
+                        },
+                        actionLabel = if (exception == null) {
+                            null
+                        } else {
+                            context.getString(R.string.report)
+                        },
+                        duration = SnackbarDuration.Long,
                     )
-                }
-                is ImageSaverEffect.SaveSuccess -> coroutineScope.launch {
-                    snackbarState.showSnackbar(context.getString(R.string.saved_to_gallery))
-                }
-                is ImageSaverEffect.ReadyToShare -> effect.run {
-                    currentOnShare(uri, mimeType)
+                    if (res == SnackbarResult.ActionPerformed) {
+                        viewModel.errorReport(ErrorReportInfo(exception))
+                    }
                 }
             }
+
+            ImageSaverState.SaveFailed.UnsupportedFormat -> coroutineScope.launch {
+                snackbarState.showSnackbar(
+                    context.run {
+                        getString(
+                            R.string.save_image_failed,
+                            getString(R.string.save_image_failed_unsupported_format)
+                        )
+                    }
+                )
+            }
+
+            is ImageSaverState.SaveSuccess -> coroutineScope.launch {
+                if (s.readyToShare) {
+                    currentOnShare(s.uri, s.mimeType)
+                } else {
+                    snackbarState.showSnackbar(context.getString(R.string.saved_to_gallery))
+                }
+            }
+
+            else -> {}
         }
     }
 
@@ -125,11 +127,10 @@ fun ImageViewerPage(
                         FilledTonalActionButton(
                             onClick = {
                                 imageState.drawable?.let {
-                                    viewModel.event(
-                                        ImageSaverEvent.SaveForSharing(
-                                            bitmap = (it as BitmapDrawable).bitmap,
-                                            url = url,
-                                        )
+                                    viewModel.save(
+                                        bitmap = (it as BitmapDrawable).bitmap,
+                                        url = url,
+                                        saveAndShare = true,
                                     )
                                 }
                             }
@@ -142,11 +143,9 @@ fun ImageViewerPage(
                         FilledTonalActionButton(
                             onClick = {
                                 imageState.drawable?.let {
-                                    viewModel.event(
-                                        ImageSaverEvent.Save(
-                                            bitmap = (it as BitmapDrawable).bitmap,
-                                            url = url,
-                                        )
+                                    viewModel.save(
+                                        bitmap = (it as BitmapDrawable).bitmap,
+                                        url = url,
                                     )
                                 }
                             }
@@ -162,5 +161,4 @@ fun ImageViewerPage(
             }
         }
     }
-
 }

@@ -99,24 +99,25 @@ class SettingsViewModelTest {
     fun `Change API key`() = runTest {
         val apiKey = "key"
 
-        val expectedEffects = listOf(
-            SettingsEffect.ApiKeyChanged,
+        val expectedStates = listOf(
+            ChangeApiKeyState.Initial,
+            ChangeApiKeyState.Success(apiKey),
         )
-        val actualEffects = mutableListOf<SettingsEffect>()
+        val actualStates = mutableListOf<ChangeApiKeyState>()
 
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+        val stateJob = launch {
+            viewModel.changeApiKey.state.toList(actualStates)
         }
 
         coEvery { apiKeyRepo.set(apiKey) } returns ApiKeyRepository.SaveResult.Success(Unit)
 
         dispatcher.scheduler.run {
-            viewModel.event(SettingsEvent.ChangeApiKey(apiKey))
+            viewModel.changeApiKey(apiKey)
             runCurrent()
         }
 
-        assertEquals(expectedEffects, actualEffects)
-        effectJob.cancel()
+        assertEquals(expectedStates, actualStates)
+        stateJob.cancel()
 
         verify { apiKeyRepo.get() }
         verify { pref.theme }
@@ -130,24 +131,25 @@ class SettingsViewModelTest {
         val apiKey = "key"
         val error = ApiKeyRepository.SaveResult.Failed.IO(IOException())
 
-        val expectedEffects = listOf(
-            SettingsEffect.ChangeApiKeyFailed.SaveError(error),
+        val expectedStates = listOf(
+            ChangeApiKeyState.Initial,
+            ChangeApiKeyState.Failed.SaveError(error),
         )
-        val actualEffects = mutableListOf<SettingsEffect>()
+        val actualStates = mutableListOf<ChangeApiKeyState>()
 
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+        val stateJob = launch {
+            viewModel.changeApiKey.state.toList(actualStates)
         }
 
         coEvery { apiKeyRepo.set(apiKey) } returns error
 
         dispatcher.scheduler.run {
-            viewModel.event(SettingsEvent.ChangeApiKey(apiKey))
+            viewModel.changeApiKey(apiKey)
             runCurrent()
         }
 
-        assertEquals(expectedEffects, actualEffects)
-        effectJob.cancel()
+        assertEquals(expectedStates, actualStates)
+        stateJob.cancel()
 
         verify { apiKeyRepo.get() }
         verify { pref.theme }
@@ -158,36 +160,18 @@ class SettingsViewModelTest {
 
     @Test
     fun `Empty API key`() = runTest {
-        val apiKey = "key"
-        val theme = PrefTheme.System
-        val searchHistorySize = 10
-
         val expectedStates = listOf(
-            SettingsState.Initial,
-            SettingsState.Loaded(
-                apiKey = apiKey,
-                theme = theme,
-                searchHistorySize = searchHistorySize
-            ),
-            SettingsState.ChangeApiKeyFailed.EmptyKey(
-                apiKey = "",
-                theme = theme,
-                searchHistorySize = searchHistorySize,
-            ),
+            ChangeApiKeyState.Initial,
+            ChangeApiKeyState.Failed.EmptyKey
         )
-        val actualStates = mutableListOf<SettingsState>()
+        val actualStates = mutableListOf<ChangeApiKeyState>()
 
-        val stateJob = launch(UnconfinedTestDispatcher()) {
-            viewModel.state.toList(actualStates)
+        val stateJob = launch {
+            viewModel.changeApiKey.state.toList(actualStates)
         }
 
         dispatcher.scheduler.run {
-            apiKeyFlow.emit(ApiKeyRepository.GetResult.Success(apiKey))
-            themeFlow.emit(theme)
-            searchHistorySizeFlow.emit(searchHistorySize)
-            runCurrent()
-
-            viewModel.event(SettingsEvent.ChangeApiKey(""))
+            viewModel.changeApiKey("")
             runCurrent()
         }
 
@@ -204,24 +188,12 @@ class SettingsViewModelTest {
     fun `Change theme`() = runTest {
         val theme = PrefTheme.System
 
-        val expectedEffects = listOf(
-            SettingsEffect.ThemeChanged,
-        )
-        val actualEffects = mutableListOf<SettingsEffect>()
-
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
-
         coEvery { pref.setTheme(theme) } just runs
 
         dispatcher.scheduler.run {
-            viewModel.event(SettingsEvent.ChangeTheme(theme))
+            viewModel.changeTheme(theme)
             runCurrent()
         }
-
-        assertEquals(expectedEffects, actualEffects)
-        effectJob.cancel()
 
         verify { apiKeyRepo.get() }
         verify { pref.theme }
@@ -234,24 +206,12 @@ class SettingsViewModelTest {
     fun `Change search history size`() = runTest {
         val searchHistorySize = 10
 
-        val expectedEffects = listOf(
-            SettingsEffect.SearchHistorySizeChanged,
-        )
-        val actualEffects = mutableListOf<SettingsEffect>()
-
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
-
         coEvery { pref.setSearchHistorySize(searchHistorySize) } just runs
 
         dispatcher.scheduler.run {
-            viewModel.event(SettingsEvent.ChangeSearchHistorySize(searchHistorySize))
+            viewModel.changeSearchHistorySize(searchHistorySize)
             runCurrent()
         }
-
-        assertEquals(expectedEffects, actualEffects)
-        effectJob.cancel()
 
         verify { apiKeyRepo.get() }
         verify { pref.theme }
@@ -269,7 +229,7 @@ class SettingsViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(SettingsEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

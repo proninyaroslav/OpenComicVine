@@ -19,10 +19,12 @@
 
 package org.proninyaroslav.opencomicvine.ui.favorites
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.data.FavoriteInfo
 import org.proninyaroslav.opencomicvine.data.item.favorites.*
@@ -31,7 +33,6 @@ import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.paging.favorites.*
 import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.*
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,96 +59,92 @@ class FavoritesPageViewModel @Inject constructor(
     peopleRemoteMediatorFactory: PeopleRemoteMediatorFactory,
     storyArcsRemoteMediatorFactory: StoryArcsRemoteMediatorFactory,
     teamsRemoteMediatorFactory: TeamsRemoteMediatorFactory,
-) : StoreViewModel<
-        FavoritesPageEvent,
-        Unit,
-        FavoritesPageEffect>
-    (Unit) {
+) : ViewModel() {
+    private val _effect = MutableSharedFlow<FavoritesPageEffect>()
+    val effect: SharedFlow<FavoritesPageEffect> = _effect
 
-    init {
-        on<FavoritesPageEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     private val charactersRemoteMediator = charactersRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Character)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Character))
+            }
         },
     )
     private val issuesRemoteMediator = issuesRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Issue)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Issue))
+            }
         },
     )
     private val volumesRemoteMediator = volumesRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Volume)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Volume))
+            }
         },
     )
     private val conceptsRemoteMediator = conceptsRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Concept)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Concept))
+            }
         },
     )
     private val locationsRemoteMediator = locationsRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Location)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Location))
+            }
         },
     )
     private val moviesRemoteMediator = moviesRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Movie)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Movie))
+            }
         },
     )
     private val objectsRemoteMediator = objectsRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Object)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Object))
+            }
         },
     )
     private val peopleRemoteMediator = peopleRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Person)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Person))
+            }
         },
     )
     private val storyArcsRemoteMediator = storyArcsRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.StoryArc)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.StoryArc))
+            }
         },
     )
     private val teamsRemoteMediator = teamsRemoteMediatorFactory.create(
         scope = viewModelScope,
         onRefresh = {
-            emitEffect(
-                FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Team)
-            )
+            viewModelScope.launch {
+                _effect.emit(FavoritesPageEffect.Refresh(FavoriteInfo.EntityType.Team))
+            }
         },
     )
 
@@ -259,11 +256,6 @@ class FavoritesPageViewModel @Inject constructor(
         initialLoadSize = ComicVineSource.DEFAULT_MINI_PAGE_SIZE,
     )
 }
-
-sealed interface FavoritesPageEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : FavoritesPageEvent
-}
-
 
 sealed interface FavoritesPageEffect {
     data class Refresh(val entityType: FavoriteInfo.EntityType) : FavoritesPageEffect

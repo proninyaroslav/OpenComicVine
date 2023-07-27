@@ -31,9 +31,10 @@ class SearchHistoryViewModelTest {
     @MockK
     lateinit var searchHistoryRepo: SearchHistoryRepository
 
-    private val historyListFlow = MutableStateFlow<SearchHistoryRepository.Result<List<SearchHistoryInfo>>>(
-        SearchHistoryRepository.Result.Success(emptyList())
-    )
+    private val historyListFlow =
+        MutableStateFlow<SearchHistoryRepository.Result<List<SearchHistoryInfo>>>(
+            SearchHistoryRepository.Result.Success(emptyList())
+        )
 
     private val historySize = 10
 
@@ -139,21 +140,22 @@ class SearchHistoryViewModelTest {
         )
         val error = SearchHistoryRepository.Result.Failed.IO(IOException())
 
-        val expectedEffects = listOf(
-            SearchHistoryEffect.AddToHistoryFailed(error)
+        val expectedStates = listOf(
+            AddToHistoryState.Initial,
+            AddToHistoryState.Failed(error)
         )
-        val actualEffects = mutableListOf<SearchHistoryEffect>()
+        val actualStates = mutableListOf<AddToHistoryState>()
 
         coEvery { searchHistoryRepo.insert(info) } returns error
 
         val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+            viewModel.addToHistory.state.toList(actualStates)
         }
 
-        viewModel.event(SearchHistoryEvent.AddToHistory(info.query))
+        viewModel.addToHistory(info.query)
         dispatcher.scheduler.runCurrent()
 
-        assertEquals(expectedEffects, actualEffects)
+        assertEquals(expectedStates, actualStates)
         effectJob.cancel()
 
         verify { dateProvider.now }
@@ -170,21 +172,22 @@ class SearchHistoryViewModelTest {
         )
         val error = SearchHistoryRepository.Result.Failed.IO(IOException())
 
-        val expectedEffects = listOf(
-            SearchHistoryEffect.DeleteFromHistoryFailed(error)
+        val expectedStates = listOf(
+            DeleteFromHistoryState.Initial,
+            DeleteFromHistoryState.Failed(error)
         )
-        val actualEffects = mutableListOf<SearchHistoryEffect>()
+        val actualStates = mutableListOf<DeleteFromHistoryState>()
 
         coEvery { searchHistoryRepo.delete(info) } returns error
 
         val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+            viewModel.deleteFromHistory.state.toList(actualStates)
         }
 
-        viewModel.event(SearchHistoryEvent.DeleteFromHistory(info))
+        viewModel.deleteFromHistory(info)
         dispatcher.scheduler.runCurrent()
 
-        assertEquals(expectedEffects, actualEffects)
+        assertEquals(expectedStates, actualStates)
         effectJob.cancel()
 
         coVerify { searchHistoryRepo.observeAll() }
@@ -199,22 +202,23 @@ class SearchHistoryViewModelTest {
             date = nowDate,
         )
 
-        val expectedEffects = listOf(
-            SearchHistoryEffect.AddedToHistory(info)
+        val expectedStates = listOf(
+            AddToHistoryState.Initial,
+            AddToHistoryState.Success
         )
-        val actualEffects = mutableListOf<SearchHistoryEffect>()
+        val actualStates = mutableListOf<AddToHistoryState>()
 
         coEvery { searchHistoryRepo.insert(info) } returns
                 SearchHistoryRepository.Result.Success(Unit)
 
         val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+            viewModel.addToHistory.state.toList(actualStates)
         }
 
-        viewModel.event(SearchHistoryEvent.AddToHistory(info.query))
+        viewModel.addToHistory(info.query)
         dispatcher.scheduler.runCurrent()
 
-        assertEquals(expectedEffects, actualEffects)
+        assertEquals(expectedStates, actualStates)
         effectJob.cancel()
 
         verify { dateProvider.now }
@@ -230,22 +234,23 @@ class SearchHistoryViewModelTest {
             date = nowDate,
         )
 
-        val expectedEffects = listOf(
-            SearchHistoryEffect.RemovedFromHistory(info)
+        val expectedStates = listOf(
+            DeleteFromHistoryState.Initial,
+            DeleteFromHistoryState.Success
         )
-        val actualEffects = mutableListOf<SearchHistoryEffect>()
+        val actualStates = mutableListOf<DeleteFromHistoryState>()
 
         coEvery { searchHistoryRepo.delete(info) } returns
                 SearchHistoryRepository.Result.Success(Unit)
 
         val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+            viewModel.deleteFromHistory.state.toList(actualStates)
         }
 
-        viewModel.event(SearchHistoryEvent.DeleteFromHistory(info))
+        viewModel.deleteFromHistory(info)
         dispatcher.scheduler.runCurrent()
 
-        assertEquals(expectedEffects, actualEffects)
+        assertEquals(expectedStates, actualStates)
         effectJob.cancel()
 
         coVerify { searchHistoryRepo.observeAll() }

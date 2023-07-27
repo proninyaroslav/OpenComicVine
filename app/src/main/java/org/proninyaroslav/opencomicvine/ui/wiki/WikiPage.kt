@@ -36,7 +36,6 @@ import org.proninyaroslav.opencomicvine.ui.components.categories.CategoriesList
 import org.proninyaroslav.opencomicvine.ui.components.error.NetworkNotAvailableSlider
 import org.proninyaroslav.opencomicvine.ui.removeBottomPadding
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
-import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkEffect
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.*
 
@@ -77,11 +76,9 @@ fun WikiPage(
         }
     }
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> entities.onEach { it.retry() }
-            }
+    LaunchedEffect(networkState, entities) {
+        if (networkState is NetworkState.Reestablished) {
+            entities.onEach { it.retry() }
         }
     }
 
@@ -125,7 +122,7 @@ fun WikiPage(
                     onClick = { onLoadPage(WikiPage.Characters) },
                     fullscreen = !isExpandedWidth,
                     onCharacterClicked = { onLoadPage(WikiPage.Character(it)) },
-                    onReport = { viewModel.event(WikiEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -136,7 +133,7 @@ fun WikiPage(
                     onClick = { onLoadPage(WikiPage.Issues) },
                     fullscreen = !isExpandedWidth,
                     onIssueClick = { onLoadPage(WikiPage.Issue(it)) },
-                    onReport = { viewModel.event(WikiEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
 
@@ -147,7 +144,7 @@ fun WikiPage(
                     onClick = { onLoadPage(WikiPage.Volumes) },
                     fullscreen = !isExpandedWidth,
                     onVolumeClick = { onLoadPage(WikiPage.Volume(it)) },
-                    onReport = { viewModel.event(WikiEvent.ErrorReport(it)) },
+                    onReport = viewModel::errorReport,
                 )
             }
         }

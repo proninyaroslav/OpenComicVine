@@ -23,7 +23,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
@@ -33,10 +37,7 @@ import org.proninyaroslav.opencomicvine.R
 import org.proninyaroslav.opencomicvine.data.FavoriteInfo
 import org.proninyaroslav.opencomicvine.ui.details.DetailsPage
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsCategoryPage
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEffect
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEvent
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsState
-import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesEvent
 import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesViewModel
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
 
@@ -60,17 +61,16 @@ fun VolumePage(
     val filterState by filterViewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel) {
-        viewModel.event(DetailsEvent.Load(volumeId))
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is DetailsEffect.CacheLoadFailed -> {
-                    Log.e(
-                        TAG,
-                        "Unable to load volume info from cache, id = $volumeId",
-                        effect.exception
-                    )
-                }
-            }
+        viewModel.load(volumeId)
+    }
+    LaunchedEffect(state) {
+        val s = state
+        if (s is DetailsState.CacheLoadFailed) {
+            Log.e(
+                TAG,
+                "Unable to load volume info from cache, id = $volumeId",
+                s.exception
+            )
         }
     }
 
@@ -96,16 +96,15 @@ fun VolumePage(
                         objects = objects,
                     )
                 }
+
                 else -> null
             }
         )
     }
 
-    LaunchedEffect(issues, filterViewModel) {
-        filterViewModel.effect.collect { effect ->
-            when (effect) {
-                VolumeIssuesFilterEffect.Applied -> issues?.refresh()
-            }
+    LaunchedEffect(issues, filterState) {
+        if (filterState is VolumeIssuesFilterState.Applied) {
+            issues?.refresh()
         }
     }
 
@@ -146,24 +145,22 @@ fun VolumePage(
                 toSourceError = viewModel::toSourceError,
                 onLoadPage = onLoadPage,
                 onFavoriteClick = { entityId, entityType ->
-                    favoritesViewModel.event(
-                        FavoritesEvent.SwitchFavorite(
-                            entityId = entityId,
-                            entityType = entityType,
-                        )
+                    favoritesViewModel.switchFavorite(
+                        entityId = entityId,
+                        entityType = entityType,
                     )
                 },
-                onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+                onReport = viewModel::errorReport,
             )
         },
         networkConnection = networkConnection,
         favoritesViewModel = favoritesViewModel,
         isExpandedWidth = isExpandedWidth,
-        onRefresh = { viewModel.event(DetailsEvent.Load(volumeId)) },
+        onRefresh = { viewModel.load(volumeId) },
         onBackPressed = onBackPressed,
         onOpenLink = onOpenLink,
         onShareLink = onShareLink,
-        onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+        onReport = viewModel::errorReport,
         modifier = modifier,
     ) { _ ->
         IssuesList(
@@ -174,11 +171,7 @@ fun VolumePage(
                     IssuesListHeader(
                         currentSort = filterState.sort,
                         issuesCount = totalIssuesCount,
-                        onSortChanged = {
-                            filterViewModel.event(
-                                VolumeIssuesFilterEvent.ChangeSort(it)
-                            )
-                        },
+                        onSortChanged = filterViewModel::changeSort,
                     )
                 }
             },
@@ -186,14 +179,12 @@ fun VolumePage(
             toSourceError = viewModel::toSourceError,
             onLoadPage = onLoadPage,
             onFavoriteClick = {
-                favoritesViewModel.event(
-                    FavoritesEvent.SwitchFavorite(
-                        entityId = it,
-                        entityType = FavoriteInfo.EntityType.Issue,
-                    )
+                favoritesViewModel.switchFavorite(
+                    entityId = it,
+                    entityType = FavoriteInfo.EntityType.Issue,
                 )
             },
-            onReport = { viewModel.event(DetailsEvent.ErrorReport(it)) },
+            onReport = viewModel::errorReport,
         )
         Spacer(modifier = Modifier.size(8.dp))
     }

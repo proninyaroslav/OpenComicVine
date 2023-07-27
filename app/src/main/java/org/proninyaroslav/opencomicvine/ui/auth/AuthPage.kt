@@ -55,15 +55,14 @@ fun AuthPage(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val submitState by viewModel.submit.state.collectAsStateWithLifecycle()
     val themeState by themeViewModel.theme.collectAsStateWithLifecycle()
     val currentOnClose by rememberUpdatedState(onClose)
 
-    LaunchedEffect(viewModel) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                AuthEffect.Submitted -> currentOnClose()
-            }
+    LaunchedEffect(submitState) {
+        if (submitState == AuthSubmitState.Submitted) {
+            currentOnClose()
         }
     }
 
@@ -87,10 +86,11 @@ fun AuthPage(
             Body(
                 contentPadding = contentPadding,
                 state = state,
+                submitState = submitState,
                 isExpandedWidth = isExpandedWidth,
-                apiKeyChanged = { viewModel.event(AuthEvent.ChangeApiKey(it)) },
-                onSubmit = { viewModel.event(AuthEvent.Submit) },
-                onReport = { viewModel.event(AuthEvent.ErrorReport(it)) },
+                apiKeyChanged = { viewModel.changeApiKey(it) },
+                onSubmit = { viewModel.submit() },
+                onReport = viewModel::errorReport,
             )
         }
     }
@@ -101,6 +101,7 @@ fun AuthPage(
 private fun Body(
     contentPadding: PaddingValues,
     state: AuthState,
+    submitState: AuthSubmitState,
     isExpandedWidth: Boolean,
     apiKeyChanged: (String) -> Unit,
     onSubmit: () -> Unit,
@@ -127,7 +128,8 @@ private fun Body(
                 }
                 item {
                     AuthForm(
-                        state = state,
+                        apiKey = state.apiKey,
+                        submitState = submitState,
                         onApiKeyChanged = apiKeyChanged,
                         onSubmit = onSubmit,
                         onReport = onReport,
@@ -177,7 +179,8 @@ fun WelcomeTitle(
 
 @Composable
 fun AuthForm(
-    state: AuthState,
+    apiKey: String,
+    submitState: AuthSubmitState,
     onApiKeyChanged: (String) -> Unit,
     onSubmit: () -> Unit,
     onReport: (ErrorReportInfo) -> Unit,
@@ -188,36 +191,38 @@ fun AuthForm(
         modifier = modifier,
     ) {
         ApiKeyField(
-            apiKey = state.apiKey,
+            apiKey = apiKey,
             onApiKeyChanged = onApiKeyChanged,
-            isError = state is AuthState.SubmitFailed.EmptyApiKey,
-            errorMessage = when (state) {
-                AuthState.SubmitFailed.EmptyApiKey -> {
+            isError = submitState is AuthSubmitState.SubmitFailed.EmptyApiKey,
+            errorMessage = when (submitState) {
+                AuthSubmitState.SubmitFailed.EmptyApiKey -> {
                     stringResource(R.string.comic_vine_api_key_empty_error)
                 }
+
                 else -> null
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
         AnimatedSlideContent(
-            targetState = state,
+            targetState = submitState,
             alignment = Alignment.Top,
         ) { state ->
-            if (state is AuthState.SubmitFailed) {
+            if (state is AuthSubmitState.SubmitFailed) {
                 when (state) {
-                    is AuthState.SubmitFailed.SaveError -> {
+                    is AuthSubmitState.SubmitFailed.SaveError -> {
                         AuthErrorView(
                             error = state.error,
                             onReport = { onReport(it) },
                             modifier = Modifier.padding(bottom = 16.dp),
                         )
                     }
-                    AuthState.SubmitFailed.EmptyApiKey -> {}
+
+                    AuthSubmitState.SubmitFailed.EmptyApiKey -> {}
                 }
             }
         }
         SubmitButton(
-            state = state,
+            state = submitState,
             onSubmit = onSubmit,
         )
     }
@@ -247,23 +252,24 @@ private fun ApiKeyField(
 
 @Composable
 private fun SubmitButton(
-    state: AuthState,
+    state: AuthSubmitState,
     onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onSubmit,
-        enabled = state !is AuthState.Submitted,
+        enabled = state !is AuthSubmitState.Submitted,
         modifier = modifier.fillMaxWidth(0.5f),
     ) {
         when (state) {
-            is AuthState.SubmitInProgress -> {
+            is AuthSubmitState.SubmitInProgress -> {
                 CircularProgressIndicator(
                     color = LocalContentColor.current,
                     strokeWidth = 2.dp,
                     modifier = Modifier.size(ButtonDefaults.IconSize),
                 )
             }
+
             else -> Text(stringResource(R.string.log_in))
         }
     }
@@ -276,7 +282,8 @@ private fun PreviewAuthPage() {
         Scaffold { contentPadding ->
             Body(
                 contentPadding = contentPadding,
-                state = AuthState.Initial,
+                state = AuthState(),
+                submitState = AuthSubmitState.Initial,
                 isExpandedWidth = false,
                 apiKeyChanged = {},
                 onSubmit = {},
@@ -293,7 +300,8 @@ private fun PreviewAuthPage_Dark() {
         Scaffold { contentPadding ->
             Body(
                 contentPadding = contentPadding,
-                state = AuthState.Initial,
+                state = AuthState(),
+                submitState = AuthSubmitState.Initial,
                 isExpandedWidth = false,
                 apiKeyChanged = {},
                 onSubmit = {},
@@ -308,7 +316,8 @@ private fun PreviewAuthPage_Dark() {
 private fun PreviewAuthForm_InProgress() {
     OpenComicVineTheme {
         AuthForm(
-            state = AuthState.SubmitInProgress(""),
+            apiKey = "",
+            submitState = AuthSubmitState.SubmitInProgress,
             onApiKeyChanged = {},
             onSubmit = {},
             onReport = {},
@@ -321,7 +330,8 @@ private fun PreviewAuthForm_InProgress() {
 private fun PreviewAuthForm_EmptyApiKeyError() {
     OpenComicVineTheme {
         AuthForm(
-            state = AuthState.SubmitFailed.EmptyApiKey,
+            apiKey = "",
+            submitState = AuthSubmitState.SubmitFailed.EmptyApiKey,
             onApiKeyChanged = {},
             onSubmit = {},
             onReport = {},
@@ -336,8 +346,8 @@ private fun PreviewAuthForm_Error() {
         val snackbarState = remember { SnackbarHostState() }
         CompositionLocalProvider(LocalAppSnackbarState provides snackbarState) {
             AuthForm(
-                state = AuthState.SubmitFailed.SaveError(
-                    apiKey = "",
+                apiKey = "",
+                submitState = AuthSubmitState.SubmitFailed.SaveError(
                     error = ApiKeyRepository.SaveResult.Failed.IO(IOException()),
                 ),
                 onApiKeyChanged = {},
@@ -355,7 +365,8 @@ private fun PreviewAuthPage_ExpandedWidth() {
         Scaffold { contentPadding ->
             Body(
                 contentPadding = contentPadding,
-                state = AuthState.Initial,
+                state = AuthState(),
+                submitState = AuthSubmitState.Initial,
                 isExpandedWidth = true,
                 apiKeyChanged = {},
                 onSubmit = {},

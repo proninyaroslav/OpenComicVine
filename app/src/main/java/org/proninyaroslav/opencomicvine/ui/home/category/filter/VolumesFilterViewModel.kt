@@ -19,76 +19,62 @@
 
 package org.proninyaroslav.opencomicvine.ui.home.category.filter
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentVolumesFilter
 import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentVolumesFilterBundle
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class VolumesFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            VolumesFilterEvent,
-            VolumesFilterState,
-            VolumesFilterEffect,
-            >(VolumesFilterState.Initial) {
-
+) : ViewModel() {
+    private val _state = MutableStateFlow<VolumesFilterState>(VolumesFilterState.Initial)
     private val stateCache = FilterStateCache<Nothing, PrefRecentVolumesFilterBundle>(
         FilterStateCache.State(
             filter = VolumesFilterState.Initial.filterBundle,
         )
     )
 
+    val state: StateFlow<VolumesFilterState> = _state
+
     init {
         viewModelScope.launch {
             val currentFilters = pref.recentVolumesFilters.first()
             stateCache.save(FilterStateCache.State(filter = currentFilters))
-            emitState(
-                VolumesFilterState.Loaded(
-                    filterBundle = currentFilters,
-                )
+            _state.value = VolumesFilterState.Loaded(
+                filterBundle = currentFilters,
             )
-        }
-
-        on<VolumesFilterEvent.ChangeFilters> { event ->
-            emitState(
-                VolumesFilterState.FiltersChanged(
-                    filterBundle = event.filterBundle,
-                    isNeedApply = event.filterBundle != stateCache.current.filter,
-                )
-            )
-        }
-
-        on<VolumesFilterEvent.Apply> {
-            val value = state.value
-            val newState = VolumesFilterState.Applied(
-                filterBundle = value.filterBundle,
-            )
-            viewModelScope.launch {
-                newState.run {
-                    pref.setRecentVolumesFilters(filterBundle)
-                    stateCache.save(FilterStateCache.State(filter = filterBundle))
-                }
-                emitEffect(VolumesFilterEffect.Applied)
-                emitState(newState)
-            }
         }
     }
-}
 
-sealed interface VolumesFilterEvent {
-    data class ChangeFilters(
-        val filterBundle: PrefRecentVolumesFilterBundle,
-    ) : VolumesFilterEvent
+    fun changeFilters(filterBundle: PrefRecentVolumesFilterBundle) {
+        _state.value = VolumesFilterState.FiltersChanged(
+            filterBundle = filterBundle,
+            isNeedApply = filterBundle != stateCache.current.filter,
+        )
+    }
 
-    object Apply : VolumesFilterEvent
+    fun apply() {
+        val value = state.value
+        val newState = VolumesFilterState.Applied(
+            filterBundle = value.filterBundle,
+        )
+        viewModelScope.launch {
+            newState.run {
+                pref.setRecentVolumesFilters(filterBundle)
+                stateCache.save(FilterStateCache.State(filter = filterBundle))
+            }
+            _state.value = newState
+        }
+    }
 }
 
 sealed interface VolumesFilterState {
@@ -113,8 +99,4 @@ sealed interface VolumesFilterState {
     data class Applied(
         override val filterBundle: PrefRecentVolumesFilterBundle,
     ) : VolumesFilterState
-}
-
-sealed interface VolumesFilterEffect {
-    object Applied : VolumesFilterEffect
 }

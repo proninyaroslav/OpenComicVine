@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.wiki
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingCharacterRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingIssueRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingVolumeRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -56,13 +56,7 @@ class WikiViewModel @Inject constructor(
     charactersRemoteMediatorFactory: CharactersRemoteMediatorFactory,
     issuesRemoteMediatorFactory: IssuesRemoteMediatorFactory,
     volumesRemoteMediatorFactory: VolumesRemoteMediatorFactory,
-) : StoreViewModel<WikiEvent, Unit, Unit>(Unit) {
-
-    init {
-        on<WikiEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
-    }
+) : ViewModel() {
 
     private val miniCharactersRemoteMediator = charactersRemoteMediatorFactory.create(
         endOfPaginationOffset = ComicVineSource.DEFAULT_MINI_PAGE_SIZE - 1,
@@ -107,6 +101,10 @@ class WikiViewModel @Inject constructor(
     fun <T> toMediatorError(state: LoadState): T? =
         ComicVineRemoteMediator.stateToError(state)
 
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
+    }
+
     private fun buildPagingConfig(): PagingConfig = PagingConfig(
         pageSize = ComicVineSource.DEFAULT_MINI_PAGE_SIZE,
         initialLoadSize = ComicVineSource.DEFAULT_MINI_PAGE_SIZE,
@@ -138,8 +136,4 @@ class WikiViewModel @Inject constructor(
                 entityType = FavoriteInfo.EntityType.Volume,
             )
         )
-}
-
-sealed interface WikiEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : WikiEvent
 }

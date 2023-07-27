@@ -21,19 +21,21 @@ package org.proninyaroslav.opencomicvine.ui.image_viewer
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.ImageStore
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import org.proninyaroslav.opencomicvine.ui.getBitmapInputStream
 import org.proninyaroslav.opencomicvine.ui.getCompressFormatByImageType
 import org.proninyaroslav.opencomicvine.ui.getMimeType
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,58 +43,27 @@ class ImageSaverViewModel @Inject constructor(
     private val store: ImageStore,
     private val errorReportService: ErrorReportService,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-) : StoreViewModel<
-        ImageSaverEvent,
-        ImageSaverState,
-        ImageSaverEffect,
-        >(ImageSaverState.Initial) {
-    init {
-        on<ImageSaverEvent.Save> { event ->
-            event.run {
-                save(
-                    bitmap = bitmap,
-                    url = url,
-                    onSuccess = { uri, mimeType ->
-                        emitState(
-                            ImageSaverState.SaveSuccess(
-                                uri = uri,
-                                mimeType = mimeType,
-                            )
-                        )
-                        emitEffect(
-                            ImageSaverEffect.SaveSuccess
-                        )
-                    },
-                )
-            }
-        }
+) : ViewModel() {
 
-        on<ImageSaverEvent.SaveForSharing> { event ->
-            event.run {
-                save(
-                    bitmap = bitmap,
-                    url = url,
-                    onSuccess = { uri, mimeType ->
-                        emitState(
-                            ImageSaverState.SaveSuccess(
-                                uri = uri,
-                                mimeType = mimeType,
-                            )
-                        )
-                        emitEffect(
-                            ImageSaverEffect.ReadyToShare(
-                                uri = uri,
-                                mimeType = mimeType,
-                            )
-                        )
-                    },
-                )
-            }
-        }
+    private val _state = MutableStateFlow<ImageSaverState>(ImageSaverState.Initial)
+    val state: StateFlow<ImageSaverState> = _state
 
-        on<ImageSaverEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    fun save(url: Uri, bitmap: Bitmap, saveAndShare: Boolean = false) {
+        save(
+            bitmap = bitmap,
+            url = url,
+            onSuccess = { uri, mimeType ->
+                _state.value = ImageSaverState.SaveSuccess(
+                    uri = uri,
+                    mimeType = mimeType,
+                    readyToShare = saveAndShare
+                )
+            },
+        )
+    }
+
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     private fun save(
@@ -103,11 +74,10 @@ class ImageSaverViewModel @Inject constructor(
         if (state.value is ImageSaverState.Saving) {
             return
         }
-        emitState(ImageSaverState.Saving)
+        _state.value = ImageSaverState.Saving
         val compressFormat = url.getCompressFormatByImageType()
         if (compressFormat == null) {
-            emitState(ImageSaverState.SaveFailed.UnsupportedFormat)
-            emitEffect(ImageSaverEffect.SaveFailed.UnsupportedFormat)
+            _state.value = ImageSaverState.SaveFailed.UnsupportedFormat
             return
         }
         viewModelScope.launch(ioDispatcher) {
@@ -117,9 +87,9 @@ class ImageSaverViewModel @Inject constructor(
                     is ImageStore.Result.Success -> {
                         onSuccess(res.uri, compressFormat.getMimeType())
                     }
+
                     is ImageStore.Result.Failed -> {
-                        emitState(ImageSaverState.SaveFailed.StoreError(res))
-                        emitEffect(ImageSaverEffect.SaveFailed.StoreError(res))
+                        _state.value = ImageSaverState.SaveFailed.StoreError(res)
                     }
                 }
             }
@@ -137,20 +107,6 @@ class ImageSaverViewModel @Inject constructor(
     }
 }
 
-sealed interface ImageSaverEvent {
-    data class Save(
-        val bitmap: Bitmap,
-        val url: Uri,
-    ) : ImageSaverEvent
-
-    data class SaveForSharing(
-        val bitmap: Bitmap,
-        val url: Uri,
-    ) : ImageSaverEvent
-
-    data class ErrorReport(val info: ErrorReportInfo) : ImageSaverEvent
-}
-
 sealed interface ImageSaverState {
     object Initial : ImageSaverState
 
@@ -159,23 +115,10 @@ sealed interface ImageSaverState {
     data class SaveSuccess(
         val uri: Uri,
         val mimeType: String,
+        val readyToShare: Boolean,
     ) : ImageSaverState
 
     sealed interface SaveFailed : ImageSaverState {
-        object UnsupportedFormat : SaveFailed
-        data class StoreError(val error: ImageStore.Result.Failed) : SaveFailed
-    }
-}
-
-sealed interface ImageSaverEffect {
-    object SaveSuccess : ImageSaverEffect
-
-    data class ReadyToShare(
-        val uri: Uri,
-        val mimeType: String,
-    ) : ImageSaverEffect
-
-    sealed interface SaveFailed : ImageSaverEffect {
         object UnsupportedFormat : SaveFailed
         data class StoreError(val error: ImageStore.Result.Failed) : SaveFailed
     }

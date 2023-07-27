@@ -62,16 +62,16 @@ class FavoritesViewModelTest {
         )
 
         val expectedStates = listOf(
-            FavoritesState.Initial,
-            FavoritesState.Added(
+            SwitchFavoriteState.Initial,
+            SwitchFavoriteState.Added(
                 entityId = id,
                 entityType = FavoriteInfo.EntityType.Character,
             )
         )
-        val actualStates = mutableListOf<FavoritesState>()
+        val actualStates = mutableListOf<SwitchFavoriteState>()
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
-            viewModel.state.toList(actualStates)
+            viewModel.switchFavorite.state.toList(actualStates)
         }
 
         coEvery {
@@ -85,7 +85,7 @@ class FavoritesViewModelTest {
         } returns FavoritesRepository.Result.Success(Unit)
 
         dispatcher.scheduler.run {
-            viewModel.event(FavoritesEvent.SwitchFavorite(id, FavoriteInfo.EntityType.Character))
+            viewModel.switchFavorite(id, FavoriteInfo.EntityType.Character)
             runCurrent()
         }
 
@@ -111,16 +111,16 @@ class FavoritesViewModelTest {
         )
 
         val expectedStates = listOf(
-            FavoritesState.Initial,
-            FavoritesState.Removed(
+            SwitchFavoriteState.Initial,
+            SwitchFavoriteState.Removed(
                 entityId = id,
                 entityType = FavoriteInfo.EntityType.Character,
             )
         )
-        val actualStates = mutableListOf<FavoritesState>()
+        val actualStates = mutableListOf<SwitchFavoriteState>()
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
-            viewModel.state.toList(actualStates)
+            viewModel.switchFavorite.state.toList(actualStates)
         }
 
         coEvery {
@@ -134,7 +134,7 @@ class FavoritesViewModelTest {
         } returns FavoritesRepository.Result.Success(Unit)
 
         dispatcher.scheduler.run {
-            viewModel.event(FavoritesEvent.SwitchFavorite(id, FavoriteInfo.EntityType.Character))
+            viewModel.switchFavorite(id, FavoriteInfo.EntityType.Character)
             runCurrent()
         }
 
@@ -156,22 +156,10 @@ class FavoritesViewModelTest {
         val error = FavoritesRepository.Result.Failed.IO(IOException())
 
         val expectedStates = listOf(
-            FavoritesState.Initial,
-            FavoritesState.SwitchFavoriteFailed(
-                entityId = id,
-                entityType = FavoriteInfo.EntityType.Character,
-                error = error,
-            )
+            SwitchFavoriteState.Initial,
+            SwitchFavoriteState.Failed(error = error)
         )
-        val expectedEffects = listOf(
-            FavoritesEffect.SwitchFavoriteFailed(
-                entityId = id,
-                entityType = FavoriteInfo.EntityType.Character,
-                error = error,
-            )
-        )
-        val actualStates = mutableListOf<FavoritesState>()
-        val actualEffects = mutableListOf<FavoritesEffect>()
+        val actualStates = mutableListOf<SwitchFavoriteState>()
 
         coEvery {
             favoritesRepo.get(
@@ -181,19 +169,14 @@ class FavoritesViewModelTest {
         } returns error
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
-            viewModel.state.toList(actualStates)
-        }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
+            viewModel.switchFavorite.state.toList(actualStates)
         }
 
-        viewModel.event(FavoritesEvent.SwitchFavorite(id, FavoriteInfo.EntityType.Character))
+        viewModel.switchFavorite(id, FavoriteInfo.EntityType.Character)
         dispatcher.scheduler.runCurrent()
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         coVerify {
             favoritesRepo.get(

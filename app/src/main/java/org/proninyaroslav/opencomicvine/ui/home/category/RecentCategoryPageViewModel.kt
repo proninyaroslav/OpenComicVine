@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.home.category
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingCharacterRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingIssueRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingVolumeRepository
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -56,12 +56,10 @@ class RecentCategoryPageViewModel @Inject constructor(
     charactersRemoteMediatorFactory: CharactersRemoteMediatorFactory,
     issuesRemoteMediatorFactory: IssuesRemoteMediatorFactory,
     volumesRemoteMediatorFactory: VolumesRemoteMediatorFactory,
-) : StoreViewModel<RecentCategoryPageEvent, Unit, RecentCategoryPageEffect>(Unit) {
+) : ViewModel() {
 
-    init {
-        on<RecentCategoryPageEvent.ErrorReport> { event ->
-            errorReportService.report(event.info)
-        }
+    fun errorReport(info: ErrorReportInfo) {
+        errorReportService.report(info)
     }
 
     private val charactersRemoteMediator = charactersRemoteMediatorFactory.create()
@@ -127,13 +125,4 @@ class RecentCategoryPageViewModel @Inject constructor(
                 entityType = FavoriteInfo.EntityType.Volume,
             )
         )
-}
-
-sealed interface RecentCategoryPageEvent {
-    data class ErrorReport(val info: ErrorReportInfo) : RecentCategoryPageEvent
-}
-
-sealed interface RecentCategoryPageEffect {
-    data class GetFavoriteFailed(val error: FavoritesRepository.Result.Failed) :
-        RecentCategoryPageEffect
 }

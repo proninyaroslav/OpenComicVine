@@ -26,8 +26,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.VolumesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEffect
-import org.proninyaroslav.opencomicvine.ui.details.category.DetailsEvent
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsState
 import java.io.IOException
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingVolumeRepository as RecentVolumeItemRepository
@@ -255,7 +253,7 @@ class VolumeViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -320,7 +318,7 @@ class VolumeViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -369,7 +367,7 @@ class VolumeViewModelTest {
         }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -451,10 +449,10 @@ class VolumeViewModelTest {
 
         dispatcher.scheduler.apply {
             coEvery { volumesRepo.getItemDetailsById(id) } returns failedResult
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
             coEvery { volumesRepo.getItemDetailsById(id) } returns successResult
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
@@ -482,6 +480,10 @@ class VolumeViewModelTest {
         val expectedStates = listOf(
             DetailsState.Initial,
             DetailsState.Loading,
+            DetailsState.CacheLoadFailed(
+                details = null,
+                exception = exception
+            ),
             DetailsState.Loaded(
                 details = VolumeDetailsItem(
                     details = volumeDetails,
@@ -497,12 +499,8 @@ class VolumeViewModelTest {
                 ),
             ),
         )
-        val expectedEffects = listOf(
-            DetailsEffect.CacheLoadFailed(exception),
-        )
         val actualStates =
             mutableListOf<DetailsState<VolumeDetailsItem, VolumeViewModel.RelatedEntities>>()
-        val actualEffects = mutableListOf<DetailsEffect>()
 
         coEvery { volumesRepo.getItemDetailsById(id) } returns result
         coEvery { wikiVolumeItemRepo.getItemById(id) } returns
@@ -513,19 +511,14 @@ class VolumeViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
 
         dispatcher.scheduler.apply {
-            viewModel.event(DetailsEvent.Load(id))
+            viewModel.load(id)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         coVerify { volumesRepo.getItemDetailsById(id) }
         coVerify { wikiVolumeItemRepo.getItemById(id) }
@@ -542,7 +535,7 @@ class VolumeViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(DetailsEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }

@@ -14,8 +14,6 @@ import org.junit.Before
 import org.junit.Test
 import org.proninyaroslav.opencomicvine.data.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
-import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.IssuesFilterEffect
-import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.IssuesFilterEvent
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.IssuesFilterState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.IssuesFilterViewModel
 
@@ -100,7 +98,8 @@ class IssuesFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(IssuesFilterEvent.ChangeSort(sort))
+            runCurrent()
+            viewModel.changeSort(sort)
             runCurrent()
         }
 
@@ -130,7 +129,8 @@ class IssuesFilterViewModelTest {
             viewModel.state.toList(actualStates)
         }
         dispatcher.scheduler.apply {
-            viewModel.event(IssuesFilterEvent.ChangeFilters(filter))
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
@@ -176,11 +176,7 @@ class IssuesFilterViewModelTest {
                 isNeedApply = false,
             ),
         )
-        val expectedEffects = listOf(
-            IssuesFilterEffect.Applied,
-        )
         val actualStates = mutableListOf<IssuesFilterState>()
-        val actualEffects = mutableListOf<IssuesFilterEffect>()
 
         coEvery { pref.setWikiIssuesSort(sort) } just runs
         coEvery { pref.setWikiIssuesFilters(filter) } just runs
@@ -188,26 +184,22 @@ class IssuesFilterViewModelTest {
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
         dispatcher.scheduler.apply {
-            viewModel.event(IssuesFilterEvent.ChangeSort(sort))
             runCurrent()
-            viewModel.event(IssuesFilterEvent.ChangeFilters(filter))
+            viewModel.changeSort(sort)
             runCurrent()
-            viewModel.event(IssuesFilterEvent.Apply)
+            viewModel.changeFilters(filter)
             runCurrent()
-            viewModel.event(IssuesFilterEvent.ChangeSort(sort))
+            viewModel.apply()
             runCurrent()
-            viewModel.event(IssuesFilterEvent.ChangeFilters(filter))
+            viewModel.changeSort(sort)
+            runCurrent()
+            viewModel.changeFilters(filter)
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
 
         verify { pref.wikiIssuesSort }
         verify { pref.wikiIssuesFilters }

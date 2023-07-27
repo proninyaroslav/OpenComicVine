@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
@@ -92,44 +93,30 @@ fun <T : BaseItem> RecentCategoryPage(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val snackbarState = LocalAppSnackbarState.current
+    val networkState by networkConnection.state.collectAsStateWithLifecycle()
+    val switchFavoriteState by favoritesViewModel.switchFavorite.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(networkConnection) {
-        networkConnection.effect.collect { effect ->
-            when (effect) {
-                NetworkEffect.Reestablished -> items.retry()
-            }
+    LaunchedEffect(networkState, items) {
+        if (networkState is NetworkState.Reestablished) {
+            items.retry()
         }
     }
 
-    LaunchedEffect(viewModel) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is RecentCategoryPageEffect.GetFavoriteFailed -> when (val error = effect.error) {
-                    is FavoritesRepository.Result.Failed.IO -> {
-                        Log.e(TAG, "Unable to get favorites status", error.exception)
-                    }
-                }
-            }
-        }
-    }
-
-    LaunchedEffect(favoritesViewModel) {
-        favoritesViewModel.effect.collect { effect ->
-            when (effect) {
-                is FavoritesEffect.SwitchFavoriteFailed -> when (val error = effect.error) {
-                    is FavoritesRepository.Result.Failed.IO -> coroutineScope.launch {
-                        snackbarState.showSnackbar(
-                            context.getString(
-                                R.string.error_add_delete_from_favorites,
-                                error.exception
-                            )
+    LaunchedEffect(switchFavoriteState) {
+        when (val s = switchFavoriteState) {
+            is SwitchFavoriteState.Failed -> when (val error = s.error) {
+                is FavoritesRepository.Result.Failed.IO -> coroutineScope.launch {
+                    snackbarState.showSnackbar(
+                        context.getString(
+                            R.string.error_add_delete_from_favorites,
+                            error.exception
                         )
-                    }
+                    )
                 }
-                is FavoritesEffect.Added -> {}
-                is FavoritesEffect.Removed -> {}
             }
+
+            else -> {}
         }
     }
 
@@ -187,7 +174,7 @@ fun <T : BaseItem> RecentCategoryPage(
                             context.getString(errorMessageTemplates.saveTemplate, it)
                         },
                         onRetry = { items.retry() },
-                        onReport = { viewModel.event(RecentCategoryPageEvent.ErrorReport(it)) },
+                        onReport = viewModel::errorReport,
                         compact = !fullscreen,
                     )
                 },
@@ -215,11 +202,9 @@ fun <T : BaseItem> RecentCategoryPage(
                                 FavoriteButton(
                                     isFavorite = isFavorite,
                                     onClick = {
-                                        favoritesViewModel.event(
-                                            FavoritesEvent.SwitchFavorite(
-                                                entityId = it.id,
-                                                entityType = type.toEntityType(),
-                                            )
+                                        favoritesViewModel.switchFavorite(
+                                            entityId = it.id,
+                                            entityType = type.toEntityType(),
                                         )
                                     },
                                 )

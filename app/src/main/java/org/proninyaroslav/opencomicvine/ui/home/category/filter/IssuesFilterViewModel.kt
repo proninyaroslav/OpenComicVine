@@ -19,8 +19,11 @@
 
 package org.proninyaroslav.opencomicvine.ui.home.category.filter
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentIssuesFilter
@@ -28,25 +31,21 @@ import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentIssuesFilterB
 import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentIssuesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
-import org.proninyaroslav.opencomicvine.model.state.StoreViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class IssuesFilterViewModel @Inject constructor(
     private val pref: AppPreferences,
-) :
-    StoreViewModel<
-            IssuesFilterEvent,
-            IssuesFilterState,
-            IssuesFilterEffect,
-            >(IssuesFilterState.Initial) {
-
+) : ViewModel() {
+    private val _state = MutableStateFlow<IssuesFilterState>(IssuesFilterState.Initial)
     private val stateCache = FilterStateCache(
         FilterStateCache.State(
             sort = IssuesFilterState.Initial.sort,
             filter = IssuesFilterState.Initial.filterBundle,
         )
     )
+
+    val state: StateFlow<IssuesFilterState> = _state
 
     init {
         viewModelScope.launch {
@@ -58,81 +57,62 @@ class IssuesFilterViewModel @Inject constructor(
                     filter = currentFilters,
                 )
             )
-            emitState(
-                IssuesFilterState.Loaded(
-                    sort = currentSort,
-                    filterBundle = currentFilters,
+            _state.value = IssuesFilterState.Loaded(
+                sort = currentSort,
+                filterBundle = currentFilters,
+            )
+        }
+    }
+
+    fun changeSort(sort: PrefRecentIssuesSort) {
+        state.value.run {
+            _state.value = IssuesFilterState.SortChanged(
+                sort = sort,
+                filterBundle = filterBundle,
+                isNeedApply = isNeedApply(
+                    sort = sort,
+                    filter = filterBundle,
                 )
             )
         }
+    }
 
-        on<IssuesFilterEvent.ChangeSort> { event ->
-            state.value.run {
-                emitState(
-                    IssuesFilterState.SortChanged(
-                        sort = event.sort,
-                        filterBundle = filterBundle,
-                        isNeedApply = isNeedApply(
-                            sort = event.sort,
-                            filter = filterBundle,
-                        )
-                    )
+    fun changeFilters(filterBundle: PrefRecentIssuesFilterBundle) {
+        state.value.run {
+            _state.value = IssuesFilterState.FiltersChanged(
+                sort = sort,
+                filterBundle = filterBundle,
+                isNeedApply = isNeedApply(
+                    sort = sort,
+                    filter = filterBundle,
                 )
-            }
+            )
         }
+    }
 
-        on<IssuesFilterEvent.ChangeFilters> { event ->
-            state.value.run {
-                emitState(
-                    IssuesFilterState.FiltersChanged(
+    fun apply() {
+        val value = state.value
+        val newState = IssuesFilterState.Applied(
+            sort = value.sort,
+            filterBundle = value.filterBundle,
+        )
+        viewModelScope.launch {
+            newState.run {
+                pref.setRecentIssuesSort(sort)
+                pref.setRecentIssuesFilters(filterBundle)
+                stateCache.save(
+                    FilterStateCache.State(
                         sort = sort,
-                        filterBundle = event.filterBundle,
-                        isNeedApply = isNeedApply(
-                            sort = sort,
-                            filter = event.filterBundle,
-                        )
+                        filter = filterBundle,
                     )
                 )
             }
-        }
-
-        on<IssuesFilterEvent.Apply> {
-            val value = state.value
-            val newState = IssuesFilterState.Applied(
-                sort = value.sort,
-                filterBundle = value.filterBundle,
-            )
-            viewModelScope.launch {
-                newState.run {
-                    pref.setRecentIssuesSort(sort)
-                    pref.setRecentIssuesFilters(filterBundle)
-                    stateCache.save(
-                        FilterStateCache.State(
-                            sort = sort,
-                            filter = filterBundle,
-                        )
-                    )
-                }
-                emitEffect(IssuesFilterEffect.Applied)
-                emitState(newState)
-            }
+            _state.value = newState
         }
     }
 
     private fun isNeedApply(sort: PrefRecentIssuesSort, filter: PrefRecentIssuesFilterBundle) =
         stateCache.current.let { sort != it.sort || filter != it.filter }
-}
-
-sealed interface IssuesFilterEvent {
-    data class ChangeSort(
-        val sort: PrefRecentIssuesSort,
-    ) : IssuesFilterEvent
-
-    data class ChangeFilters(
-        val filterBundle: PrefRecentIssuesFilterBundle,
-    ) : IssuesFilterEvent
-
-    object Apply : IssuesFilterEvent
 }
 
 sealed interface IssuesFilterState {
@@ -168,8 +148,4 @@ sealed interface IssuesFilterState {
         override val sort: PrefRecentIssuesSort,
         override val filterBundle: PrefRecentIssuesFilterBundle,
     ) : IssuesFilterState
-}
-
-sealed interface IssuesFilterEffect {
-    object Applied : IssuesFilterEffect
 }

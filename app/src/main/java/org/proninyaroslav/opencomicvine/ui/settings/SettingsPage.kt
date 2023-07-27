@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alorma.compose.settings.ui.SettingsList
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import kotlinx.coroutines.launch
@@ -55,7 +56,8 @@ fun SettingsPage(
     onBackButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val changeApiKeyState by viewModel.changeApiKey.state.collectAsStateWithLifecycle()
     val dialogState = rememberDialogState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         rememberTopAppBarState()
@@ -64,15 +66,12 @@ fun SettingsPage(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    LaunchedEffect(viewModel) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                SettingsEffect.ApiKeyChanged -> dialogState.showApiKeyDialog = false
-                SettingsEffect.SearchHistorySizeChanged -> {
-                    dialogState.showSearchHistorySizeChanged = false
-                }
-                is SettingsEffect.ChangeApiKeyFailed.SaveError -> coroutineScope.launch {
-                    when (val error = effect.error) {
+    LaunchedEffect(changeApiKeyState, dialogState) {
+        when (val s = changeApiKeyState) {
+            is ChangeApiKeyState.Success -> dialogState.showApiKeyDialog = false
+            is ChangeApiKeyState.Failed.SaveError -> {
+                coroutineScope.launch {
+                    when (val error = s.error) {
                         is ApiKeyRepository.SaveResult.Failed.IO -> {
                             val res = snackbarState.showSnackbar(
                                 message = context.getString(
@@ -83,26 +82,27 @@ fun SettingsPage(
                                 duration = SnackbarDuration.Long,
                             )
                             if (res == SnackbarResult.ActionPerformed) {
-                                viewModel.event(
-                                    SettingsEvent.ErrorReport(
-                                        ErrorReportInfo(error.exception)
-                                    )
-                                )
+                                viewModel.errorReport(ErrorReportInfo(error.exception))
                             }
                         }
                     }
                 }
-                SettingsEffect.ThemeChanged -> {}
             }
+
+            else -> {}
         }
     }
 
     Body(
         state = state,
+        changeApiKeyState = changeApiKeyState,
         dialogState = dialogState,
-        onApiKeyChanged = { viewModel.event(SettingsEvent.ChangeApiKey(it)) },
-        onSearchHistorySizeChanged = { viewModel.event(SettingsEvent.ChangeSearchHistorySize(it)) },
-        onThemeChanged = { viewModel.event(SettingsEvent.ChangeTheme(it)) },
+        onApiKeyChanged = { viewModel.changeApiKey(it) },
+        onSearchHistorySizeChanged = {
+            viewModel.changeSearchHistorySize(it)
+            dialogState.showSearchHistorySizeChanged = false
+        },
+        onThemeChanged = { viewModel.changeTheme(it) },
         isExpandedWidth = isExpandedWidth,
         onBackButtonClicked = onBackButtonClicked,
         scrollBehavior = scrollBehavior,
@@ -124,6 +124,7 @@ private fun rememberDialogState() = remember { DialogState() }
 private fun Body(
     modifier: Modifier = Modifier,
     state: SettingsState,
+    changeApiKeyState: ChangeApiKeyState,
     dialogState: DialogState,
     isExpandedWidth: Boolean,
     onApiKeyChanged: (String) -> Unit,
@@ -172,6 +173,7 @@ private fun Body(
                 item {
                     ApiKey(
                         state = state,
+                        changeApiKeyState = changeApiKeyState,
                         showDialog = dialogState.showApiKeyDialog,
                         onApiKeyChanged = onApiKeyChanged,
                         onShowDialog = { dialogState.showApiKeyDialog = it },
@@ -250,6 +252,7 @@ private fun Theme(
 @Composable
 private fun ApiKey(
     state: SettingsState,
+    changeApiKeyState: ChangeApiKeyState,
     showDialog: Boolean,
     onApiKeyChanged: (String) -> Unit,
     onShowDialog: (Boolean) -> Unit,
@@ -268,6 +271,7 @@ private fun ApiKey(
     if (showDialog) {
         ApiKeyDialog(
             state = state,
+            changeApiKeyState = changeApiKeyState,
             onSubmit = onApiKeyChanged,
             onDismissRequest = { onShowDialog(false) },
         )
@@ -277,6 +281,7 @@ private fun ApiKey(
 @Composable
 fun ApiKeyDialog(
     state: SettingsState,
+    changeApiKeyState: ChangeApiKeyState,
     onSubmit: (String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -305,11 +310,12 @@ fun ApiKeyDialog(
             OutlinedTextField(
                 value = apiKey,
                 onValueChange = { apiKey = it },
-                isError = state is SettingsState.ChangeApiKeyFailed.EmptyKey,
-                supportingText = when (state) {
-                    is SettingsState.ChangeApiKeyFailed.EmptyKey -> {
+                isError = changeApiKeyState is ChangeApiKeyState.Failed,
+                supportingText = when (changeApiKeyState) {
+                    is ChangeApiKeyState.Failed.EmptyKey -> {
                         { Text(stringResource(R.string.comic_vine_api_key_empty_error)) }
                     }
+
                     else -> null
                 },
             )
@@ -400,6 +406,7 @@ private fun PreviewSettingsPage() {
                 searchHistorySize = 10,
                 theme = PrefTheme.System,
             ),
+            changeApiKeyState = ChangeApiKeyState.Initial,
             dialogState = rememberDialogState(),
             onApiKeyChanged = {},
             onSearchHistorySizeChanged = {},
@@ -421,6 +428,7 @@ private fun PreviewSettingsPage_ExpandedWidth() {
                 searchHistorySize = 10,
                 theme = PrefTheme.System,
             ),
+            changeApiKeyState = ChangeApiKeyState.Initial,
             dialogState = rememberDialogState(),
             onApiKeyChanged = {},
             onSearchHistorySizeChanged = {},

@@ -56,11 +56,11 @@ class SearchViewModelTest {
         }
 
         dispatcher.scheduler.run {
-            viewModel.event(SearchEvent.ChangeQuery(" 1 "))
+            viewModel.changeQuery(" 1 ")
             runCurrent()
-            viewModel.event(SearchEvent.ChangeQuery("2"))
+            viewModel.changeQuery("2")
             runCurrent()
-            viewModel.event(SearchEvent.ChangeQuery("3"))
+            viewModel.changeQuery("3")
             runCurrent()
         }
 
@@ -75,30 +75,21 @@ class SearchViewModelTest {
             SearchState.QueryChanged("1"),
             SearchState.Submitted("1")
         )
-        val expectedEffects = listOf(
-            SearchEffect.Refresh
-        )
         val actualStates = mutableListOf<SearchState>()
-        val actualEffects = mutableListOf<SearchEffect>()
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
-        val effectJob = launch {
-            viewModel.effect.toList(actualEffects)
-        }
 
         dispatcher.scheduler.run {
-            viewModel.event(SearchEvent.ChangeQuery("1"))
+            viewModel.changeQuery("1")
             runCurrent()
-            viewModel.event(SearchEvent.Search)
+            viewModel.search()
             runCurrent()
         }
 
         assertEquals(expectedStates, actualStates)
-        assertEquals(expectedEffects, actualEffects)
         stateJob.cancel()
-        effectJob.cancel()
     }
 
     @Test
@@ -110,7 +101,7 @@ class SearchViewModelTest {
 
         every { errorReportService.report(info) } just runs
 
-        viewModel.event(SearchEvent.ErrorReport(info))
+        viewModel.errorReport(info)
         dispatcher.scheduler.runCurrent()
 
         verify { errorReportService.report(info) }
