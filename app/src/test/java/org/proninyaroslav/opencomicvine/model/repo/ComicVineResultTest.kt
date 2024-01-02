@@ -22,8 +22,8 @@ class ComicVineResultTest {
         assertEquals(
             "HTTP error",
             ComicVineResult.Failed.HttpError(StatusCode.NotFound),
-            ApiResponse.Failure.Error<String>(
-                Response.error(
+            ApiResponse.Failure.Error(
+                Response.error<String>(
                     404, ByteString.of().toResponseBody()
                 )
             ).toComicVineResult(),
@@ -31,14 +31,14 @@ class ComicVineResultTest {
         assertEquals(
             "No network connection",
             ComicVineResult.Failed.NoNetworkConnection,
-            ApiResponse.Failure.Exception<String>(
+            ApiResponse.Failure.Exception(
                 NoNetworkConnectionException()
             ).toComicVineResult(),
         )
         assertEquals(
             "Request timeout",
             ComicVineResult.Failed.RequestTimeout,
-            ApiResponse.Failure.Exception<String>(
+            ApiResponse.Failure.Exception(
                 SocketTimeoutException()
             ).toComicVineResult(),
         )
@@ -46,7 +46,7 @@ class ComicVineResultTest {
         assertEquals(
             "Exception",
             ComicVineResult.Failed.Exception(ioException),
-            ApiResponse.Failure.Exception<String>(
+            ApiResponse.Failure.Exception(
                 ioException
             ).toComicVineResult(),
         )
