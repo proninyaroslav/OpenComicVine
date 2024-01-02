@@ -2,7 +2,7 @@ package org.proninyaroslav.opencomicvine.model.moshi
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.filter.ComicVineFilter
+import org.proninyaroslav.opencomicvine.types.filter.ComicVineFilter
 
 class ComicVineFilterConverterTest {
     private val converter = ComicVineFilterConverter

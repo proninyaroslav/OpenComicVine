@@ -9,11 +9,11 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.ConceptInfo
-import org.proninyaroslav.opencomicvine.data.ConceptsResponse
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.filter.ConceptsFilter
+import org.proninyaroslav.opencomicvine.types.ConceptInfo
+import org.proninyaroslav.opencomicvine.types.ConceptsResponse
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.filter.ConceptsFilter
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.repo.ConceptsRepository

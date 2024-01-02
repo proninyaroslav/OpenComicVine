@@ -10,8 +10,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.paging.recent.PagingRecentIssueItem
-import org.proninyaroslav.opencomicvine.data.paging.recent.RecentIssueItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentIssueItem
+import org.proninyaroslav.opencomicvine.types.paging.recent.RecentIssueItemRemoteKeys
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.recent.RecentIssuesDao
 import org.proninyaroslav.opencomicvine.model.db.recent.RecentIssuesRemoteKeysDao

@@ -45,8 +45,8 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.Gender
-import org.proninyaroslav.opencomicvine.data.Origin
+import org.proninyaroslav.opencomicvine.types.Gender
+import org.proninyaroslav.opencomicvine.types.Origin
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

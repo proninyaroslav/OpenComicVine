@@ -46,10 +46,10 @@ class ComicVineWebViewClient(
 ) : AccompanistWebViewClient() {
     private val tag = this::class.simpleName
 
-    override fun onPageFinished(view: WebView?, url: String?) {
+    override fun onPageFinished(view: WebView, url: String?) {
         super.onPageFinished(view, url)
 
-        view?.run {
+        view.run {
             loadLazyContent()
             loadCss(themeProvider.build())
         }
@@ -142,7 +142,7 @@ class ComicVineWebViewClient(
     }
 
     override fun onReceivedError(
-        view: WebView?,
+        view: WebView,
         request: WebResourceRequest?,
         error: WebResourceError?
     ) {

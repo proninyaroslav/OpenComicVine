@@ -19,7 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.model.paging.details
 
-import org.proninyaroslav.opencomicvine.data.StatusCode
+import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.subListFrom

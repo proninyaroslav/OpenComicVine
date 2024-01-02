@@ -12,8 +12,8 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.preferences.PrefFavoritesSort
-import org.proninyaroslav.opencomicvine.data.preferences.PrefSortDirection
+import org.proninyaroslav.opencomicvine.types.preferences.PrefFavoritesSort
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterState
 import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterViewModel

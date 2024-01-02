@@ -1,20 +1,28 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
 import com.skydoves.sandwich.ApiResponse
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.CharactersFilter
-import org.proninyaroslav.opencomicvine.data.sort.CharactersSort
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSortDirection
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
-import retrofit2.Response
+import org.proninyaroslav.opencomicvine.types.CharacterDetails
+import org.proninyaroslav.opencomicvine.types.CharacterInfo
+import org.proninyaroslav.opencomicvine.types.CharacterResponse
+import org.proninyaroslav.opencomicvine.types.CharactersResponse
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.filter.CharactersFilter
+import org.proninyaroslav.opencomicvine.types.sort.CharactersSort
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CharactersRepositoryTest {
@@ -63,7 +71,7 @@ class CharactersRepositoryTest {
                 sort = sort,
                 filter = filters,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItems(
             offset = response.offset,
@@ -127,7 +135,7 @@ class CharactersRepositoryTest {
                 id = id,
                 apiKey = apiKey,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItemDetailsById(id)
         assertEquals(ComicVineResult.Success(response), res)

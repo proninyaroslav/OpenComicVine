@@ -24,7 +24,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import org.proninyaroslav.opencomicvine.data.preferences.PrefTheme
+import org.proninyaroslav.opencomicvine.types.preferences.PrefTheme
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import javax.inject.Inject
 

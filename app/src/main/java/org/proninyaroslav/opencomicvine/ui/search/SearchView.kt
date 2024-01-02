@@ -39,7 +39,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
 import org.proninyaroslav.opencomicvine.model.repo.SearchHistoryRepository
 import org.proninyaroslav.opencomicvine.ui.components.search_bar.CustomDockedSearchBar
 import org.proninyaroslav.opencomicvine.ui.components.search_bar.CustomSearchBar

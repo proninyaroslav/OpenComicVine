@@ -13,7 +13,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.preferences.PrefTheme
+import org.proninyaroslav.opencomicvine.types.preferences.PrefTheme
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 
 @OptIn(ExperimentalCoroutinesApi::class)

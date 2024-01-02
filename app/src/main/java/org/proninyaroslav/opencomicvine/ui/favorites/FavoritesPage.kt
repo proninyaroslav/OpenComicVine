@@ -32,7 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.components.categories.CategoriesList
 import org.proninyaroslav.opencomicvine.ui.components.error.NetworkNotAvailableSlider

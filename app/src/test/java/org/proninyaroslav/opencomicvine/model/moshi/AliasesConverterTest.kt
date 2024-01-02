@@ -2,7 +2,7 @@ package org.proninyaroslav.opencomicvine.model.moshi
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.Aliases
+import org.proninyaroslav.opencomicvine.types.Aliases
 
 class AliasesConverterTest {
     private val converter = AliasesConverter

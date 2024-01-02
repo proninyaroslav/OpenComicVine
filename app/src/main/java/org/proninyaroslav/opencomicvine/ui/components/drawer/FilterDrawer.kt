@@ -22,7 +22,6 @@ package org.proninyaroslav.opencomicvine.ui.components.drawer
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import org.proninyaroslav.opencomicvine.R
@@ -86,6 +84,7 @@ fun AdaptiveFilterDrawer(
                 modifier = modifier,
                 content = content,
             )
+
             AdaptiveFilterDrawerType.Permanent -> FilterPermanentDrawer(
                 drawerContent = drawerContent,
                 showApplyButton = showApplyButton,
@@ -364,22 +363,22 @@ fun SelectableChipItemIcon(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FilterChipList(
     modifier: Modifier = Modifier,
-    mainAxisSpacing: Dp = 8.dp,
-    crossAxisSpacing: Dp = 4.dp,
-    content: @Composable () -> Unit
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
+    content: @Composable FlowRowScope.() -> Unit
 ) {
     ChipFlowRow(
-        mainAxisSpacing = mainAxisSpacing,
-        crossAxisSpacing = crossAxisSpacing,
+        horizontalArrangement = horizontalArrangement,
+        verticalArrangement = verticalArrangement,
         modifier = modifier.padding(start = 40.dp),
         content = content,
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ApplyButton(
     visible: Boolean,
@@ -403,6 +402,7 @@ private fun ApplyButton(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showBackground = true)
 @Composable
@@ -475,6 +475,7 @@ fun PreviewFilterDrawer() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showBackground = true)
 @Composable

@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.item.VolumeItem
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.item.VolumeItem
 import org.proninyaroslav.opencomicvine.model.paging.recent.RecentEntityRemoteMediator
 import org.proninyaroslav.opencomicvine.ui.components.card.VolumeCard
 import org.proninyaroslav.opencomicvine.ui.components.categories.CategoryHeader

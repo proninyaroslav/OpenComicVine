@@ -20,6 +20,7 @@
 package org.proninyaroslav.opencomicvine.ui.search
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -29,9 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.preferences.PrefSearchFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefSearchFilterBundle
-import org.proninyaroslav.opencomicvine.data.preferences.PrefSearchResourceType
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSearchFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSearchFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSearchResourceType
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterChipList
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterElevatedSelectableChipItem
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterSectionHeader
@@ -45,6 +46,7 @@ fun LazyListScope.searchFilter(
     resourceTypeFilter(filter, onFilterChange)
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 private fun LazyListScope.resourceTypeFilter(
     bundle: PrefSearchFilterBundle,
     onFilterChange: (PrefSearchFilterBundle) -> Unit,

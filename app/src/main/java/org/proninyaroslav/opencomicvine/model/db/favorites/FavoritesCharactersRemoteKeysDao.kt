@@ -23,7 +23,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesCharacterItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesCharacterItemRemoteKeys
 
 @Dao
 interface FavoritesCharactersRemoteKeysDao {

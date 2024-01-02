@@ -21,7 +21,7 @@ package org.proninyaroslav.opencomicvine.model.db
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
 
 @Dao
 interface SearchHistoryDao {

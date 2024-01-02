@@ -24,13 +24,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.copyResults
-import org.proninyaroslav.opencomicvine.data.filter.PeopleFilter
-import org.proninyaroslav.opencomicvine.data.item.favorites.FavoritesPersonItem
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesPersonItemRemoteKeys
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesPersonItem
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.copyResults
+import org.proninyaroslav.opencomicvine.types.filter.PeopleFilter
+import org.proninyaroslav.opencomicvine.types.item.favorites.FavoritesPersonItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesPersonItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesPersonItem
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
@@ -46,7 +46,7 @@ interface PeopleRemoteMediatorFactory {
     ): PeopleRemoteMediator
 }
 
-@OptIn(FlowPreview::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class PeopleRemoteMediator @AssistedInject constructor(
     @Assisted private val scope: CoroutineScope,
     @Assisted private val onRefresh: () -> Unit,
@@ -94,6 +94,7 @@ class PeopleRemoteMediator @AssistedInject constructor(
                         }.sort(pref.favoritePeopleSort.first())
                         FetchResult.Success(copyResults(items))
                     }
+
                     else -> FetchResult.Failed(
                         Error.Service(
                             statusCode = statusCode,
@@ -102,6 +103,7 @@ class PeopleRemoteMediator @AssistedInject constructor(
                     )
                 }
             }
+
             else -> FetchResult.Failed(
                 Error.Fetching(
                     error = res as ComicVineResult.Failed

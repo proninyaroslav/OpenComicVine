@@ -26,10 +26,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentCharactersFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentCharactersFilterBundle
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentCharactersFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentCharactersFilterBundle
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,10 +73,6 @@ class CharactersFilterViewModel @Inject constructor(
             _state.value = newState
         }
     }
-}
-
-sealed interface CharactersFilterEvent {
-    object Apply : CharactersFilterEvent
 }
 
 sealed interface CharactersFilterState {

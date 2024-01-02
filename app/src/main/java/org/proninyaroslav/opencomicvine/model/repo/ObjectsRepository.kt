@@ -20,11 +20,11 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
 import kotlinx.coroutines.flow.first
-import org.proninyaroslav.opencomicvine.data.ComicVineResponse
-import org.proninyaroslav.opencomicvine.data.ObjectInfo
-import org.proninyaroslav.opencomicvine.data.ObjectsResponse
-import org.proninyaroslav.opencomicvine.data.filter.ObjectsFilter
-import org.proninyaroslav.opencomicvine.data.sort.ObjectsSort
+import org.proninyaroslav.opencomicvine.types.ComicVineResponse
+import org.proninyaroslav.opencomicvine.types.ObjectInfo
+import org.proninyaroslav.opencomicvine.types.ObjectsResponse
+import org.proninyaroslav.opencomicvine.types.filter.ObjectsFilter
+import org.proninyaroslav.opencomicvine.types.sort.ObjectsSort
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
 import javax.inject.Inject
 

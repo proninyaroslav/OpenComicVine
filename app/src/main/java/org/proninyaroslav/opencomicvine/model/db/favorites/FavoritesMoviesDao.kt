@@ -24,7 +24,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesMovieItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesMovieItem
 
 @Dao
 interface FavoritesMoviesDao {

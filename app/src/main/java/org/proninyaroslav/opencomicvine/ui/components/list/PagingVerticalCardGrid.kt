@@ -19,17 +19,31 @@
 
 package org.proninyaroslav.opencomicvine.ui.components.list
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,7 +70,7 @@ fun PagingVerticalCardGrid(
     cellSize: CardCellSize = CardCellSize.Adaptive.Small,
     placeholder: @Composable () -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onError: @Composable (state: LoadState.Error, fullscreen: Boolean) -> Unit,
+    onError: @Composable (LoadState.Error, fullscreen: Boolean) -> Unit,
     onRefresh: () -> Unit = {},
     refreshing: Boolean = false,
     content: LazyGridScope.() -> Unit,
@@ -79,7 +93,7 @@ fun PagingVerticalCardGrid(
                     mapState(
                         loadState = it,
                         alignment = Alignment.Top,
-                        onError = { error -> onError(error, fullscreen = false) },
+                        onError = { error -> onError(error, false) },
                         gridState = state,
                         coroutineScope = coroutineScope,
                     )
@@ -88,7 +102,7 @@ fun PagingVerticalCardGrid(
             mapState(
                 loadState = loadState.prepend,
                 alignment = Alignment.Top,
-                onError = { error -> onError(error, fullscreen = false) },
+                onError = { error -> onError(error, false) },
                 gridState = state,
                 coroutineScope = coroutineScope,
             )
@@ -96,7 +110,7 @@ fun PagingVerticalCardGrid(
             mapState(
                 loadState = loadState.append,
                 alignment = Alignment.Bottom,
-                onError = { error -> onError(error, fullscreen = false) },
+                onError = { error -> onError(error, false) },
                 gridState = state,
                 coroutineScope = coroutineScope,
             )
@@ -123,8 +137,9 @@ fun PagingVerticalCardGrid(
             when (loadState.refresh) {
                 is LoadState.Loading -> CircularProgressIndicator()
                 is LoadState.Error -> {
-                    onError(loadState.refresh as LoadState.Error, fullscreen = true)
+                    onError(loadState.refresh as LoadState.Error, true)
                 }
+
                 else -> placeholder()
             }
         }
@@ -171,6 +186,7 @@ private fun LazyGridScope.mapState(
                         .padding(16.dp)
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
+
                 is LoadState.Error -> {
                     SideEffect {
                         coroutineScope.launch {
@@ -185,6 +201,7 @@ private fun LazyGridScope.mapState(
                     }
                     onError(state)
                 }
+
                 else -> {}
             }
         }

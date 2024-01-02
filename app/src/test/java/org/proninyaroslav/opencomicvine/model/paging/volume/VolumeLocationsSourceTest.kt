@@ -10,8 +10,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.LocationsFilter
+import org.proninyaroslav.opencomicvine.types.*
+import org.proninyaroslav.opencomicvine.types.filter.LocationsFilter
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.paging.details.DetailsEntitySource
 import org.proninyaroslav.opencomicvine.model.paging.details.volume.VolumeLocationsSource

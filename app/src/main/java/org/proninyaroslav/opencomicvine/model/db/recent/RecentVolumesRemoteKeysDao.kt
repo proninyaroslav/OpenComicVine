@@ -23,7 +23,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.proninyaroslav.opencomicvine.data.paging.recent.RecentVolumeItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.recent.RecentVolumeItemRemoteKeys
 
 @Dao
 interface RecentVolumesRemoteKeysDao {

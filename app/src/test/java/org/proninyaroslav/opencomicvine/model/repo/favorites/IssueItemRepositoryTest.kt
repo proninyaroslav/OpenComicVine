@@ -10,8 +10,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesIssueItemRemoteKeys
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesIssueItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesIssueItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesIssueItem
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.favorites.FavoritesIssuesDao
 import org.proninyaroslav.opencomicvine.model.db.favorites.FavoritesIssuesRemoteKeysDao

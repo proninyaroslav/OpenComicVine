@@ -26,8 +26,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.item.BaseItem
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.item.BaseItem
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult

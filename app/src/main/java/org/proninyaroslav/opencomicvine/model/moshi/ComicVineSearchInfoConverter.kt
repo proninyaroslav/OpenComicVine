@@ -21,9 +21,9 @@ package org.proninyaroslav.opencomicvine.model.moshi
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
-import org.proninyaroslav.opencomicvine.data.ComicVineSearchInfoJson
-import org.proninyaroslav.opencomicvine.data.ComicVineSearchResourceType
-import org.proninyaroslav.opencomicvine.data.SearchInfo
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchInfoJson
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchResourceType
+import org.proninyaroslav.opencomicvine.types.SearchInfo
 
 object ComicVineSearchInfoConverter {
     @FromJson

@@ -34,7 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.ui.components.AppSnackbarHost
 import org.proninyaroslav.opencomicvine.ui.components.FilledTonalActionButton
 import org.proninyaroslav.opencomicvine.ui.theme.OpenComicVineTheme

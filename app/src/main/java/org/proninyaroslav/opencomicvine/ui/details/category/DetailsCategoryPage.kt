@@ -41,10 +41,10 @@ import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.ImageInfo
-import org.proninyaroslav.opencomicvine.data.item.BaseItem
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.ImageInfo
+import org.proninyaroslav.opencomicvine.types.item.BaseItem
 import org.proninyaroslav.opencomicvine.model.ComicVineUrlBuilder
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository

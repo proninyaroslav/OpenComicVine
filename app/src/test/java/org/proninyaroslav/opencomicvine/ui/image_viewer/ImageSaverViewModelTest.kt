@@ -13,7 +13,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.ImageStore
 import org.proninyaroslav.opencomicvine.ui.getCompressFormatByImageType

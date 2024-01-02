@@ -20,12 +20,37 @@
 package org.proninyaroslav.opencomicvine.ui.crash_report
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -151,7 +176,6 @@ private fun Body(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -163,15 +187,17 @@ private fun CustomTextField(
         value = value,
         onValueChange = onValueChange,
         placeholder = { Text(stringResource(R.string.crash_dialog_comment)) },
-        colors = TextFieldDefaults.textFieldColors(
-            cursorColor = MaterialTheme.colorScheme.error,
+        colors = TextFieldDefaults.colors(
             focusedTextColor = contentColor,
             unfocusedTextColor = contentColor,
-            focusedPlaceholderColor = contentColor,
-            unfocusedPlaceholderColor = contentColor,
+            focusedContainerColor = containerColor,
+            unfocusedContainerColor = containerColor,
+            disabledContainerColor = containerColor,
+            cursorColor = MaterialTheme.colorScheme.error,
             focusedIndicatorColor = MaterialTheme.colorScheme.error,
             unfocusedIndicatorColor = contentColor,
-            containerColor = containerColor,
+            focusedPlaceholderColor = contentColor,
+            unfocusedPlaceholderColor = contentColor,
         ),
         modifier = modifier,
     )

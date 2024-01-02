@@ -19,8 +19,8 @@
 
 package org.proninyaroslav.opencomicvine.model.paging.details.volume
 
-import org.proninyaroslav.opencomicvine.data.copyResults
-import org.proninyaroslav.opencomicvine.data.item.volume.VolumeItem
+import org.proninyaroslav.opencomicvine.types.copyResults
+import org.proninyaroslav.opencomicvine.types.item.volume.VolumeItem
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource
 import org.proninyaroslav.opencomicvine.model.paging.details.DetailsEntitySource
 import org.proninyaroslav.opencomicvine.model.subListFrom

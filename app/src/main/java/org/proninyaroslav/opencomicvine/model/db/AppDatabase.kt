@@ -21,11 +21,11 @@ package org.proninyaroslav.opencomicvine.model.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
-import org.proninyaroslav.opencomicvine.data.paging.favorites.*
-import org.proninyaroslav.opencomicvine.data.paging.recent.*
-import org.proninyaroslav.opencomicvine.data.paging.wiki.*
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.paging.favorites.*
+import org.proninyaroslav.opencomicvine.types.paging.recent.*
+import org.proninyaroslav.opencomicvine.types.paging.wiki.*
 import org.proninyaroslav.opencomicvine.model.db.favorites.*
 import org.proninyaroslav.opencomicvine.model.db.recent.*
 import org.proninyaroslav.opencomicvine.model.db.wiki.*

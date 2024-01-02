@@ -37,11 +37,11 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
-import org.proninyaroslav.opencomicvine.data.SearchInfo
-import org.proninyaroslav.opencomicvine.data.item.SearchItem
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.SearchInfo
+import org.proninyaroslav.opencomicvine.types.item.SearchItem
 import org.proninyaroslav.opencomicvine.model.paging.SearchSource
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository

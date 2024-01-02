@@ -20,9 +20,9 @@
 package org.proninyaroslav.opencomicvine.model.network
 
 import com.skydoves.sandwich.ApiResponse
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.ComicVineFilter
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSort
+import org.proninyaroslav.opencomicvine.types.*
+import org.proninyaroslav.opencomicvine.types.filter.ComicVineFilter
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSort
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

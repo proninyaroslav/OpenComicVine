@@ -12,7 +12,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.preferences.*
+import org.proninyaroslav.opencomicvine.types.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.IssuesFilterState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.IssuesFilterViewModel

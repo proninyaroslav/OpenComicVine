@@ -24,13 +24,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.copyResults
-import org.proninyaroslav.opencomicvine.data.filter.IssuesFilter
-import org.proninyaroslav.opencomicvine.data.item.favorites.FavoritesIssueItem
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesIssueItemRemoteKeys
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesIssueItem
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.copyResults
+import org.proninyaroslav.opencomicvine.types.filter.IssuesFilter
+import org.proninyaroslav.opencomicvine.types.item.favorites.FavoritesIssueItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesIssueItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesIssueItem
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
@@ -46,7 +46,7 @@ interface IssuesRemoteMediatorFactory {
     ): IssuesRemoteMediator
 }
 
-@OptIn(FlowPreview::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class IssuesRemoteMediator @AssistedInject constructor(
     @Assisted private val scope: CoroutineScope,
     @Assisted private val onRefresh: () -> Unit,
@@ -94,6 +94,7 @@ class IssuesRemoteMediator @AssistedInject constructor(
                         }.sort(pref.favoriteIssuesSort.first())
                         FetchResult.Success(copyResults(items))
                     }
+
                     else -> FetchResult.Failed(
                         Error.Service(
                             statusCode = statusCode,
@@ -102,6 +103,7 @@ class IssuesRemoteMediator @AssistedInject constructor(
                     )
                 }
             }
+
             else -> FetchResult.Failed(
                 Error.Fetching(
                     error = res as ComicVineResult.Failed

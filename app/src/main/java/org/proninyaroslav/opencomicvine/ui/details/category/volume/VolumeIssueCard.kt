@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.IssueInfo
+import org.proninyaroslav.opencomicvine.types.IssueInfo
 import org.proninyaroslav.opencomicvine.ui.calculateTextHeight
 import org.proninyaroslav.opencomicvine.ui.components.CustomBadge
 import org.proninyaroslav.opencomicvine.ui.components.DefaultCustomBadgeSize

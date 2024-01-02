@@ -1,22 +1,30 @@
 package org.proninyaroslav.opencomicvine.ui.viewmodel
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
 import org.proninyaroslav.opencomicvine.model.DateProvider
-import org.proninyaroslav.opencomicvine.model.paging.recent.*
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import java.io.IOException
-import java.util.*
+import java.util.Date
+import java.util.GregorianCalendar
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FavoritesViewModelTest {

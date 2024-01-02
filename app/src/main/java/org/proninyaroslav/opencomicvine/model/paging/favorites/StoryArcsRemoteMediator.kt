@@ -24,13 +24,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.copyResults
-import org.proninyaroslav.opencomicvine.data.filter.StoryArcsFilter
-import org.proninyaroslav.opencomicvine.data.item.favorites.FavoritesStoryArcItem
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesStoryArcItemRemoteKeys
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesStoryArcItem
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.copyResults
+import org.proninyaroslav.opencomicvine.types.filter.StoryArcsFilter
+import org.proninyaroslav.opencomicvine.types.item.favorites.FavoritesStoryArcItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesStoryArcItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesStoryArcItem
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
@@ -46,7 +46,7 @@ interface StoryArcsRemoteMediatorFactory {
     ): StoryArcsRemoteMediator
 }
 
-@OptIn(FlowPreview::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class StoryArcsRemoteMediator @AssistedInject constructor(
     @Assisted private val scope: CoroutineScope,
     @Assisted private val onRefresh: () -> Unit,
@@ -94,6 +94,7 @@ class StoryArcsRemoteMediator @AssistedInject constructor(
                         }.sort(pref.favoriteStoryArcsSort.first())
                         FetchResult.Success(copyResults(items))
                     }
+
                     else -> FetchResult.Failed(
                         Error.Service(
                             statusCode = statusCode,
@@ -102,6 +103,7 @@ class StoryArcsRemoteMediator @AssistedInject constructor(
                     )
                 }
             }
+
             else -> FetchResult.Failed(
                 Error.Fetching(
                     error = res as ComicVineResult.Failed

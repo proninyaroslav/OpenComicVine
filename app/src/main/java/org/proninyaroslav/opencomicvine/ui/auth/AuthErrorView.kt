@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.repo.ApiKeyRepository
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.components.error.FatalErrorPage

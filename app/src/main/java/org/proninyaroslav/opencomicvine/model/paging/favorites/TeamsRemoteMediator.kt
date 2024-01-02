@@ -24,13 +24,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.copyResults
-import org.proninyaroslav.opencomicvine.data.filter.TeamsFilter
-import org.proninyaroslav.opencomicvine.data.item.favorites.FavoritesTeamItem
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesTeamItemRemoteKeys
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesTeamItem
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.copyResults
+import org.proninyaroslav.opencomicvine.types.filter.TeamsFilter
+import org.proninyaroslav.opencomicvine.types.item.favorites.FavoritesTeamItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesTeamItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesTeamItem
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
@@ -46,7 +46,7 @@ interface TeamsRemoteMediatorFactory {
     ): TeamsRemoteMediator
 }
 
-@OptIn(FlowPreview::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class TeamsRemoteMediator @AssistedInject constructor(
     @Assisted private val scope: CoroutineScope,
     @Assisted private val onRefresh: () -> Unit,
@@ -94,6 +94,7 @@ class TeamsRemoteMediator @AssistedInject constructor(
                         }.sort(pref.favoriteTeamsSort.first())
                         FetchResult.Success(copyResults(items))
                     }
+
                     else -> FetchResult.Failed(
                         Error.Service(
                             statusCode = statusCode,
@@ -102,6 +103,7 @@ class TeamsRemoteMediator @AssistedInject constructor(
                     )
                 }
             }
+
             else -> FetchResult.Failed(
                 Error.Fetching(
                     error = res as ComicVineResult.Failed

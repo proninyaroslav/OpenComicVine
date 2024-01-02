@@ -19,31 +19,35 @@
 
 package org.proninyaroslav.opencomicvine.ui.components.chip
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowScope
 import org.proninyaroslav.opencomicvine.ui.theme.OpenComicVineTheme
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ChipFlowRow(
     modifier: Modifier = Modifier,
-    mainAxisSpacing: Dp = 8.dp,
-    crossAxisSpacing: Dp = 4.dp,
-    content: @Composable () -> Unit,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
+    content: @Composable FlowRowScope.() -> Unit,
 ) {
     FlowRow(
-        mainAxisSpacing = mainAxisSpacing,
-        crossAxisSpacing = crossAxisSpacing,
+        horizontalArrangement = horizontalArrangement,
+        verticalArrangement = verticalArrangement,
         modifier = modifier,
         content = content,
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Preview
 @Composable
 fun PreviewChipFlowRow() {

@@ -1,20 +1,24 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
 import com.skydoves.sandwich.ApiResponse
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.ObjectInfo
-import org.proninyaroslav.opencomicvine.data.ObjectsResponse
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.filter.ObjectsFilter
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
-import retrofit2.Response
+import org.proninyaroslav.opencomicvine.types.ObjectInfo
+import org.proninyaroslav.opencomicvine.types.ObjectsResponse
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.filter.ObjectsFilter
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ObjectsRepositoryTest {
@@ -59,7 +63,7 @@ class ObjectsRepositoryTest {
                 sort = null,
                 filter = filters,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItems(
             offset = response.offset,

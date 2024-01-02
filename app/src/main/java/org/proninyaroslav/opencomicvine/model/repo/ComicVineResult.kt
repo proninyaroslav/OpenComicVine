@@ -21,6 +21,7 @@ package org.proninyaroslav.opencomicvine.model.repo
 
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.StatusCode
+import com.skydoves.sandwich.retrofit.statusCode
 import org.proninyaroslav.opencomicvine.model.network.NoNetworkConnectionException
 import java.net.SocketTimeoutException
 
@@ -49,12 +50,12 @@ fun <T> ApiResponse<T>.toComicVineResult(): ComicVineResult<T> =
             ComicVineResult.Failed.HttpError(statusCode)
         }
         is ApiResponse.Failure.Exception -> {
-            when (exception) {
+            when (throwable) {
                 is NoNetworkConnectionException ->
                     ComicVineResult.Failed.NoNetworkConnection
                 is SocketTimeoutException ->
                     ComicVineResult.Failed.RequestTimeout
-                else -> ComicVineResult.Failed.Exception(exception)
+                else -> ComicVineResult.Failed.Exception(throwable)
             }
         }
     }

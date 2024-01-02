@@ -57,7 +57,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.components.AppLogo
 import org.proninyaroslav.opencomicvine.ui.components.HyperlinkText

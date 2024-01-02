@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.preferences.PrefTheme
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.preferences.PrefTheme
 import org.proninyaroslav.opencomicvine.model.repo.ApiKeyRepository
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.addExtraPadding

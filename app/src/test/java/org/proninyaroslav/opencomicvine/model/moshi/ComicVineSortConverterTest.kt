@@ -2,8 +2,8 @@ package org.proninyaroslav.opencomicvine.model.moshi
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSort
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSortDirection
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSort
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
 
 class ComicVineSortConverterTest {
     private val converter = ComicVineSortConverter

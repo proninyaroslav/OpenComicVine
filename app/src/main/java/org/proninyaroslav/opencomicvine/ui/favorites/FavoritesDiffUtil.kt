@@ -19,7 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.favorites
 
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 
 class FavoritesDiffUtil {
     private var currentSet = mutableSetOf<FavoriteInfo>()

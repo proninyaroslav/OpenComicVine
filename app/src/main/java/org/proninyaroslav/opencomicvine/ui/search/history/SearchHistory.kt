@@ -36,7 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
 import org.proninyaroslav.opencomicvine.model.repo.SearchHistoryRepository
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.components.list.EmptyListPlaceholder

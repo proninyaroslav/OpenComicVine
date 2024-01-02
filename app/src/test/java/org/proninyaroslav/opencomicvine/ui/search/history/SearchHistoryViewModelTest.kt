@@ -11,7 +11,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.DateProvider
 import org.proninyaroslav.opencomicvine.model.repo.SearchHistoryRepository

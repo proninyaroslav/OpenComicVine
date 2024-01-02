@@ -22,7 +22,7 @@ package org.proninyaroslav.opencomicvine.model.repo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import org.proninyaroslav.opencomicvine.data.SearchHistoryInfo
+import org.proninyaroslav.opencomicvine.types.SearchHistoryInfo
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import java.io.IOException
 import javax.inject.Inject

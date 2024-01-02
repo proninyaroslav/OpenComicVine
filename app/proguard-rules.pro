@@ -21,8 +21,3 @@
 #-renamesourcefileattribute SourceFile
 
 -dontobfuscate
-
-# Keep JsonClass annotations for moshi-sealed's NestedSealed.Factory
-# TODO: temporary solution, see https://github.com/ZacSweers/MoshiX/pull/342
--keep @com.squareup.moshi.JsonClass class *
--keep @com.squareup.moshi.JsonClass interface *

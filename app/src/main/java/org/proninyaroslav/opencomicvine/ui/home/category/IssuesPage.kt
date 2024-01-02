@@ -32,8 +32,8 @@ import androidx.core.util.Pair
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentIssuesFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentIssuesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentIssuesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentIssuesFilterBundle
 import org.proninyaroslav.opencomicvine.ui.components.DateRangePickerDialog
 import org.proninyaroslav.opencomicvine.ui.components.card.IssueCard
 import org.proninyaroslav.opencomicvine.ui.components.list.CardCellSize

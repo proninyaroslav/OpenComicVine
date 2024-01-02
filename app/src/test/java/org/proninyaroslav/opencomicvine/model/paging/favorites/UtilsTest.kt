@@ -3,9 +3,9 @@ package org.proninyaroslav.opencomicvine.model.paging.favorites
 import io.mockk.mockk
 import org.junit.Assert.*
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.item.favorites.FavoritesCharacterItem
-import org.proninyaroslav.opencomicvine.data.preferences.PrefFavoritesSort
-import org.proninyaroslav.opencomicvine.data.preferences.PrefSortDirection
+import org.proninyaroslav.opencomicvine.types.item.favorites.FavoritesCharacterItem
+import org.proninyaroslav.opencomicvine.types.preferences.PrefFavoritesSort
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
 import java.util.*
 
 class UtilsTest {

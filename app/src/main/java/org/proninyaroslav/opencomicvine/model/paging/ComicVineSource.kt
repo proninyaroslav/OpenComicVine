@@ -22,7 +22,7 @@ package org.proninyaroslav.opencomicvine.model.paging
 import androidx.paging.LoadState
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import org.proninyaroslav.opencomicvine.data.ComicVineResponse
+import org.proninyaroslav.opencomicvine.types.ComicVineResponse
 
 abstract class ComicVineSource<Value : Any, Error : ComicVineSource.Error>(
     private val endOfPaginationOffset: Int? = null,

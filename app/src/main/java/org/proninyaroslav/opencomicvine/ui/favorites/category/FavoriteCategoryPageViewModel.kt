@@ -24,8 +24,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.item.favorites.*
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.item.favorites.*
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineSource

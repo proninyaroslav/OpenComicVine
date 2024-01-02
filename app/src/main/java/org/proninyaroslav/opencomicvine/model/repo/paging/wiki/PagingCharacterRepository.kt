@@ -21,8 +21,8 @@ package org.proninyaroslav.opencomicvine.model.repo.paging.wiki
 
 import androidx.paging.PagingSource
 import androidx.room.withTransaction
-import org.proninyaroslav.opencomicvine.data.paging.wiki.PagingWikiCharacterItem
-import org.proninyaroslav.opencomicvine.data.paging.wiki.WikiCharacterItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.wiki.PagingWikiCharacterItem
+import org.proninyaroslav.opencomicvine.types.paging.wiki.WikiCharacterItemRemoteKeys
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import java.io.IOException

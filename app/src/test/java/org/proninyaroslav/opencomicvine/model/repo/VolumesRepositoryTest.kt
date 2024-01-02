@@ -1,8 +1,13 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
 import com.skydoves.sandwich.ApiResponse
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -11,12 +16,16 @@ import okio.ByteString
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.VolumesFilter
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSortDirection
-import org.proninyaroslav.opencomicvine.data.sort.VolumesSort
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
 import org.proninyaroslav.opencomicvine.model.network.NoNetworkConnectionException
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.VolumeDetails
+import org.proninyaroslav.opencomicvine.types.VolumeInfo
+import org.proninyaroslav.opencomicvine.types.VolumeResponse
+import org.proninyaroslav.opencomicvine.types.VolumesResponse
+import org.proninyaroslav.opencomicvine.types.filter.VolumesFilter
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
+import org.proninyaroslav.opencomicvine.types.sort.VolumesSort
 import retrofit2.Response
 import java.io.IOException
 
@@ -67,7 +76,7 @@ class VolumesRepositoryTest {
                 sort = sort,
                 filter = filters,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItems(
             offset = response.offset,
@@ -125,7 +134,7 @@ class VolumesRepositoryTest {
                 filter = null,
             )
         } returns ApiResponse.Failure.Error(
-            Response.error(
+            Response.error<VolumesResponse>(
                 404,
                 ByteString.of().toResponseBody()
             )
@@ -258,7 +267,7 @@ class VolumesRepositoryTest {
                 id = id,
                 apiKey = apiKey,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItemDetailsById(id)
         assertEquals(ComicVineResult.Success(response), res)

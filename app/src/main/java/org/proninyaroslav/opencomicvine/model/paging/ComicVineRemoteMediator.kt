@@ -22,9 +22,9 @@ package org.proninyaroslav.opencomicvine.model.paging
 import androidx.paging.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import org.proninyaroslav.opencomicvine.data.ComicVineResponse
-import org.proninyaroslav.opencomicvine.data.paging.ComicVinePagingItem
-import org.proninyaroslav.opencomicvine.data.paging.ComicVineRemoteKeys
+import org.proninyaroslav.opencomicvine.types.ComicVineResponse
+import org.proninyaroslav.opencomicvine.types.paging.ComicVinePagingItem
+import org.proninyaroslav.opencomicvine.types.paging.ComicVineRemoteKeys
 
 @OptIn(ExperimentalPagingApi::class)
 abstract class ComicVineRemoteMediator<

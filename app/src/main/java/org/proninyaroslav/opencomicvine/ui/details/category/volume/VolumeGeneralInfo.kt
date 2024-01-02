@@ -24,7 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.VolumeDetails
+import org.proninyaroslav.opencomicvine.types.VolumeDetails
 import org.proninyaroslav.opencomicvine.ui.components.chip.OpenContentChip
 import org.proninyaroslav.opencomicvine.ui.details.DetailsGeneralInfo
 import org.proninyaroslav.opencomicvine.ui.details.DetailsGeneralInfoItem

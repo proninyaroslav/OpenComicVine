@@ -20,9 +20,9 @@
 package org.proninyaroslav.opencomicvine.model.paging.recent
 
 import kotlinx.coroutines.CoroutineDispatcher
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.paging.ComicVinePagingItem
-import org.proninyaroslav.opencomicvine.data.paging.ComicVineRemoteKeys
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.paging.ComicVinePagingItem
+import org.proninyaroslav.opencomicvine.types.paging.ComicVineRemoteKeys
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository

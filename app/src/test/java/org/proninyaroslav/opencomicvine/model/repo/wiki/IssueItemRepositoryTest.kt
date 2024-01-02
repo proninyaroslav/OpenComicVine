@@ -10,8 +10,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.paging.wiki.PagingWikiIssueItem
-import org.proninyaroslav.opencomicvine.data.paging.wiki.WikiIssueItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.wiki.PagingWikiIssueItem
+import org.proninyaroslav.opencomicvine.types.paging.wiki.WikiIssueItemRemoteKeys
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.wiki.WikiIssuesDao
 import org.proninyaroslav.opencomicvine.model.db.wiki.WikiIssuesRemoteKeysDao

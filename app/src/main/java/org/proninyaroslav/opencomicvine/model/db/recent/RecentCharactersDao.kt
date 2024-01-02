@@ -24,7 +24,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.proninyaroslav.opencomicvine.data.paging.recent.PagingRecentCharacterItem
+import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentCharacterItem
 
 @Dao
 interface RecentCharactersDao {

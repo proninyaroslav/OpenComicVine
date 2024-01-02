@@ -32,8 +32,8 @@ import androidx.core.util.Pair
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentVolumesFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentVolumesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilterBundle
 import org.proninyaroslav.opencomicvine.ui.components.DateRangePickerDialog
 import org.proninyaroslav.opencomicvine.ui.components.card.VolumeCard
 import org.proninyaroslav.opencomicvine.ui.components.list.CardCellSize

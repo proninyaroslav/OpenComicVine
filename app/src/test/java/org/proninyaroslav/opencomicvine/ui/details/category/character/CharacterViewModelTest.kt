@@ -13,10 +13,10 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.item.*
-import org.proninyaroslav.opencomicvine.data.paging.recent.PagingRecentCharacterItem
-import org.proninyaroslav.opencomicvine.data.paging.wiki.PagingWikiCharacterItem
+import org.proninyaroslav.opencomicvine.types.*
+import org.proninyaroslav.opencomicvine.types.item.*
+import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentCharacterItem
+import org.proninyaroslav.opencomicvine.types.paging.wiki.PagingWikiCharacterItem
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.repo.CharactersRepository
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult

@@ -22,7 +22,7 @@ package org.proninyaroslav.opencomicvine.model.db
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 
 @Dao
 interface FavoritesDao {

@@ -19,7 +19,9 @@
 
 package org.proninyaroslav.opencomicvine.model
 
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+
 
 fun getDaysOfCurrentWeek(): Pair<Date, Date> {
     val calendar = Calendar.getInstance().apply {

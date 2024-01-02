@@ -21,8 +21,8 @@ package org.proninyaroslav.opencomicvine.model.repo.paging.recent
 
 import androidx.paging.PagingSource
 import androidx.room.withTransaction
-import org.proninyaroslav.opencomicvine.data.paging.recent.PagingRecentVolumeItem
-import org.proninyaroslav.opencomicvine.data.paging.recent.RecentVolumeItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentVolumeItem
+import org.proninyaroslav.opencomicvine.types.paging.recent.RecentVolumeItemRemoteKeys
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import java.io.IOException

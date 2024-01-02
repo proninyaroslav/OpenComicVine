@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.proninyaroslav.opencomicvine.data.preferences.PrefVolumeIssuesSort
+import org.proninyaroslav.opencomicvine.types.preferences.PrefVolumeIssuesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import javax.inject.Inject
 

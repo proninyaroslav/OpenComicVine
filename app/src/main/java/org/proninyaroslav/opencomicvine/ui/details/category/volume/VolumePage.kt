@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import org.proninyaroslav.opencomicvine.ui.details.DetailsPage
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsCategoryPage
 import org.proninyaroslav.opencomicvine.ui.details.category.DetailsState

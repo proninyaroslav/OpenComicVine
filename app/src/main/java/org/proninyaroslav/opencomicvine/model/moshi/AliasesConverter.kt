@@ -21,7 +21,7 @@ package org.proninyaroslav.opencomicvine.model.moshi
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
-import org.proninyaroslav.opencomicvine.data.Aliases
+import org.proninyaroslav.opencomicvine.types.Aliases
 
 object AliasesConverter {
     @FromJson

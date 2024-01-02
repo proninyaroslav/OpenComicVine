@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.proninyaroslav.opencomicvine.data.ImageInfo
+import org.proninyaroslav.opencomicvine.types.ImageInfo
 import org.proninyaroslav.opencomicvine.ui.components.list.ScrollUpButton
 import org.proninyaroslav.opencomicvine.ui.components.list.ScrollUpButtonHeight
 import org.proninyaroslav.opencomicvine.ui.components.rememberTopAppBarWithImageScrollBehavior

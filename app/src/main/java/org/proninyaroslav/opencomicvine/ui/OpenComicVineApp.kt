@@ -27,7 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import org.proninyaroslav.opencomicvine.data.preferences.PrefTheme
+import org.proninyaroslav.opencomicvine.types.preferences.PrefTheme
 import org.proninyaroslav.opencomicvine.ui.components.AppSnackbarHost
 import org.proninyaroslav.opencomicvine.ui.navigation.AppNavBarScaffold
 import org.proninyaroslav.opencomicvine.ui.navigation.AppNavGraph

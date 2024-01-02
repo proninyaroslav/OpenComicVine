@@ -24,7 +24,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import org.proninyaroslav.opencomicvine.data.paging.wiki.PagingWikiVolumeItem
+import org.proninyaroslav.opencomicvine.types.paging.wiki.PagingWikiVolumeItem
 
 @Dao
 interface WikiVolumesDao {

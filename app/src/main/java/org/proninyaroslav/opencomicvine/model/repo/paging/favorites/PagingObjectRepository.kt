@@ -21,8 +21,8 @@ package org.proninyaroslav.opencomicvine.model.repo.paging.favorites
 
 import androidx.paging.PagingSource
 import androidx.room.withTransaction
-import org.proninyaroslav.opencomicvine.data.paging.favorites.FavoritesObjectItemRemoteKeys
-import org.proninyaroslav.opencomicvine.data.paging.favorites.PagingFavoritesObjectItem
+import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesObjectItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesObjectItem
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import java.io.IOException

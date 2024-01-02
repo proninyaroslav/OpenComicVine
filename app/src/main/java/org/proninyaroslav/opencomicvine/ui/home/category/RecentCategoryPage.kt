@@ -22,8 +22,19 @@ package org.proninyaroslav.opencomicvine.ui.home.category
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -34,10 +45,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.item.BaseItem
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.item.BaseItem
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.components.FavoriteButton
 import org.proninyaroslav.opencomicvine.ui.components.FavoriteSwipeableBox
@@ -46,12 +57,14 @@ import org.proninyaroslav.opencomicvine.ui.components.categories.CategoryAppBar
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterDrawer
 import org.proninyaroslav.opencomicvine.ui.components.list.CardCellSize
 import org.proninyaroslav.opencomicvine.ui.components.list.PagingVerticalCardGrid
-import org.proninyaroslav.opencomicvine.ui.favorites.*
 import org.proninyaroslav.opencomicvine.ui.fling
 import org.proninyaroslav.opencomicvine.ui.home.RecentErrorView
 import org.proninyaroslav.opencomicvine.ui.rememberLazyGridState
 import org.proninyaroslav.opencomicvine.ui.removeBottomPadding
-import org.proninyaroslav.opencomicvine.ui.viewmodel.*
+import org.proninyaroslav.opencomicvine.ui.viewmodel.FavoritesViewModel
+import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
+import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkState
+import org.proninyaroslav.opencomicvine.ui.viewmodel.SwitchFavoriteState
 
 enum class RecentCategoryPageType {
     Characters,

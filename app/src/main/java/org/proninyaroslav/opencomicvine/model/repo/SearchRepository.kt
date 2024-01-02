@@ -21,9 +21,9 @@ package org.proninyaroslav.opencomicvine.model.repo
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.ObjectsFilter
-import org.proninyaroslav.opencomicvine.data.filter.StoryArcsFilter
+import org.proninyaroslav.opencomicvine.types.*
+import org.proninyaroslav.opencomicvine.types.filter.ObjectsFilter
+import org.proninyaroslav.opencomicvine.types.filter.StoryArcsFilter
 import org.proninyaroslav.opencomicvine.di.ApplicationScope
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
 import javax.inject.Inject

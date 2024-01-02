@@ -24,10 +24,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
-import org.proninyaroslav.opencomicvine.data.paging.ComicVinePagingItem
-import org.proninyaroslav.opencomicvine.data.paging.ComicVineRemoteKeys
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.paging.ComicVinePagingItem
+import org.proninyaroslav.opencomicvine.types.paging.ComicVineRemoteKeys
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesListFetchResult

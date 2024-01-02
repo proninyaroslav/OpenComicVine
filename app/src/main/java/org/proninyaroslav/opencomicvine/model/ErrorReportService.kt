@@ -21,7 +21,7 @@ package org.proninyaroslav.opencomicvine.model
 
 import org.acra.ACRA
 import org.acra.ReportField
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import javax.inject.Inject
 
 interface ErrorReportService {

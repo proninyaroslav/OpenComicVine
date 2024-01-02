@@ -19,12 +19,13 @@
 
 package org.proninyaroslav.opencomicvine.ui.details.category.character
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.CharacterDetails
+import org.proninyaroslav.opencomicvine.types.CharacterDetails
 import org.proninyaroslav.opencomicvine.ui.components.chip.ChipFlowRow
 import org.proninyaroslav.opencomicvine.ui.components.chip.OpenContentChip
 import org.proninyaroslav.opencomicvine.ui.components.chip.TextChip
@@ -54,6 +55,7 @@ fun CharacterGeneralInfo(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun toInfoItems(
     onCopyToClipboard: (String) -> Unit,

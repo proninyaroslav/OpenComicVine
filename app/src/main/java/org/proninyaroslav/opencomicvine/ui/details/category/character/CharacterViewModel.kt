@@ -27,10 +27,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import org.proninyaroslav.opencomicvine.data.CharacterDetails
-import org.proninyaroslav.opencomicvine.data.CharacterInfo
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
-import org.proninyaroslav.opencomicvine.data.item.*
+import org.proninyaroslav.opencomicvine.types.CharacterDetails
+import org.proninyaroslav.opencomicvine.types.CharacterInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.item.*
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import org.proninyaroslav.opencomicvine.model.paging.details.*

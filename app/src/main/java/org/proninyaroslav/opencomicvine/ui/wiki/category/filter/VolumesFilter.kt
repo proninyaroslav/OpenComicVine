@@ -32,10 +32,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.preferences.PrefSortDirection
-import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiVolumesFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiVolumesFilterBundle
-import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiVolumesSort
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiVolumesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiVolumesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiVolumesSort
 import org.proninyaroslav.opencomicvine.model.getDaysOfCurrentWeek
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterDatePickerItem
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterRadioButtonItem

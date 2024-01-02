@@ -29,7 +29,7 @@ import dev.zacsweers.moshix.sealed.annotations.NestedSealed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import org.proninyaroslav.opencomicvine.data.preferences.*
+import org.proninyaroslav.opencomicvine.types.preferences.*
 import org.proninyaroslav.opencomicvine.model.moshi.ComicVineDateConverter
 import javax.inject.Inject
 

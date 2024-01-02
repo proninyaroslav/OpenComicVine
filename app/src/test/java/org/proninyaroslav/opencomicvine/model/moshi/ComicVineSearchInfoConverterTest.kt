@@ -4,10 +4,10 @@ import io.mockk.mockk
 import org.junit.Assert.*
 
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.ComicVineSearchInfoJson
-import org.proninyaroslav.opencomicvine.data.ComicVineSearchResourceType
-import org.proninyaroslav.opencomicvine.data.ImageInfo
-import org.proninyaroslav.opencomicvine.data.SearchInfo
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchInfoJson
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchResourceType
+import org.proninyaroslav.opencomicvine.types.ImageInfo
+import org.proninyaroslav.opencomicvine.types.SearchInfo
 import java.util.*
 
 class ComicVineSearchInfoConverterTest {

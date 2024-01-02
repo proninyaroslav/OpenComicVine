@@ -1,8 +1,13 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
 import com.skydoves.sandwich.ApiResponse
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -11,12 +16,16 @@ import okio.ByteString
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.IssuesFilter
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSortDirection
-import org.proninyaroslav.opencomicvine.data.sort.IssuesSort
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
 import org.proninyaroslav.opencomicvine.model.network.NoNetworkConnectionException
+import org.proninyaroslav.opencomicvine.types.IssueDetails
+import org.proninyaroslav.opencomicvine.types.IssueInfo
+import org.proninyaroslav.opencomicvine.types.IssueResponse
+import org.proninyaroslav.opencomicvine.types.IssuesResponse
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.filter.IssuesFilter
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
+import org.proninyaroslav.opencomicvine.types.sort.IssuesSort
 import retrofit2.Response
 import java.io.IOException
 
@@ -67,7 +76,7 @@ class IssuesRepositoryTest {
                 sort = sort,
                 filter = filters,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItems(
             offset = response.offset,
@@ -125,7 +134,7 @@ class IssuesRepositoryTest {
                 filter = null,
             )
         } returns ApiResponse.Failure.Error(
-            Response.error(
+            Response.error<IssuesResponse>(
                 404,
                 ByteString.of().toResponseBody()
             )
@@ -257,7 +266,7 @@ class IssuesRepositoryTest {
                 id = id,
                 apiKey = apiKey,
             )
-        } returns ApiResponse.Success(Response.success(response))
+        } returns ApiResponse.Success(response)
 
         val res = repo.getItemDetailsById(id)
         assertEquals(ComicVineResult.Success(response), res)

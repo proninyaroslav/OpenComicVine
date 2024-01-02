@@ -28,15 +28,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.StatusCode
 import org.proninyaroslav.opencomicvine.model.repo.ApiKeyRepository
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
-import org.proninyaroslav.opencomicvine.ui.components.error.FatalErrorPage
-import org.proninyaroslav.opencomicvine.ui.components.error.HttpErrorPage
-import org.proninyaroslav.opencomicvine.ui.components.error.NetworkNotAvailable
-import org.proninyaroslav.opencomicvine.ui.components.error.RetryableErrorPage
 
 @Composable
 fun ComicVineResultErrorView(
@@ -77,6 +73,7 @@ fun ComicVineResultErrorView(
                         modifier = modifier,
                     )
                 }
+
                 is ApiKeyRepository.GetResult.Failed.NoApiKey -> {
                     FatalErrorPage(
                         errorMessage = stringResource(R.string.no_api_key_error),
@@ -88,6 +85,7 @@ fun ComicVineResultErrorView(
                 }
             }
         }
+
         is ComicVineResult.Failed.Exception -> error.run {
             FatalErrorPage(
                 errorMessage = formatFetchErrorMessage(exception.toString()),
@@ -98,6 +96,7 @@ fun ComicVineResultErrorView(
                 modifier = modifier,
             )
         }
+
         is ComicVineResult.Failed.HttpError -> error.run {
             HttpErrorPage(
                 httpCode = statusCode.code,
@@ -106,12 +105,14 @@ fun ComicVineResultErrorView(
                 modifier = modifier,
             )
         }
+
         ComicVineResult.Failed.NoNetworkConnection -> {
             NetworkNotAvailable(
                 compact = compact,
                 modifier = modifier,
             )
         }
+
         ComicVineResult.Failed.RequestTimeout -> {
             RetryableErrorPage(
                 errorMessage = formatFetchErrorMessage(

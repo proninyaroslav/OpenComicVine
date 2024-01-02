@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.AppInfoProvider
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
 import javax.inject.Inject

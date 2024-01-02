@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -80,7 +81,7 @@ fun PagingCardColumn(
                     mapState(
                         loadState = it,
                         alignment = Alignment.Top,
-                        onError = { error -> onError(error, fullscreen = false) },
+                        onError = { error -> onError(error, false) },
                         listState = state,
                         coroutineScope = coroutineScope,
                     )
@@ -89,7 +90,7 @@ fun PagingCardColumn(
             mapState(
                 loadState = loadState.prepend,
                 alignment = Alignment.Top,
-                onError = { error -> onError(error, fullscreen = false) },
+                onError = { error -> onError(error, false) },
                 listState = state,
                 coroutineScope = coroutineScope,
             )
@@ -97,7 +98,7 @@ fun PagingCardColumn(
             mapState(
                 loadState = loadState.append,
                 alignment = Alignment.Bottom,
-                onError = { error -> onError(error, fullscreen = false) },
+                onError = { error -> onError(error, false) },
                 listState = state,
                 coroutineScope = coroutineScope,
             )
@@ -125,8 +126,9 @@ fun PagingCardColumn(
                 is LoadState.Loading -> CircularProgressIndicator()
                 is LoadState.Error -> onError(
                     loadState.refresh as LoadState.Error,
-                    fullscreen = true
+                    true
                 )
+
                 else -> placeholder()
             }
         }
@@ -171,6 +173,7 @@ private fun LazyListScope.mapState(
                         .padding(16.dp)
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
+
                 is LoadState.Error -> {
                     SideEffect {
                         coroutineScope.launch {
@@ -185,6 +188,7 @@ private fun LazyListScope.mapState(
                     }
                     onError(state)
                 }
+
                 else -> {}
             }
         }
@@ -252,9 +256,11 @@ private fun PreviewPagingCardColumn_AppendLoading() {
             },
         ) {
             items(3) {
-                Card(modifier = Modifier
-                    .defaultMinSize(minHeight = 200.dp)
-                    .fillMaxWidth()) {}
+                Card(
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 200.dp)
+                        .fillMaxWidth()
+                ) {}
             }
         }
     }
@@ -288,9 +294,11 @@ private fun PreviewPagingCardColumn_PrependLoading() {
             },
         ) {
             items(3) {
-                Card(modifier = Modifier
-                    .defaultMinSize(minHeight = 200.dp)
-                    .fillMaxWidth()) {}
+                Card(
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 200.dp)
+                        .fillMaxWidth()
+                ) {}
             }
         }
     }
@@ -359,9 +367,11 @@ private fun PreviewPagingCardColumn_RefreshRemoteError() {
             },
         ) {
             items(3) {
-                Card(modifier = Modifier
-                    .defaultMinSize(minHeight = 200.dp)
-                    .fillMaxWidth()) {}
+                Card(
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 200.dp)
+                        .fillMaxWidth()
+                ) {}
             }
         }
     }
@@ -395,9 +405,11 @@ private fun PreviewPagingCardColumn_AppendError() {
             },
         ) {
             items(3) {
-                Card(modifier = Modifier
-                    .defaultMinSize(minHeight = 200.dp)
-                    .fillMaxWidth()) {}
+                Card(
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 200.dp)
+                        .fillMaxWidth()
+                ) {}
             }
         }
     }
@@ -431,9 +443,11 @@ private fun PreviewPagingCardColumn_PrependError() {
             },
         ) {
             items(3) {
-                Card(modifier = Modifier
-                    .defaultMinSize(minHeight = 200.dp)
-                    .fillMaxWidth()) {}
+                Card(
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 200.dp)
+                        .fillMaxWidth()
+                ) {}
             }
         }
     }

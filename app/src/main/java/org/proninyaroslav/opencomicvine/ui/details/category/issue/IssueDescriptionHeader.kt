@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.IssueDetails
+import org.proninyaroslav.opencomicvine.types.IssueDetails
 import org.proninyaroslav.opencomicvine.ui.details.*
 import org.proninyaroslav.opencomicvine.ui.theme.OpenComicVineTheme
 import java.text.DateFormat

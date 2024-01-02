@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.VolumeInfo
+import org.proninyaroslav.opencomicvine.types.VolumeInfo
 import org.proninyaroslav.opencomicvine.ui.components.defaultPlaceholder
 import org.proninyaroslav.opencomicvine.ui.components.list.CardCellSize
 import org.proninyaroslav.opencomicvine.ui.theme.OpenComicVineTheme

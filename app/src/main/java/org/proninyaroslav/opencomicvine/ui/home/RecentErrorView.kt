@@ -28,7 +28,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.paging.LoadState
 import kotlinx.coroutines.launch
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.paging.recent.RecentEntityRemoteMediator
 import org.proninyaroslav.opencomicvine.ui.LocalAppSnackbarState
 import org.proninyaroslav.opencomicvine.ui.components.error.ComicVineResultErrorView

@@ -28,8 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentVolumesFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefRecentVolumesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilterBundle
 import org.proninyaroslav.opencomicvine.model.getDaysOfCurrentWeek
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterDatePickerItem
 import org.proninyaroslav.opencomicvine.ui.components.drawer.FilterRadioButtonItem

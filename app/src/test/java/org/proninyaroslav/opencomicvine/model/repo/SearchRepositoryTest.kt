@@ -1,21 +1,34 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
 import com.skydoves.sandwich.ApiResponse
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import okio.IOException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.filter.ObjectsFilter
-import org.proninyaroslav.opencomicvine.data.filter.StoryArcsFilter
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
-import retrofit2.Response
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchResourceType
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchResourceTypeList
+import org.proninyaroslav.opencomicvine.types.SearchInfo
+import org.proninyaroslav.opencomicvine.types.SearchObjectsResponse
+import org.proninyaroslav.opencomicvine.types.SearchResponse
+import org.proninyaroslav.opencomicvine.types.SearchStoryArcsResponse
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.filter.ObjectsFilter
+import org.proninyaroslav.opencomicvine.types.filter.StoryArcsFilter
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SearchRepositoryTest {
@@ -113,7 +126,7 @@ class SearchRepositoryTest {
                 query = query,
                 resources = null,
             )
-        } returns ApiResponse.Success(Response.success(searchResponse))
+        } returns ApiResponse.Success(searchResponse)
         coEvery {
             comicVineService.searchStoryArcs(
                 apiKey = apiKey,
@@ -121,7 +134,7 @@ class SearchRepositoryTest {
                 limit = 4,
                 filter = listOf(StoryArcsFilter.Name(query))
             )
-        } returns ApiResponse.Success(Response.success(storyArcsResponse))
+        } returns ApiResponse.Success(storyArcsResponse)
         coEvery {
             comicVineService.searchObjects(
                 apiKey = apiKey,
@@ -129,7 +142,7 @@ class SearchRepositoryTest {
                 limit = 4,
                 filter = listOf(ObjectsFilter.Name(query))
             )
-        } returns ApiResponse.Success(Response.success(objectsResponse))
+        } returns ApiResponse.Success(objectsResponse)
 
         val res = repo.search(
             offset = totalResponse.offset,
@@ -218,7 +231,7 @@ class SearchRepositoryTest {
                 query = query,
                 resources = null,
             )
-        } returns ApiResponse.Success(Response.success(searchResponse))
+        } returns ApiResponse.Success(searchResponse)
         coEvery {
             comicVineService.searchStoryArcs(
                 apiKey = apiKey,
@@ -226,7 +239,7 @@ class SearchRepositoryTest {
                 limit = 4,
                 filter = listOf(StoryArcsFilter.Name(query))
             )
-        } returns ApiResponse.Success(Response.success(storyArcsResponse))
+        } returns ApiResponse.Success(storyArcsResponse)
         coEvery {
             comicVineService.searchObjects(
                 apiKey = apiKey,
@@ -316,7 +329,7 @@ class SearchRepositoryTest {
                     listOf(ComicVineSearchResourceType.Location)
                 ),
             )
-        } returns ApiResponse.Success(Response.success(searchResponse))
+        } returns ApiResponse.Success(searchResponse)
 
         val res = repo.search(
             offset = totalResponse.offset,
@@ -405,7 +418,7 @@ class SearchRepositoryTest {
                     )
                 ),
             )
-        } returns ApiResponse.Success(Response.success(searchResponse))
+        } returns ApiResponse.Success(searchResponse)
         coEvery {
             comicVineService.searchObjects(
                 apiKey = apiKey,
@@ -413,7 +426,7 @@ class SearchRepositoryTest {
                 limit = 5,
                 filter = listOf(ObjectsFilter.Name(query))
             )
-        } returns ApiResponse.Success(Response.success(objectsResponse))
+        } returns ApiResponse.Success(objectsResponse)
 
         val res = repo.search(
             offset = totalResponse.offset,
@@ -511,7 +524,7 @@ class SearchRepositoryTest {
                 limit = 5,
                 filter = listOf(StoryArcsFilter.Name(query)),
             )
-        } returns ApiResponse.Success(Response.success(storyArcResponse))
+        } returns ApiResponse.Success(storyArcResponse)
         coEvery {
             comicVineService.searchObjects(
                 apiKey = apiKey,
@@ -519,7 +532,7 @@ class SearchRepositoryTest {
                 limit = 5,
                 filter = listOf(ObjectsFilter.Name(query))
             )
-        } returns ApiResponse.Success(Response.success(objectsResponse))
+        } returns ApiResponse.Success(objectsResponse)
 
         val res = repo.search(
             offset = totalResponse.offset,

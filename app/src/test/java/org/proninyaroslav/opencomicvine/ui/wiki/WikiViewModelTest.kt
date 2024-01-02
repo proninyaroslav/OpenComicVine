@@ -1,18 +1,23 @@
 package org.proninyaroslav.opencomicvine.ui.wiki
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
 import org.proninyaroslav.opencomicvine.model.ErrorReportService
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
 import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)

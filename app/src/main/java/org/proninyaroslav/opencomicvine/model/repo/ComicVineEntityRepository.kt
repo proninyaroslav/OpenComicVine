@@ -19,9 +19,9 @@
 
 package org.proninyaroslav.opencomicvine.model.repo
 
-import org.proninyaroslav.opencomicvine.data.ComicVineResponse
-import org.proninyaroslav.opencomicvine.data.filter.ComicVineFilter
-import org.proninyaroslav.opencomicvine.data.sort.ComicVineSort
+import org.proninyaroslav.opencomicvine.types.ComicVineResponse
+import org.proninyaroslav.opencomicvine.types.filter.ComicVineFilter
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSort
 
 interface ComicVineEntityRepository<Item : Any, DetailsItem : Any, Sort : ComicVineSort, Filter : ComicVineFilter> {
     suspend fun getItems(

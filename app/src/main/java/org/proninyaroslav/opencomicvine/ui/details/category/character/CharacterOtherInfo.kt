@@ -23,7 +23,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,13 +37,26 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.Flow
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.*
-import org.proninyaroslav.opencomicvine.data.item.*
-import org.proninyaroslav.opencomicvine.model.paging.*
 import org.proninyaroslav.opencomicvine.model.paging.details.DetailsEntitySource
-import org.proninyaroslav.opencomicvine.ui.components.card.*
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.item.CharacterItem
+import org.proninyaroslav.opencomicvine.types.item.IssueItem
+import org.proninyaroslav.opencomicvine.types.item.MovieItem
+import org.proninyaroslav.opencomicvine.types.item.StoryArcItem
+import org.proninyaroslav.opencomicvine.types.item.TeamItem
+import org.proninyaroslav.opencomicvine.types.item.VolumeItem
+import org.proninyaroslav.opencomicvine.ui.components.card.CharacterCard
+import org.proninyaroslav.opencomicvine.ui.components.card.IssueCard
+import org.proninyaroslav.opencomicvine.ui.components.card.MovieCard
+import org.proninyaroslav.opencomicvine.ui.components.card.StoryArcCard
+import org.proninyaroslav.opencomicvine.ui.components.card.TeamCard
+import org.proninyaroslav.opencomicvine.ui.components.card.VolumeCard
 import org.proninyaroslav.opencomicvine.ui.components.list.EmptyListPlaceholder
-import org.proninyaroslav.opencomicvine.ui.details.*
+import org.proninyaroslav.opencomicvine.ui.details.DetailsPage
+import org.proninyaroslav.opencomicvine.ui.details.DetailsPagerCard
+import org.proninyaroslav.opencomicvine.ui.details.DetailsPagerTab
+import org.proninyaroslav.opencomicvine.ui.details.DetailsRelatedEntitiesPage
 import org.proninyaroslav.opencomicvine.ui.visibilityWrapper
 
 @Immutable
@@ -66,25 +83,30 @@ fun CharacterOtherInfo(
     onFavoriteClick: (Int, FavoriteInfo.EntityType) -> Unit,
     onReport: (ErrorReportInfo) -> Unit,
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        tabGroup.size
+    }
     val pageHeight by remember(pagerState) {
         derivedStateOf {
-            when (TabGroup.values()[pagerState.currentPage]) {
+            when (TabGroup.entries[pagerState.currentPage]) {
                 TabGroup.IssueCredits,
                 TabGroup.VolumeCredits -> Modifier.height(IssueCardWidth * 3.3f)
+
                 TabGroup.Movies -> Modifier.height(512.dp)
                 else -> Modifier
             }
         }
     }
-    @Suppress("UNCHECKED_CAST")
     DetailsPagerCard(
         pagesCount = tabGroup.size,
         pagerState = pagerState,
         tabs = tabGroup.values.toList(),
         modifier = Modifier.then(pageHeight),
     ) { page ->
-        when (TabGroup.values()[page]) {
+        when (TabGroup.entries[page]) {
             TabGroup.Movies -> MoviesList(
                 movies = pagerState.visibilityWrapper(page) {
                     state?.movies?.collectAsLazyPagingItems()
@@ -94,6 +116,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.IssueCredits -> IssuesList(
                 issues = pagerState.visibilityWrapper(page) {
                     state?.issues?.collectAsLazyPagingItems()
@@ -103,6 +126,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.VolumeCredits -> VolumesList(
                 volumes = pagerState.visibilityWrapper(page) {
                     state?.volumes?.collectAsLazyPagingItems()
@@ -112,6 +136,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.StoryArcCredits -> StoryArcsList(
                 storyArcs = pagerState.visibilityWrapper(page) {
                     state?.storyArcs?.collectAsLazyPagingItems()
@@ -121,6 +146,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.Friends -> FriendsList(
                 friends = pagerState.visibilityWrapper(page) {
                     state?.friends?.collectAsLazyPagingItems()
@@ -130,6 +156,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.Enemies -> EnemiesList(
                 enemies = pagerState.visibilityWrapper(page) {
                     state?.enemies?.collectAsLazyPagingItems()
@@ -139,6 +166,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.Teams -> TeamsList(
                 teams = pagerState.visibilityWrapper(page) {
                     state?.teams?.collectAsLazyPagingItems()
@@ -148,6 +176,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.TeamFriends -> TeamsList(
                 teams = pagerState.visibilityWrapper(page) {
                     state?.teamFriends?.collectAsLazyPagingItems()
@@ -157,6 +186,7 @@ fun CharacterOtherInfo(
                 onFavoriteClick = onFavoriteClick,
                 onReport = onReport,
             )
+
             TabGroup.TeamEnemies -> TeamsList(
                 teams = pagerState.visibilityWrapper(page) {
                     state?.teamEnemies?.collectAsLazyPagingItems()

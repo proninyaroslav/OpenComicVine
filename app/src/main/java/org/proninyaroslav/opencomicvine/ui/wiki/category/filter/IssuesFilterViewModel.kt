@@ -26,9 +26,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiIssuesFilter
-import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiIssuesFilterBundle
-import org.proninyaroslav.opencomicvine.data.preferences.PrefWikiIssuesSort
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiIssuesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiIssuesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiIssuesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.state.FilterStateCache
 import javax.inject.Inject

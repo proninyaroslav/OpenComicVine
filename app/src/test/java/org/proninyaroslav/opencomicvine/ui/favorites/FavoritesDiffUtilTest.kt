@@ -2,7 +2,7 @@ package org.proninyaroslav.opencomicvine.ui.favorites
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.FavoriteInfo
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import java.util.*
 
 class FavoritesDiffUtilTest {

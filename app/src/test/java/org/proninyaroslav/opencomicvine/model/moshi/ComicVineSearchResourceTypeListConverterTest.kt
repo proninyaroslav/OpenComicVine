@@ -2,8 +2,8 @@ package org.proninyaroslav.opencomicvine.model.moshi
 
 import org.junit.Assert.*
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.data.ComicVineSearchResourceType
-import org.proninyaroslav.opencomicvine.data.ComicVineSearchResourceTypeList
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchResourceType
+import org.proninyaroslav.opencomicvine.types.ComicVineSearchResourceTypeList
 
 class ComicVineSearchResourceTypeListConverterTest {
     @Test

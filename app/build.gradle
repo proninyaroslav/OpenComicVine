@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.devtools.ksp'
 }
@@ -16,12 +15,12 @@ if (localPropertiesFile.exists()) {
 
 android {
     namespace 'org.proninyaroslav.opencomicvine'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "org.proninyaroslav.opencomicvine"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode 2
         versionName "1.0"
 
@@ -60,17 +59,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.3'
+        kotlinCompilerExtensionVersion '1.5.7'
     }
     packagingOptions {
         resources {
@@ -86,49 +86,54 @@ ksp {
 }
 
 dependencies {
-    def nav_version = '2.5.3'
-    def room_version = '2.5.0'
+    def nav_version = '2.7.6'
+    def room_version = '2.6.1'
     def retrofit_version = '2.9.0'
-    def okhttp_version = '5.0.0-alpha.11'
-    def moshi_version = '1.14.0'
-    def moshi_sealed_version = '0.19.0'
-    def accompanist_version = '0.28.0'
-    def acra_version = '5.9.7'
+    def okhttp_version = '5.0.0-alpha.12'
+    def moshi_version = '1.15.0'
+    def moshi_sealed_version = '0.23.0'
+    def accompanist_version = '0.32.0'
+    def acra_version = '5.11.3'
+    def sandwich_version = '2.0.5'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.mockk:mockk:1.13.4'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation 'io.mockk:mockk:1.13.8'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
-    testImplementation 'io.kotest:kotest-assertions-core:5.5.5'
+    testImplementation 'io.kotest:kotest-assertions-core:5.8.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.5.4'
 
     // Debug
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling"
+    debugImplementation "androidx.compose.ui:ui-test-manifest"
 
     // AndroidX Core
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
-    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
     // Android Material View
-    implementation 'com.google.android.material:material:1.9.0-beta01'
+    implementation 'com.google.android.material:material:1.11.0'
 
     // Compose Core
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.1.0-alpha08'
-    implementation 'androidx.compose.material3:material3-window-size-class:1.1.0-alpha08'
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.activity:activity-compose:1.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.0'
+    implementation(platform('androidx.compose:compose-bom:2023.10.01'))
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.ui:ui-util'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material3:material3-window-size-class'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.activity:activity-compose:1.8.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.2'
     // Fallback import for components that aren't in Material 3
-    implementation "androidx.compose.material:material:$compose_version"
+    implementation 'androidx.compose.material:material'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -137,15 +142,15 @@ dependencies {
 
     // Navigation Compose
     implementation "androidx.navigation:navigation-compose:$nav_version"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation 'androidx.hilt:hilt-navigation-compose:1.1.0'
 
     // Paging 3.0
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha18'
+    implementation 'androidx.paging:paging-compose:3.2.1'
     implementation "androidx.room:room-paging:$room_version"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    ksp "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -156,14 +161,12 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     // Coil
-    implementation 'io.coil-kt:coil-compose:2.2.2'
+    implementation 'io.coil-kt:coil-compose:2.5.0'
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // Accompanist
-    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
     implementation "com.google.accompanist:accompanist-webview:$accompanist_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
 
@@ -173,6 +176,8 @@ dependencies {
     ksp "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // moshi-sealed
+    // TODO: https://github.com/ZacSweers/MoshiX/issues/530
+    //noinspection GradleDependency
     implementation "dev.zacsweers.moshix:moshi-sealed-runtime:$moshi_sealed_version"
     ksp "dev.zacsweers.moshix:moshi-sealed-codegen:$moshi_sealed_version"
 
@@ -181,7 +186,9 @@ dependencies {
     implementation "ch.acra:acra-dialog:$acra_version"
 
     // Other
-    implementation 'com.github.skydoves:sandwich:1.3.4'
+    implementation "com.github.skydoves:sandwich:$sandwich_version"
+    implementation "com.github.skydoves:sandwich-retrofit:$sandwich_version"
     implementation 'com.github.SmartToolFactory:Compose-Image:1.2.1'
-    implementation 'com.github.alorma:compose-settings-ui-m3:0.25.0'
+    implementation 'com.github.alorma:compose-settings-ui-m3:1.0.3'
+    implementation 'io.github.fornewid:placeholder-material3:1.0.1'
 }

@@ -20,8 +20,8 @@
 package org.proninyaroslav.opencomicvine.model.repo.paging
 
 import androidx.paging.PagingSource
-import org.proninyaroslav.opencomicvine.data.paging.ComicVinePagingItem
-import org.proninyaroslav.opencomicvine.data.paging.ComicVineRemoteKeys
+import org.proninyaroslav.opencomicvine.types.paging.ComicVinePagingItem
+import org.proninyaroslav.opencomicvine.types.paging.ComicVineRemoteKeys
 import java.io.IOException
 
 interface ComicVinePagingRepository<Item : ComicVinePagingItem, RemoteKey : ComicVineRemoteKeys> {

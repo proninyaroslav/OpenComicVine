@@ -21,7 +21,13 @@ package org.proninyaroslav.opencomicvine.ui.details.category.volume
 
 import android.util.Log
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedCard
@@ -35,10 +41,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import org.proninyaroslav.opencomicvine.R
-import org.proninyaroslav.opencomicvine.data.ErrorReportInfo
-import org.proninyaroslav.opencomicvine.data.item.IssueItem
+import org.proninyaroslav.opencomicvine.types.ErrorReportInfo
+import org.proninyaroslav.opencomicvine.types.item.IssueItem
 import org.proninyaroslav.opencomicvine.model.paging.details.DetailsEntitySource
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.ui.components.FavoriteBox
@@ -111,7 +116,8 @@ fun IssuesList(
                         } * 2.3f
                     ),
             ) {
-                items(issues, key = { it.id }) { issue ->
+                items(issues.itemCount, key = { issues[it]?.id ?: it }) { index ->
+                    val issue = issues[index]
                     issue?.let {
                         val isFavorite by produceState(initialValue = false, it.isFavorite) {
                             it.isFavorite.collect { res ->
