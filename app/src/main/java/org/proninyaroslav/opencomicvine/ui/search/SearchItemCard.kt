@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalLayoutApi::class)
+
 /*
  * Copyright (C) 2023 Yaroslav Pronin <proninyaroslav@mail.ru>
  *
@@ -17,7 +19,6 @@
  * along with OpenComicVine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:OptIn(ExperimentalLayoutApi::class)
 
 package org.proninyaroslav.opencomicvine.ui.search
 

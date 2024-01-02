@@ -32,6 +32,7 @@ import org.proninyaroslav.opencomicvine.model.COMIC_VINE_BASE_API_URL
 import org.proninyaroslav.opencomicvine.model.moshi.*
 import org.proninyaroslav.opencomicvine.model.network.ComicVineService
 import org.proninyaroslav.opencomicvine.model.network.ConnectivityInterceptor
+import org.proninyaroslav.opencomicvine.model.network.UserAgentInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -52,10 +53,12 @@ object NetworkModule {
     fun provideOkHttpClient(
         logInterceptor: HttpLoggingInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
+        userAgentInterceptor: UserAgentInterceptor,
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(logInterceptor)
             .addInterceptor(connectivityInterceptor)
+            .addInterceptor(userAgentInterceptor)
             .build()
 
     @Singleton
