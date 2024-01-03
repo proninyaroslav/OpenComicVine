@@ -1,0 +1,1 @@
+Fix HTTP 403. ComicVine has blocked the default User Agent.
