@@ -1,20 +1,32 @@
 package org.proninyaroslav.opencomicvine.ui.home.filter
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.getDaysOfCurrentWeek
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilterBundle
 import org.proninyaroslav.opencomicvine.ui.home.category.filter.VolumesFilterState
 import org.proninyaroslav.opencomicvine.ui.home.category.filter.VolumesFilterViewModel
 
@@ -48,7 +60,6 @@ class VolumesFilterViewModelTest {
     @Test
     fun load() = runTest {
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 filterBundle = initialFilter,
             ),
@@ -78,7 +89,6 @@ class VolumesFilterViewModelTest {
             },
         )
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 filterBundle = initialFilter,
             ),
@@ -113,7 +123,6 @@ class VolumesFilterViewModelTest {
             },
         )
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 filterBundle = initialFilter,
             ),

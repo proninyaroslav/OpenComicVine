@@ -1,16 +1,24 @@
 package org.proninyaroslav.opencomicvine.ui.viewmodel
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.proninyaroslav.opencomicvine.model.network.AppConnectivityManager
@@ -24,12 +32,20 @@ class NetworkConnectionViewModelTest {
 
     val dispatcher = StandardTestDispatcher()
 
+    lateinit var sharedFlow: MutableSharedFlow<Boolean>
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(dispatcher)
+
+        sharedFlow = MutableSharedFlow()
+
         every { connectivityManager.isNetworkAvailable() } returns true
+        every { connectivityManager.observeNetworkAvailability } returns sharedFlow
+
         viewModel = NetworkConnectionViewModel(connectivityManager)
+
         verify { connectivityManager.isNetworkAvailable() }
     }
 
@@ -45,8 +61,6 @@ class NetworkConnectionViewModelTest {
         )
         val actualStates = mutableListOf<NetworkState>()
 
-        coEvery { connectivityManager.observeNetworkAvailability } returns MutableSharedFlow()
-
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)
         }
@@ -61,9 +75,6 @@ class NetworkConnectionViewModelTest {
             NetworkState.NoConnection,
         )
         val actualStates = mutableListOf<NetworkState>()
-
-        val sharedFlow = MutableSharedFlow<Boolean>()
-        coEvery { connectivityManager.observeNetworkAvailability } returns sharedFlow
 
         dispatcher.scheduler.apply {
             runCurrent()
@@ -89,9 +100,6 @@ class NetworkConnectionViewModelTest {
             NetworkState.Reestablished
         )
         val actualStates = mutableListOf<NetworkState>()
-
-        val sharedFlow = MutableSharedFlow<Boolean>()
-        coEvery { connectivityManager.observeNetworkAvailability } returns sharedFlow
 
         val stateJob = launch(UnconfinedTestDispatcher()) {
             viewModel.state.toList(actualStates)

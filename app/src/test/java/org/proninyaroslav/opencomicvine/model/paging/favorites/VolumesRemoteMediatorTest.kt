@@ -1,17 +1,37 @@
 package org.proninyaroslav.opencomicvine.model.paging.favorites
 
-import androidx.paging.*
-import io.mockk.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadType
+import androidx.paging.PagingConfig
+import androidx.paging.PagingState
+import androidx.paging.RemoteMediator
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.proninyaroslav.opencomicvine.model.AppPreferences
+import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
+import org.proninyaroslav.opencomicvine.model.repo.FavoritesListFetchResult
+import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
+import org.proninyaroslav.opencomicvine.model.repo.VolumesRepository
+import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
+import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.PagingVolumeRepository
 import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.VolumeInfo
@@ -22,14 +42,8 @@ import org.proninyaroslav.opencomicvine.types.paging.favorites.FavoritesVolumeIt
 import org.proninyaroslav.opencomicvine.types.paging.favorites.PagingFavoritesVolumeItem
 import org.proninyaroslav.opencomicvine.types.preferences.PrefFavoritesSort
 import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
-import org.proninyaroslav.opencomicvine.model.AppPreferences
-import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
-import org.proninyaroslav.opencomicvine.model.repo.FavoritesListFetchResult
-import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
-import org.proninyaroslav.opencomicvine.model.repo.VolumesRepository
-import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
-import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.PagingVolumeRepository
-import java.util.*
+import java.util.Date
+import java.util.GregorianCalendar
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class VolumesRemoteMediatorTest {
@@ -199,6 +213,7 @@ class VolumesRemoteMediatorTest {
                 clearBeforeSave = true,
             )
         }
+        verify { volumeItemRepo.toString() }
         confirmVerified(volumesRepo, volumeItemRepo, favoritesRepo, pref, response)
     }
 

@@ -1,20 +1,31 @@
 package org.proninyaroslav.opencomicvine.ui.favorites.filter
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.types.preferences.PrefFavoritesSort
 import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
-import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterState
 import org.proninyaroslav.opencomicvine.ui.favorites.category.filter.FavoritesFilterViewModel
 
@@ -47,7 +58,6 @@ class FavoritesFilterViewModelTest {
     @Test
     fun load() = runTest {
         val expectedStates = listOf(
-            FavoritesFilterState.Initial,
             FavoritesFilterState.Loaded(
                 sort = initialSort,
             ),
@@ -70,7 +80,6 @@ class FavoritesFilterViewModelTest {
     fun `Change sort`() = runTest {
         val sort = PrefFavoritesSort.DateAdded(direction = PrefSortDirection.Asc)
         val expectedStates = listOf(
-            FavoritesFilterState.Initial,
             FavoritesFilterState.Loaded(
                 sort = initialSort,
             ),
@@ -98,7 +107,6 @@ class FavoritesFilterViewModelTest {
     fun apply() = runTest {
         val sort = PrefFavoritesSort.DateAdded(direction = PrefSortDirection.Asc)
         val expectedStates = listOf(
-            FavoritesFilterState.Initial,
             FavoritesFilterState.Loaded(
                 sort = initialSort,
             ),

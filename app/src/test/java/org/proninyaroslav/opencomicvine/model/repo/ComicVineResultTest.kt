@@ -14,11 +14,14 @@ import java.net.SocketTimeoutException
 class ComicVineResultTest {
     @Test
     fun toComicVineResult() {
-        assertEquals(
-            "Success",
-            ComicVineResult.Success(""),
-            ApiResponse.Success(Response.success("")).toComicVineResult(),
-        )
+        Response.success("").let {
+            assertEquals(
+                "Success",
+                ComicVineResult.Success(it),
+                ApiResponse.Success(it).toComicVineResult(),
+            )
+        }
+
         assertEquals(
             "HTTP error",
             ComicVineResult.Failed.HttpError(StatusCode.NotFound),
@@ -28,6 +31,7 @@ class ComicVineResultTest {
                 )
             ).toComicVineResult(),
         )
+
         assertEquals(
             "No network connection",
             ComicVineResult.Failed.NoNetworkConnection,
@@ -35,6 +39,7 @@ class ComicVineResultTest {
                 NoNetworkConnectionException()
             ).toComicVineResult(),
         )
+
         assertEquals(
             "Request timeout",
             ComicVineResult.Failed.RequestTimeout,
@@ -42,13 +47,13 @@ class ComicVineResultTest {
                 SocketTimeoutException()
             ).toComicVineResult(),
         )
-        val ioException = IOException()
-        assertEquals(
-            "Exception",
-            ComicVineResult.Failed.Exception(ioException),
-            ApiResponse.Failure.Exception(
-                ioException
-            ).toComicVineResult(),
-        )
+
+        IOException().let {
+            assertEquals(
+                "Exception",
+                ComicVineResult.Failed.Exception(it),
+                ApiResponse.Failure.Exception(it).toComicVineResult(),
+            )
+        }
     }
 }

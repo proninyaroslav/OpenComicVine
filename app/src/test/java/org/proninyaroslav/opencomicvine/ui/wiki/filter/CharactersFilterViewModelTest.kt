@@ -1,19 +1,33 @@
 package org.proninyaroslav.opencomicvine.ui.wiki.filter
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiCharactersFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiCharactersFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiCharactersSort
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.CharactersFilterState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.CharactersFilterViewModel
 
@@ -54,7 +68,6 @@ class CharactersFilterViewModelTest {
     @Test
     fun load() = runTest {
         val expectedStates = listOf(
-            CharactersFilterState.Initial,
             CharactersFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
@@ -81,7 +94,6 @@ class CharactersFilterViewModelTest {
             direction = PrefSortDirection.Desc,
         )
         val expectedStates = listOf(
-            CharactersFilterState.Initial,
             CharactersFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
@@ -111,7 +123,6 @@ class CharactersFilterViewModelTest {
     fun `Change filter`() = runTest {
         val filter = initialFilter.copy(gender = PrefWikiCharactersFilter.Gender.Male)
         val expectedStates = listOf(
-            CharactersFilterState.Initial,
             CharactersFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
@@ -144,7 +155,6 @@ class CharactersFilterViewModelTest {
         )
         val filter = initialFilter.copy(gender = PrefWikiCharactersFilter.Gender.Male)
         val expectedStates = listOf(
-            CharactersFilterState.Initial,
             CharactersFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,

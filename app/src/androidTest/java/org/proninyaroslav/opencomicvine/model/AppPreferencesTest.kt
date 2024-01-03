@@ -14,7 +14,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.proninyaroslav.opencomicvine.data.preferences.*
+import org.proninyaroslav.opencomicvine.types.preferences.*
 import java.util.*
 
 @OptIn(ExperimentalCoroutinesApi::class)

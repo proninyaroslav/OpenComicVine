@@ -1,19 +1,33 @@
 package org.proninyaroslav.opencomicvine.ui.wiki.filter
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.preferences.*
 import org.proninyaroslav.opencomicvine.model.AppPreferences
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiVolumesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiVolumesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefWikiVolumesSort
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.VolumesFilterState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.filter.VolumesFilterViewModel
 
@@ -53,7 +67,6 @@ class VolumesFilterViewModelTest {
     @Test
     fun load() = runTest {
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
@@ -80,7 +93,6 @@ class VolumesFilterViewModelTest {
             direction = PrefSortDirection.Desc,
         )
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
@@ -110,7 +122,6 @@ class VolumesFilterViewModelTest {
     fun `Change filter`() = runTest {
         val filter = initialFilter.copy(name = PrefWikiVolumesFilter.Name.Contains("test"))
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
@@ -143,7 +154,6 @@ class VolumesFilterViewModelTest {
         )
         val filter = initialFilter.copy(name = PrefWikiVolumesFilter.Name.Contains("test"))
         val expectedStates = listOf(
-            VolumesFilterState.Initial,
             VolumesFilterState.Loaded(
                 sort = initialSort,
                 filterBundle = initialFilter,
