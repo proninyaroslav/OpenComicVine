@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.konan.file.File
-import org.jetbrains.kotlin.konan.properties.loadProperties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -25,36 +22,15 @@ android {
         }
     }
 
-    signingConfigs {
-        create("release") {
-            val keyProperties = File("${rootProject.projectDir}/key.properties").let {
-                if (it.exists) {
-                    it.loadProperties()
-                } else {
-                    null
-                }
-            }
-
-            storeFile = keyProperties?.getProperty("storeFile")?.let { file(it) }
-            keyPassword = keyProperties?.getProperty("keyPassword")
-            storePassword = keyProperties?.getProperty("storePassword")
-            keyAlias = keyProperties?.getProperty("keyAlias")
-        }
-    }
-
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-        }
-
-        debug {
-            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -181,10 +157,7 @@ dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
 
     // moshi-sealed
-    // TODO: https://github.com/ZacSweers/MoshiX/issues/530
-    //noinspection GradleDependency
     implementation("dev.zacsweers.moshix:moshi-sealed-runtime:$moshiSealedVersion")
-    //noinspection GradleDependency
     ksp("dev.zacsweers.moshix:moshi-sealed-codegen:$moshiSealedVersion")
 
     // ACRA
