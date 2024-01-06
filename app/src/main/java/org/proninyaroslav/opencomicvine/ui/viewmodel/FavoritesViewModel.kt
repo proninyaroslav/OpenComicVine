@@ -26,10 +26,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import org.proninyaroslav.opencomicvine.di.IoDispatcher
 import org.proninyaroslav.opencomicvine.model.DateProvider
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,47 +48,45 @@ class FavoritesViewModel @Inject constructor(
         operator fun invoke(
             entityId: Int,
             entityType: FavoriteInfo.EntityType,
-        ) {
+        ) = viewModelScope.launch(ioDispatcher) {
             val res = favoritesRepo.get(
                 entityId = entityId,
                 entityType = entityType,
             )
-            viewModelScope.launch(ioDispatcher) {
-                when (res) {
-                    is FavoritesRepository.Result.Success -> {
-                        if (res.data != null) {
-                            _state.value = when (val deleteRes = favoritesRepo.delete(res.data)) {
-                                is FavoritesRepository.Result.Failed -> SwitchFavoriteState.Failed(
-                                    deleteRes
-                                )
-
-                                is FavoritesRepository.Result.Success -> SwitchFavoriteState.Removed(
-                                    entityId, entityType
-                                )
-                            }
-                        } else {
-                            val addRes = favoritesRepo.add(
-                                FavoriteInfo(
-                                    entityId = entityId,
-                                    entityType = entityType,
-                                    dateAdded = dateProvider.now,
-                                )
+            when (res) {
+                is FavoritesRepository.Result.Success -> {
+                    if (res.data != null) {
+                        _state.value = when (val deleteRes = favoritesRepo.delete(res.data)) {
+                            is FavoritesRepository.Result.Failed -> SwitchFavoriteState.Failed(
+                                deleteRes
                             )
-                            _state.value = when (addRes) {
-                                is FavoritesRepository.Result.Failed -> SwitchFavoriteState.Failed(
-                                    addRes
-                                )
 
-                                is FavoritesRepository.Result.Success -> SwitchFavoriteState.Added(
-                                    entityId, entityType
-                                )
-                            }
+                            is FavoritesRepository.Result.Success -> SwitchFavoriteState.Removed(
+                                entityId, entityType
+                            )
+                        }
+                    } else {
+                        val addRes = favoritesRepo.add(
+                            FavoriteInfo(
+                                entityId = entityId,
+                                entityType = entityType,
+                                dateAdded = dateProvider.now,
+                            )
+                        )
+                        _state.value = when (addRes) {
+                            is FavoritesRepository.Result.Failed -> SwitchFavoriteState.Failed(
+                                addRes
+                            )
+
+                            is FavoritesRepository.Result.Success -> SwitchFavoriteState.Added(
+                                entityId, entityType
+                            )
                         }
                     }
+                }
 
-                    is FavoritesRepository.Result.Failed -> {
-                        _state.value = SwitchFavoriteState.Failed(res)
-                    }
+                is FavoritesRepository.Result.Failed -> {
+                    _state.value = SwitchFavoriteState.Failed(res)
                 }
             }
         }
