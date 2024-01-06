@@ -1,3 +1,7 @@
+### Version 1.1.1 (2024-01-06)
+
+Fix crash when add to favorites.
+
 ### Version 1.1 (2024-01-03)
 
 Fix HTTP 403. ComicVine has blocked the default User Agent.
