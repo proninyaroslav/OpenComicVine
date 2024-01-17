@@ -76,17 +76,20 @@ fun issuesCount(firstIssueNumber: String?, lastIssueNumber: String?): Int? {
         return 1
     }
 
-    val firstIssue = if (isSupplement(firstIssueNumber)) {
-        firstIssueNumber?.replace(numberExtractRegex, "")?.toInt()?.plus(1)
-    } else {
-        firstIssueNumber?.toInt()
+    val toInteger = { str: String? ->
+        if (str == null) {
+            null
+        } else if (isSupplement(str)) {
+            str.replace(numberExtractRegex, "").toInt() + 1
+        } else if (str.isRomanNumeral()) {
+            str.romanToArabic()
+        } else {
+            str.toInt()
+        }
     }
 
-    val lastIssue = if (isSupplement(lastIssueNumber)) {
-        lastIssueNumber?.replace(numberExtractRegex, "")?.toInt()?.plus(1)
-    } else {
-        lastIssueNumber?.toInt()
-    }
+    val firstIssue = toInteger(firstIssueNumber?.trim())
+    val lastIssue = toInteger(lastIssueNumber?.trim())
 
     return if (firstIssue != null && lastIssue != null) {
         lastIssue - firstIssue + 1
@@ -97,3 +100,39 @@ fun issuesCount(firstIssueNumber: String?, lastIssueNumber: String?): Int? {
         1
     }
 }
+
+private val romanCharToValue = mapOf(
+    'I' to 1,
+    'V' to 5,
+    'X' to 10,
+    'L' to 50,
+    'C' to 100,
+    'D' to 500,
+    'M' to 1000,
+)
+private const val romanNumeralRegex = "^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$"
+
+fun String.romanToArabic(): Int {
+    var arabicValue = 0
+    var lastValue = 0
+
+    uppercase().forEach { char ->
+        val value =
+            romanCharToValue[char] ?: throw IllegalArgumentException("Invalid Roman numeral: $char")
+
+        // If last value is less than current, that means we need to subtract the last value
+        // as it was added previously, then we add the current value minus last value.
+        // For example: IV = 5 - 2*1 = 4 (since I was added previously, we subtract it twice).
+        arabicValue += if (lastValue < value) {
+            value - 2 * lastValue
+        } else {
+            value
+        }
+        lastValue = value
+    }
+
+    return arabicValue
+}
+
+fun String.isRomanNumeral(): Boolean =
+    isNotEmpty() && uppercase().matches(romanNumeralRegex.toRegex())

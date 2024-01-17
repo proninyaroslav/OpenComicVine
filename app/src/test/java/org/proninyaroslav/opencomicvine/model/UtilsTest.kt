@@ -1,7 +1,10 @@
 package org.proninyaroslav.opencomicvine.model
 
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class UtilsTest {
@@ -49,5 +52,36 @@ class UtilsTest {
         }
 
         assertEquals(6, issuesCount("1", "5 Suppl."))
+
+        assertEquals(3, issuesCount("1 ", "3 \n"))
+
+        assertEquals(5, issuesCount("I", "V"))
+    }
+
+    @Test
+    fun isRomanNumeral() {
+        val validRoman = "MCMXCIV"
+        val invalidRoman = "MCMZ"
+
+        assertTrue(validRoman.isRomanNumeral())
+
+        assertFalse(invalidRoman.isRomanNumeral())
+
+        assertFalse("".isRomanNumeral())
+
+        assertFalse("ABC".isRomanNumeral())
+
+        assertFalse("123".isRomanNumeral())
+    }
+
+    @Test
+    fun romanToArabic() {
+        assertEquals(1994, "MCMXCIV".romanToArabic())
+        
+        assertThrows(IllegalArgumentException::class.java) { "".romanToArabic() }
+
+        assertThrows(IllegalArgumentException::class.java) { "ABC".romanToArabic() }
+
+        assertThrows(IllegalArgumentException::class.java) { "123".romanToArabic() }
     }
 }

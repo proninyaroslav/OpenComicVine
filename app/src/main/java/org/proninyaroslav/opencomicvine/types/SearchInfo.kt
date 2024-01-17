@@ -22,7 +22,7 @@ package org.proninyaroslav.opencomicvine.types
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.proninyaroslav.opencomicvine.model.issuesCount
-import java.util.*
+import java.util.Date
 
 sealed interface SearchInfo {
     val id: Int

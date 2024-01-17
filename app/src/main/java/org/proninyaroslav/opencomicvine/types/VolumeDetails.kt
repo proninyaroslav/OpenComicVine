@@ -23,7 +23,7 @@ import androidx.compose.runtime.Immutable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import org.proninyaroslav.opencomicvine.model.issuesCount
-import java.util.*
+import java.util.Date
 
 @JsonClass(generateAdapter = true)
 @Immutable
