@@ -103,7 +103,7 @@ dependencies {
 
     // Testing
     testImplementation("junit:junit:4.13.2")
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk:1.13.9")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("androidx.room:room-testing:$roomVersion")
     testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
@@ -118,7 +118,7 @@ dependencies {
 
     // AndroidX Core
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
 
@@ -135,8 +135,8 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     // Fallback import for components that aren"t in Material 3
     implementation("androidx.compose.material:material")
 
