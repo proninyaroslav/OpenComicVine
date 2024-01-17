@@ -116,6 +116,10 @@ fun String.romanToArabic(): Int {
     var arabicValue = 0
     var lastValue = 0
 
+    if (isEmpty()) {
+        throw IllegalArgumentException("Invalid Roman numeral: \"\"")
+    }
+
     uppercase().forEach { char ->
         val value =
             romanCharToValue[char] ?: throw IllegalArgumentException("Invalid Roman numeral: $char")
