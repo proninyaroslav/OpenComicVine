@@ -270,8 +270,4 @@ enum class SearchDestination(
     );
 
     override val parent: Destination? = AppDestination.Search
-
-    companion object {
-        private val routeToDestinationMap = entries.associateBy { it.route }
-    }
 }
