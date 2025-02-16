@@ -1,30 +1,44 @@
 package org.proninyaroslav.opencomicvine.model.paging.recent
 
-import androidx.paging.*
-import io.mockk.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadState
+import androidx.paging.LoadType
+import androidx.paging.PagingConfig
+import androidx.paging.PagingState
+import androidx.paging.RemoteMediator
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.*
-import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentVolumeItem
-import org.proninyaroslav.opencomicvine.types.paging.recent.RecentVolumeItemRemoteKeys
-import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilter
-import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilterBundle
-import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
-import org.proninyaroslav.opencomicvine.types.sort.VolumesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
 import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.repo.VolumesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingVolumeRepository
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.VolumeInfo
+import org.proninyaroslav.opencomicvine.types.VolumesResponse
+import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentVolumeItem
+import org.proninyaroslav.opencomicvine.types.paging.recent.RecentVolumeItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentVolumesFilterBundle
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
+import org.proninyaroslav.opencomicvine.types.sort.VolumesSort
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class VolumesRemoteMediatorTest {
     lateinit var mediator: VolumesRemoteMediator
 

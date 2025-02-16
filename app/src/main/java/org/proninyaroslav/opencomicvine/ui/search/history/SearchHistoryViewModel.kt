@@ -109,9 +109,9 @@ class SearchHistoryViewModel @Inject constructor(
 }
 
 sealed interface AddToHistoryState {
-    object Initial : AddToHistoryState
+    data object Initial : AddToHistoryState
 
-    object Success : AddToHistoryState
+    data object Success : AddToHistoryState
 
     data class Failed(
         val error: SearchHistoryRepository.Result.Failed
@@ -119,9 +119,9 @@ sealed interface AddToHistoryState {
 }
 
 sealed interface DeleteFromHistoryState {
-    object Initial : DeleteFromHistoryState
+    data object Initial : DeleteFromHistoryState
 
-    object Success : DeleteFromHistoryState
+    data object Success : DeleteFromHistoryState
 
     data class Failed(
         val error: SearchHistoryRepository.Result.Failed

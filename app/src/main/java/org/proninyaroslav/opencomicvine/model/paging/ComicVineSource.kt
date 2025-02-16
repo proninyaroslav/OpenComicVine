@@ -87,7 +87,7 @@ abstract class ComicVineSource<Value : Any, Error : ComicVineSource.Error>(
     }
 
     protected sealed interface FetchResult<out T> {
-        object Empty : FetchResult<Nothing>
+        data object Empty : FetchResult<Nothing>
         data class Success<T>(val response: ComicVineResponse<List<T>>) : FetchResult<T>
         data class Failed(val error: Error) : FetchResult<Nothing>
     }

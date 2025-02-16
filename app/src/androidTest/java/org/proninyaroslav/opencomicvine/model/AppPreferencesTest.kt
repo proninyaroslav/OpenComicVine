@@ -17,7 +17,6 @@ import org.junit.runner.RunWith
 import org.proninyaroslav.opencomicvine.types.preferences.*
 import java.util.*
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class AppPreferencesTest {
     private lateinit var pref: AppPreferences

@@ -293,7 +293,10 @@ private fun PreviewSearchView_SearchHistory() {
     }
 }
 
-@Preview(name = "Expanded width", device = Devices.TABLET)
+@Preview(
+    name = "Expanded width",
+    device = "spec:width=1280dp,height=800dp,dpi=480"
+)
 @Composable
 private fun PreviewSearchView_ExpandedWidth() {
     var query by remember { mutableStateOf("") }

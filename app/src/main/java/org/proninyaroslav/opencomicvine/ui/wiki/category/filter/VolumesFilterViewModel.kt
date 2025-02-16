@@ -119,7 +119,7 @@ sealed interface VolumesFilterState {
     val sort: PrefWikiVolumesSort
     val filterBundle: PrefWikiVolumesFilterBundle
 
-    object Initial : VolumesFilterState {
+    data object Initial : VolumesFilterState {
         override val sort: PrefWikiVolumesSort = PrefWikiVolumesSort.Unknown
         override val filterBundle: PrefWikiVolumesFilterBundle = PrefWikiVolumesFilterBundle(
             name = PrefWikiVolumesFilter.Name.Unknown,

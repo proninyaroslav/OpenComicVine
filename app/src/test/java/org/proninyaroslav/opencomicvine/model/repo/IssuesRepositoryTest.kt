@@ -8,7 +8,6 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -29,7 +28,6 @@ import org.proninyaroslav.opencomicvine.types.sort.IssuesSort
 import retrofit2.Response
 import java.io.IOException
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class IssuesRepositoryTest {
     lateinit var repo: IssuesRepository
 

@@ -29,9 +29,9 @@ sealed interface ComicVineResult<out T> {
     data class Success<T>(val response: T) : ComicVineResult<T>
 
     sealed interface Failed : ComicVineResult<Nothing> {
-        object NoNetworkConnection : Failed
+        data object NoNetworkConnection : Failed
 
-        object RequestTimeout : Failed
+        data object RequestTimeout : Failed
 
         data class HttpError(val statusCode: StatusCode) : Failed
 

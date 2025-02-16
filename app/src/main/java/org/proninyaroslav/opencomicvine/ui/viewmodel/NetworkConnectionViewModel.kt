@@ -59,11 +59,11 @@ class NetworkConnectionViewModel @Inject constructor(
 }
 
 sealed interface NetworkState {
-    object Initial : NetworkState
+    data object Initial : NetworkState
 
-    object NoConnection : NetworkState
+    data object NoConnection : NetworkState
 
-    object ConnectionAvailable : NetworkState
+    data object ConnectionAvailable : NetworkState
 
-    object Reestablished : NetworkState
+    data object Reestablished : NetworkState
 }

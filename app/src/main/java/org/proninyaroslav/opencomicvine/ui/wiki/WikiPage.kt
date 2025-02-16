@@ -40,9 +40,9 @@ import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkState
 import org.proninyaroslav.opencomicvine.ui.wiki.category.*
 
 sealed interface WikiPage {
-    object Characters : WikiPage
-    object Issues : WikiPage
-    object Volumes : WikiPage
+    data object Characters : WikiPage
+    data object Issues : WikiPage
+    data object Volumes : WikiPage
     data class Character(val characterId: Int) : WikiPage
     data class Issue(val issueId: Int) : WikiPage
     data class Volume(val volumeId: Int) : WikiPage

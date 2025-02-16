@@ -31,7 +31,7 @@ fun Modifier.defaultPlaceholder(
     visible: Boolean,
     shape: Shape? = null,
 ): Modifier = composed {
-    Modifier.placeholder(
+    this.placeholder(
         visible = visible,
         shape = shape ?: MaterialTheme.shapes.small,
         highlight = PlaceholderHighlight.fade(),

@@ -113,7 +113,7 @@ class SearchSource @AssistedInject constructor(
     }
 
     sealed interface Query {
-        object Empty : Query
+        data object Empty : Query
 
         data class Value(val query: String) : Query {
             init {

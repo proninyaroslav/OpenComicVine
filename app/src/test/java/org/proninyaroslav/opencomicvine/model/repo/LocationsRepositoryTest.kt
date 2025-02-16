@@ -8,7 +8,6 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -20,7 +19,6 @@ import org.proninyaroslav.opencomicvine.types.LocationsResponse
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.filter.LocationsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LocationsRepositoryTest {
     lateinit var repo: LocationsRepository
 

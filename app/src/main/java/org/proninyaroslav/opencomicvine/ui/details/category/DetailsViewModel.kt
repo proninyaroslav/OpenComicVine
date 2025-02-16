@@ -143,9 +143,9 @@ abstract class DetailsViewModel<DetailsItem : BaseItem, RelatedEntities : Detail
 }
 
 sealed interface DetailsState<out D : BaseItem, out R : DetailsViewModel.RelatedEntities> {
-    object Initial : DetailsState<Nothing, Nothing>
+    data object Initial : DetailsState<Nothing, Nothing>
 
-    object Loading : DetailsState<Nothing, Nothing>
+    data object Loading : DetailsState<Nothing, Nothing>
 
     data class CacheLoaded<D : BaseItem, R : DetailsViewModel.RelatedEntities>(
         val details: D,

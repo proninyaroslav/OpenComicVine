@@ -38,9 +38,7 @@ class IssueDetailsItem(
 
         other as IssueDetailsItem
 
-        if (details != other.details) return false
-
-        return true
+        return details == other.details
     }
 
     override fun hashCode(): Int = details.hashCode()

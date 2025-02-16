@@ -32,7 +32,7 @@ sealed interface PrefWikiCharactersSort {
     val direction: PrefSortDirection
 
     @TypeLabel("unknown")
-    object Unknown : PrefWikiCharactersSort {
+    data object Unknown : PrefWikiCharactersSort {
         override val direction: PrefSortDirection
             get() = PrefSortDirection.Unknown
     }
@@ -70,7 +70,7 @@ sealed interface PrefWikiCharactersFilter {
     @NestedSealed
     sealed interface Name : PrefWikiCharactersFilter {
         @TypeLabel("name_unknown")
-        object Unknown : Name
+        data object Unknown : Name
 
         @TypeLabel("name_contains")
         @JsonClass(generateAdapter = true)
@@ -80,7 +80,7 @@ sealed interface PrefWikiCharactersFilter {
     @NestedSealed
     sealed interface DateAdded : PrefWikiCharactersFilter {
         @TypeLabel("date_added_unknown")
-        object Unknown : DateAdded
+        data object Unknown : DateAdded
 
         @TypeLabel("date_added_in_range")
         @JsonClass(generateAdapter = true)
@@ -90,7 +90,7 @@ sealed interface PrefWikiCharactersFilter {
     @NestedSealed
     sealed interface DateLastUpdated : PrefWikiCharactersFilter {
         @TypeLabel("date_last_updated_unknown")
-        object Unknown : DateLastUpdated
+        data object Unknown : DateLastUpdated
 
         @TypeLabel("date_last_updated_in_range")
         @JsonClass(generateAdapter = true)
@@ -103,7 +103,7 @@ sealed interface PrefRecentCharactersFilter {
     @NestedSealed
     sealed interface DateAdded : PrefRecentCharactersFilter {
         @TypeLabel("date_added_unknown")
-        object Unknown : DateAdded
+        data object Unknown : DateAdded
 
         @TypeLabel("date_added_in_range")
         @JsonClass(generateAdapter = true)

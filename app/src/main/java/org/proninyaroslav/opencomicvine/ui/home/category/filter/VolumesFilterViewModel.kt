@@ -80,7 +80,7 @@ class VolumesFilterViewModel @Inject constructor(
 sealed interface VolumesFilterState {
     val filterBundle: PrefRecentVolumesFilterBundle
 
-    object Initial : VolumesFilterState {
+    data object Initial : VolumesFilterState {
         override val filterBundle: PrefRecentVolumesFilterBundle =
             PrefRecentVolumesFilterBundle(
                 dateAdded = PrefRecentVolumesFilter.DateAdded.Unknown,

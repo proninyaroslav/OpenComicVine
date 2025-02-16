@@ -194,7 +194,7 @@ dependencies {
     // Other
     implementation("com.github.skydoves:sandwich:$sandwichVersion")
     implementation("com.github.skydoves:sandwich-retrofit:$sandwichVersion")
-    implementation("com.github.SmartToolFactory:Compose-Image:1.2.1")
+    implementation("com.github.SmartToolFactory:Compose-Image:1.2.2")
     implementation("com.github.alorma:compose-settings-ui-m3:1.0.3")
     implementation("io.github.fornewid:placeholder-material3:1.0.1")
 }

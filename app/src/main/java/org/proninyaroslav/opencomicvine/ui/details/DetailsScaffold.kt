@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.details
 
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -179,7 +180,10 @@ private fun PreviewDetailsScaffold() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Preview(
+    uiMode = UI_MODE_TYPE_NORMAL,
+    device = "spec:width=1280dp,height=800dp,dpi=480"
+)
 @Composable
 private fun PreviewDetailsScaffold_ExpandedWidth() {
     val scrollBehavior = rememberTopAppBarWithImageScrollBehavior()
@@ -224,7 +228,10 @@ private fun PreviewDetailsScaffold_ExpandedWidth() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(device = "spec:shape=Normal,width=900,height=800,unit=dp,dpi=480")
+@Preview(
+    uiMode = UI_MODE_TYPE_NORMAL,
+    device = "spec:width=1280dp,height=800dp,dpi=480"
+)
 @Composable
 private fun PreviewDetailsScaffold_ExpandedWidthPortrait() {
     val scrollBehavior = rememberTopAppBarWithImageScrollBehavior()

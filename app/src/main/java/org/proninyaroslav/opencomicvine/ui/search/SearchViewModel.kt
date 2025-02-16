@@ -87,7 +87,7 @@ class SearchViewModel @Inject constructor(
 sealed interface SearchState {
     val query: String
 
-    object Initial : SearchState {
+    data object Initial : SearchState {
         override val query = ""
     }
 

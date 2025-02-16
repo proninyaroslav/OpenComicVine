@@ -34,7 +34,7 @@ sealed interface PrefWikiIssuesSort {
     val direction: PrefSortDirection
 
     @TypeLabel("unknown")
-    object Unknown : PrefWikiIssuesSort {
+    data object Unknown : PrefWikiIssuesSort {
         override val direction: PrefSortDirection
             get() = PrefSortDirection.Unknown
     }
@@ -75,7 +75,7 @@ sealed interface PrefWikiIssuesFilter {
     @NestedSealed
     sealed interface Name : PrefWikiIssuesFilter {
         @TypeLabel("name_unknown")
-        object Unknown : Name
+        data object Unknown : Name
 
         @TypeLabel("name_contains")
         @JsonClass(generateAdapter = true)
@@ -85,7 +85,7 @@ sealed interface PrefWikiIssuesFilter {
     @NestedSealed
     sealed interface DateAdded : PrefWikiIssuesFilter {
         @TypeLabel("date_added_unknown")
-        object Unknown : DateAdded
+        data object Unknown : DateAdded
 
         @TypeLabel("date_added_in_range")
         @JsonClass(generateAdapter = true)
@@ -95,7 +95,7 @@ sealed interface PrefWikiIssuesFilter {
     @NestedSealed
     sealed interface DateLastUpdated : PrefWikiIssuesFilter {
         @TypeLabel("date_last_updated_unknown")
-        object Unknown : DateLastUpdated
+        data object Unknown : DateLastUpdated
 
         @TypeLabel("date_last_updated_in_range")
         @JsonClass(generateAdapter = true)
@@ -105,7 +105,7 @@ sealed interface PrefWikiIssuesFilter {
     @NestedSealed
     sealed interface CoverDate : PrefWikiIssuesFilter {
         @TypeLabel("cover_date_unknown")
-        object Unknown : CoverDate
+        data object Unknown : CoverDate
 
         @TypeLabel("cover_date_in_range")
         @JsonClass(generateAdapter = true)
@@ -115,7 +115,7 @@ sealed interface PrefWikiIssuesFilter {
     @NestedSealed
     sealed interface StoreDate : PrefWikiIssuesFilter {
         @TypeLabel("store_date_unknown")
-        object Unknown : StoreDate
+        data object Unknown : StoreDate
 
         @TypeLabel("store_date_in_range")
         @JsonClass(generateAdapter = true)
@@ -125,7 +125,7 @@ sealed interface PrefWikiIssuesFilter {
     @NestedSealed
     sealed interface IssueNumber : PrefWikiIssuesFilter {
         @TypeLabel("issue_number_unknown")
-        object Unknown : IssueNumber
+        data object Unknown : IssueNumber
 
         @TypeLabel("issue_number_contains")
         @JsonClass(generateAdapter = true)
@@ -138,10 +138,10 @@ sealed interface PrefRecentIssuesFilter {
     @NestedSealed
     sealed interface StoreDate : PrefRecentIssuesFilter {
         @TypeLabel("store_date_unknown")
-        object Unknown : StoreDate
+        data object Unknown : StoreDate
 
         @TypeLabel("store_date_next_week")
-        object NextWeek : StoreDate
+        data object NextWeek : StoreDate
 
         @TypeLabel("store_date_in_range")
         @JsonClass(generateAdapter = true)
@@ -151,10 +151,10 @@ sealed interface PrefRecentIssuesFilter {
     @NestedSealed
     sealed interface DateAdded : PrefRecentIssuesFilter {
         @TypeLabel("date_added_unknown")
-        object Unknown : DateAdded
+        data object Unknown : DateAdded
 
         @TypeLabel("date_added_this_week")
-        object ThisWeek : DateAdded
+        data object ThisWeek : DateAdded
 
         @TypeLabel("date_added_in_range")
         @JsonClass(generateAdapter = true)
@@ -183,7 +183,7 @@ sealed interface PrefRecentIssuesSort {
     val direction: PrefSortDirection
 
     @TypeLabel("unknown")
-    object Unknown : PrefRecentIssuesSort {
+    data object Unknown : PrefRecentIssuesSort {
         override val direction: PrefSortDirection
             get() = PrefSortDirection.Unknown
     }

@@ -37,7 +37,7 @@ fun AppNavBar(
     modifier: Modifier = Modifier,
 ) {
     NavigationBar(modifier = modifier) {
-        NavBarItemInfo.values().forEach { item ->
+        NavBarItemInfo.entries.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(painterResource(item.icon), contentDescription = "") },
                 label = { Text(stringResource(item.label)) },

@@ -62,7 +62,7 @@ class AboutViewModel @Inject constructor(
 }
 
 sealed interface AboutState {
-    object Initial : AboutState
+    data object Initial : AboutState
 
     data class Loaded(
         val appName: String,

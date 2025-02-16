@@ -78,7 +78,7 @@ class SearchFilterViewModel @Inject constructor(
 sealed interface SearchFilterState {
     val filterBundle: PrefSearchFilterBundle
 
-    object Initial : SearchFilterState {
+    data object Initial : SearchFilterState {
         override val filterBundle: PrefSearchFilterBundle = PrefSearchFilterBundle(
             resources = PrefSearchFilter.Resources.Unknown
         )

@@ -78,7 +78,7 @@ class CharactersFilterViewModel @Inject constructor(
 sealed interface CharactersFilterState {
     val filterBundle: PrefRecentCharactersFilterBundle
 
-    object Initial : CharactersFilterState {
+    data object Initial : CharactersFilterState {
         override val filterBundle: PrefRecentCharactersFilterBundle =
             PrefRecentCharactersFilterBundle(
                 dateAdded = PrefRecentCharactersFilter.DateAdded.Unknown,
@@ -100,5 +100,5 @@ sealed interface CharactersFilterState {
 }
 
 sealed interface CharactersFilterEffect {
-    object Applied : CharactersFilterEffect
+    data object Applied : CharactersFilterEffect
 }

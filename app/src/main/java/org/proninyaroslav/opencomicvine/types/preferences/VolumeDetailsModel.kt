@@ -29,7 +29,7 @@ sealed interface PrefVolumeIssuesSort {
     val direction: PrefSortDirection
 
     @TypeLabel("unknown")
-    object Unknown : PrefVolumeIssuesSort {
+    data object Unknown : PrefVolumeIssuesSort {
         override val direction: PrefSortDirection
             get() = PrefSortDirection.Unknown
     }

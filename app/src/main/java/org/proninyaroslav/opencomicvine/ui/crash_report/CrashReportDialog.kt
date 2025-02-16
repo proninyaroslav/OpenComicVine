@@ -251,7 +251,10 @@ private fun PreviewCrashReportDialog_Dark() {
     }
 }
 
-@Preview(name = "Expanded", device = Devices.TABLET)
+@Preview(
+    name = "Expanded",
+    device = "spec:width=1280dp,height=800dp,dpi=480"
+)
 @Composable
 private fun PreviewCrashReportDialog_Expanded() {
     val snackbarState = remember { SnackbarHostState() }

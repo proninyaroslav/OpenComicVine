@@ -30,10 +30,10 @@ sealed interface PrefSearchFilter {
     @NestedSealed
     sealed interface Resources : PrefSearchFilter {
         @TypeLabel("resources_unknown")
-        object Unknown : Resources
+        data object Unknown : Resources
 
         @TypeLabel("resources_all")
-        object All : Resources
+        data object All : Resources
 
         @TypeLabel("resources_selected")
         @JsonClass(generateAdapter = true)

@@ -87,14 +87,14 @@ data class AuthState(
 )
 
 sealed interface AuthSubmitState {
-    object Initial : AuthSubmitState
+    data object Initial : AuthSubmitState
 
-    object SubmitInProgress : AuthSubmitState
+    data object SubmitInProgress : AuthSubmitState
 
-    object Submitted : AuthSubmitState
+    data object Submitted : AuthSubmitState
 
     sealed interface SubmitFailed : AuthSubmitState {
-        object EmptyApiKey : SubmitFailed
+        data object EmptyApiKey : SubmitFailed
 
         data class SaveError(
             val error: ApiKeyRepository.SaveResult.Failed,

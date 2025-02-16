@@ -25,16 +25,16 @@ import dev.zacsweers.moshix.sealed.annotations.TypeLabel
 @JsonClass(generateAdapter = true, generator = "sealed:type")
 sealed class PrefTheme(val id: Int) {
     @TypeLabel("unknown")
-    object Unknown : PrefTheme(-1)
+    data object Unknown : PrefTheme(-1)
 
     @TypeLabel("system")
-    object System : PrefTheme(0)
+    data object System : PrefTheme(0)
 
     @TypeLabel("dark")
-    object Dark : PrefTheme(1)
+    data object Dark : PrefTheme(1)
 
     @TypeLabel("light")
-    object Light : PrefTheme(2)
+    data object Light : PrefTheme(2)
 
     companion object {
         fun fromId(id: Int): PrefTheme = when (id) {

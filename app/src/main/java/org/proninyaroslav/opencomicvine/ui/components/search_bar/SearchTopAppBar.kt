@@ -176,9 +176,7 @@ class SearchTopAppBarColors internal constructor(
 
         other as SearchTopAppBarColors
 
-        if (actionIconContentColor != other.actionIconContentColor) return false
-
-        return true
+        return actionIconContentColor == other.actionIconContentColor
     }
 
     override fun hashCode(): Int {

@@ -8,7 +8,6 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -20,7 +19,6 @@ import org.proninyaroslav.opencomicvine.types.StoryArcInfo
 import org.proninyaroslav.opencomicvine.types.StoryArcsResponse
 import org.proninyaroslav.opencomicvine.types.filter.StoryArcsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StoryArcRepositoryTest {
     lateinit var repo: StoryArcsRepository
 

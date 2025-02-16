@@ -108,9 +108,9 @@ class ImageSaverViewModel @Inject constructor(
 }
 
 sealed interface ImageSaverState {
-    object Initial : ImageSaverState
+    data object Initial : ImageSaverState
 
-    object Saving : ImageSaverState
+    data object Saving : ImageSaverState
 
     data class SaveSuccess(
         val uri: Uri,
@@ -119,7 +119,7 @@ sealed interface ImageSaverState {
     ) : ImageSaverState
 
     sealed interface SaveFailed : ImageSaverState {
-        object UnsupportedFormat : SaveFailed
+        data object UnsupportedFormat : SaveFailed
         data class StoreError(val error: ImageStore.Result.Failed) : SaveFailed
     }
 }

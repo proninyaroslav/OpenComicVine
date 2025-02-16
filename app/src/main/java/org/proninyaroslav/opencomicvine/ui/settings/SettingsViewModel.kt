@@ -105,7 +105,7 @@ sealed interface SettingsState {
     val searchHistorySize: Int
     val theme: PrefTheme
 
-    object Initial : SettingsState {
+    data object Initial : SettingsState {
         override val apiKey: String? = null
         override val searchHistorySize: Int = 0
         override val theme: PrefTheme = PrefTheme.Unknown
@@ -119,12 +119,12 @@ sealed interface SettingsState {
 }
 
 sealed interface ChangeApiKeyState {
-    object Initial : ChangeApiKeyState
+    data object Initial : ChangeApiKeyState
 
     data class Success(val apiKey: String) : ChangeApiKeyState
 
     sealed interface Failed : ChangeApiKeyState {
-        object EmptyKey : Failed
+        data object EmptyKey : Failed
 
         data class SaveError(val error: ApiKeyRepository.SaveResult.Failed) : Failed
     }

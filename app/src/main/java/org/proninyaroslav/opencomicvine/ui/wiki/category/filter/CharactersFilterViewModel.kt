@@ -119,7 +119,7 @@ sealed interface CharactersFilterState {
     val sort: PrefWikiCharactersSort
     val filterBundle: PrefWikiCharactersFilterBundle
 
-    object Initial : CharactersFilterState {
+    data object Initial : CharactersFilterState {
         override val sort: PrefWikiCharactersSort = PrefWikiCharactersSort.Unknown
         override val filterBundle: PrefWikiCharactersFilterBundle = PrefWikiCharactersFilterBundle(
             gender = PrefWikiCharactersFilter.Gender.Unknown,

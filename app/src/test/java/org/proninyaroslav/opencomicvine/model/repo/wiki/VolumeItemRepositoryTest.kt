@@ -2,24 +2,32 @@ package org.proninyaroslav.opencomicvine.model.repo.wiki
 
 import androidx.paging.PagingSource
 import androidx.room.withTransaction
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyAll
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.paging.wiki.PagingWikiVolumeItem
-import org.proninyaroslav.opencomicvine.types.paging.wiki.WikiVolumeItemRemoteKeys
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.wiki.WikiVolumesDao
 import org.proninyaroslav.opencomicvine.model.db.wiki.WikiVolumesRemoteKeysDao
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingVolumeRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingVolumeRepositoryImpl
+import org.proninyaroslav.opencomicvine.types.paging.wiki.PagingWikiVolumeItem
+import org.proninyaroslav.opencomicvine.types.paging.wiki.WikiVolumeItemRemoteKeys
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class VolumeItemRepositoryTest {
     lateinit var repo: PagingVolumeRepository
 

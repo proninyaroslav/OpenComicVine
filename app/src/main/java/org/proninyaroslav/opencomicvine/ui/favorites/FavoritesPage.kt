@@ -41,16 +41,16 @@ import org.proninyaroslav.opencomicvine.ui.removeBottomPadding
 import org.proninyaroslav.opencomicvine.ui.viewmodel.*
 
 sealed interface FavoritesPage {
-    object FavoriteCharacters : FavoritesPage
-    object FavoriteIssues : FavoritesPage
-    object FavoriteVolumes : FavoritesPage
-    object FavoriteConcepts : FavoritesPage
-    object FavoriteLocations : FavoritesPage
-    object FavoriteMovies : FavoritesPage
-    object FavoriteObjects : FavoritesPage
-    object FavoritePeople : FavoritesPage
-    object FavoriteStoryArcs : FavoritesPage
-    object FavoriteTeams : FavoritesPage
+    data object FavoriteCharacters : FavoritesPage
+    data object FavoriteIssues : FavoritesPage
+    data object FavoriteVolumes : FavoritesPage
+    data object FavoriteConcepts : FavoritesPage
+    data object FavoriteLocations : FavoritesPage
+    data object FavoriteMovies : FavoritesPage
+    data object FavoriteObjects : FavoritesPage
+    data object FavoritePeople : FavoritesPage
+    data object FavoriteStoryArcs : FavoritesPage
+    data object FavoriteTeams : FavoritesPage
     data class Character(val characterId: Int) : FavoritesPage
     data class Issue(val issueId: Int) : FavoritesPage
     data class Volume(val volumeId: Int) : FavoritesPage

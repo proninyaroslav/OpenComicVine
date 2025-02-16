@@ -77,7 +77,7 @@ class FavoritesFilterViewModel @Inject constructor(
 sealed interface FavoritesFilterState {
     val sort: PrefFavoritesSort
 
-    object Initial : FavoritesFilterState {
+    data object Initial : FavoritesFilterState {
         override val sort: PrefFavoritesSort = PrefFavoritesSort.Unknown
     }
 

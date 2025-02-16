@@ -53,7 +53,7 @@ enum class NavBarItemInfo(
     );
 
     companion object {
-        private val pathToAppDestinationMap = values().associateBy { it.destination.route }
+        private val pathToAppDestinationMap = entries.associateBy { it.destination.route }
 
         fun fromPath(path: String?): NavBarItemInfo? = pathToAppDestinationMap[path]
     }

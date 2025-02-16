@@ -41,7 +41,7 @@ fun AppNavRail(
 ) {
     NavigationRail(modifier = modifier) {
         Spacer(Modifier.weight(1f))
-        NavBarItemInfo.values().forEach { item ->
+        NavBarItemInfo.entries.forEach { item ->
             val selected = selectedItem == item
             NavigationRailItem(
                 icon = { Icon(painterResource(item.icon), contentDescription = "") },
