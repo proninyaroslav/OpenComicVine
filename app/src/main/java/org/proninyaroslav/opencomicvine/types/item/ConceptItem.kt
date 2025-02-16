@@ -38,9 +38,7 @@ class ConceptItem(
 
         other as ConceptItem
 
-        if (info != other.info) return false
-
-        return true
+        return info == other.info
     }
 
     override fun hashCode(): Int = info.hashCode()
