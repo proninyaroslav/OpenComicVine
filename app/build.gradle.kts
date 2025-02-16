@@ -109,8 +109,8 @@ dependencies {
     testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.8")
 
     // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
