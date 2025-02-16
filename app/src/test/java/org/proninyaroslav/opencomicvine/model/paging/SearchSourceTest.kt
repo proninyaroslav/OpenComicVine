@@ -1,26 +1,31 @@
 package org.proninyaroslav.opencomicvine.model.paging
 
 import androidx.paging.PagingSource
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.mockk
+import io.mockk.verifyAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.proninyaroslav.opencomicvine.model.AppPreferences
+import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
+import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
+import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
+import org.proninyaroslav.opencomicvine.model.repo.SearchRepository
 import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import org.proninyaroslav.opencomicvine.types.SearchInfo
 import org.proninyaroslav.opencomicvine.types.SearchResponse
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.preferences.PrefSearchFilter
 import org.proninyaroslav.opencomicvine.types.preferences.PrefSearchFilterBundle
-import org.proninyaroslav.opencomicvine.model.AppPreferences
-import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
-import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
-import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
-import org.proninyaroslav.opencomicvine.model.repo.SearchRepository
 
 class SearchSourceTest {
     lateinit var source: SearchSource

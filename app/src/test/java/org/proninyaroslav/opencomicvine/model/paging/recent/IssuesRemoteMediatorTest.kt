@@ -1,24 +1,28 @@
 package org.proninyaroslav.opencomicvine.model.paging.recent
 
-import androidx.paging.*
-import io.mockk.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadState
+import androidx.paging.LoadType
+import androidx.paging.PagingConfig
+import androidx.paging.PagingState
+import androidx.paging.RemoteMediator
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyAll
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.IssueInfo
-import org.proninyaroslav.opencomicvine.types.IssuesResponse
-import org.proninyaroslav.opencomicvine.types.StatusCode
-import org.proninyaroslav.opencomicvine.types.filter.IssuesFilter
-import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentIssueItem
-import org.proninyaroslav.opencomicvine.types.paging.recent.RecentIssueItemRemoteKeys
-import org.proninyaroslav.opencomicvine.types.preferences.*
-import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
-import org.proninyaroslav.opencomicvine.types.sort.IssuesSort
 import org.proninyaroslav.opencomicvine.model.AppPreferences
 import org.proninyaroslav.opencomicvine.model.getNextWeekFromCurrentDay
 import org.proninyaroslav.opencomicvine.model.paging.ComicVineRemoteMediator
@@ -26,6 +30,18 @@ import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.repo.IssuesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingIssueRepository
+import org.proninyaroslav.opencomicvine.types.IssueInfo
+import org.proninyaroslav.opencomicvine.types.IssuesResponse
+import org.proninyaroslav.opencomicvine.types.StatusCode
+import org.proninyaroslav.opencomicvine.types.filter.IssuesFilter
+import org.proninyaroslav.opencomicvine.types.paging.recent.PagingRecentIssueItem
+import org.proninyaroslav.opencomicvine.types.paging.recent.RecentIssueItemRemoteKeys
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentIssuesFilter
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentIssuesFilterBundle
+import org.proninyaroslav.opencomicvine.types.preferences.PrefRecentIssuesSort
+import org.proninyaroslav.opencomicvine.types.preferences.PrefSortDirection
+import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
+import org.proninyaroslav.opencomicvine.types.sort.IssuesSort
 
 class IssuesRemoteMediatorTest {
     lateinit var mediator: IssuesRemoteMediator

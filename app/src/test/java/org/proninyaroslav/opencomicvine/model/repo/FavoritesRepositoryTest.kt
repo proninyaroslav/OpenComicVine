@@ -1,19 +1,25 @@
 package org.proninyaroslav.opencomicvine.model.repo
 
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.just
+import io.mockk.mockkStatic
+import io.mockk.runs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.proninyaroslav.opencomicvine.types.FavoriteInfo
 import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.FavoritesDao
-import java.util.*
+import org.proninyaroslav.opencomicvine.types.FavoriteInfo
+import java.util.Calendar
 
 class FavoritesRepositoryTest {
     lateinit var repo: FavoritesRepository
