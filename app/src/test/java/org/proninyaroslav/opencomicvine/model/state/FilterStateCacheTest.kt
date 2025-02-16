@@ -63,14 +63,14 @@ class FilterStateCacheTest {
     }
 
     sealed interface Sort {
-        object Unknown : Sort
-        object Sort1 : Sort
-        object Sort2 : Sort
+        data object Unknown : Sort
+        data object Sort1 : Sort
+        data object Sort2 : Sort
     }
 
     sealed interface Filter {
-        object Unknown : Filter
-        object Filter1 : Filter
-        object Filter2 : Filter
+        data object Unknown : Filter
+        data object Filter1 : Filter
+        data object Filter2 : Filter
     }
 }

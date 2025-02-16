@@ -27,7 +27,7 @@ sealed interface PrefFavoritesSort {
     val direction: PrefSortDirection
 
     @TypeLabel("unknown")
-    object Unknown : PrefFavoritesSort {
+    data object Unknown : PrefFavoritesSort {
         override val direction: PrefSortDirection
             get() = PrefSortDirection.Unknown
     }

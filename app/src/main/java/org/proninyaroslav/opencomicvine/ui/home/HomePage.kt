@@ -40,14 +40,14 @@ import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkConnectionViewModel
 import org.proninyaroslav.opencomicvine.ui.viewmodel.NetworkState
 
 sealed interface HomePage {
-    object Settings : HomePage
-    object RecentCharacters : HomePage
-    object RecentIssues : HomePage
-    object RecentVolumes : HomePage
+    data object Settings : HomePage
+    data object RecentCharacters : HomePage
+    data object RecentIssues : HomePage
+    data object RecentVolumes : HomePage
     data class Character(val characterId: Int) : HomePage
     data class Issue(val issueId: Int) : HomePage
     data class Volume(val volumeId: Int) : HomePage
-    object About : HomePage
+    data object About : HomePage
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

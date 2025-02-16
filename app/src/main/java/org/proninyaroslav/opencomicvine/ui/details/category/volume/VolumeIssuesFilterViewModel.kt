@@ -70,7 +70,7 @@ class VolumeIssuesFilterViewModel @Inject constructor(
 sealed interface VolumeIssuesFilterState {
     val sort: PrefVolumeIssuesSort
 
-    object Initial : VolumeIssuesFilterState {
+    data object Initial : VolumeIssuesFilterState {
         override val sort: PrefVolumeIssuesSort = PrefVolumeIssuesSort.Unknown
     }
 

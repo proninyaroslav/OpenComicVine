@@ -49,11 +49,11 @@ class AuthGuardViewModel @Inject constructor(
 }
 
 sealed interface AuthGuardState {
-    object Initial : AuthGuardState
+    data object Initial : AuthGuardState
 
-    object Authorized : AuthGuardState
+    data object Authorized : AuthGuardState
 
-    object NotAuthorized : AuthGuardState
+    data object NotAuthorized : AuthGuardState
 
     data class GetStatusError(val error: ApiKeyRepository.GetResult.Failed.IO) : AuthGuardState
 }

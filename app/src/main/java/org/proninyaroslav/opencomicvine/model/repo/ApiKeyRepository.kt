@@ -38,7 +38,7 @@ interface ApiKeyRepository {
         data class Success<T>(val data: T) : GetResult<T>
 
         sealed interface Failed : GetResult<Nothing> {
-            object NoApiKey : Failed
+            data object NoApiKey : Failed
 
             data class IO(val exception: IOException) : Failed
         }

@@ -94,7 +94,7 @@ class FavoritesViewModel @Inject constructor(
 }
 
 sealed interface SwitchFavoriteState {
-    object Initial : SwitchFavoriteState
+    data object Initial : SwitchFavoriteState
 
     data class Added(
         val entityId: Int,

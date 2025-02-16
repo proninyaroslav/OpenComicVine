@@ -119,7 +119,7 @@ sealed interface IssuesFilterState {
     val sort: PrefRecentIssuesSort
     val filterBundle: PrefRecentIssuesFilterBundle
 
-    object Initial : IssuesFilterState {
+    data object Initial : IssuesFilterState {
         override val sort: PrefRecentIssuesSort = PrefRecentIssuesSort.Unknown
         override val filterBundle: PrefRecentIssuesFilterBundle = PrefRecentIssuesFilterBundle(
             dateAdded = PrefRecentIssuesFilter.DateAdded.Unknown,

@@ -119,7 +119,7 @@ sealed interface IssuesFilterState {
     val sort: PrefWikiIssuesSort
     val filterBundle: PrefWikiIssuesFilterBundle
 
-    object Initial : IssuesFilterState {
+    data object Initial : IssuesFilterState {
         override val sort: PrefWikiIssuesSort = PrefWikiIssuesSort.Unknown
         override val filterBundle: PrefWikiIssuesFilterBundle = PrefWikiIssuesFilterBundle(
             name = PrefWikiIssuesFilter.Name.Unknown,

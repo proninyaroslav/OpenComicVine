@@ -32,7 +32,7 @@ sealed interface PrefWikiVolumesSort {
     val direction: PrefSortDirection
 
     @TypeLabel("unknown")
-    object Unknown : PrefWikiVolumesSort {
+    data object Unknown : PrefWikiVolumesSort {
         override val direction: PrefSortDirection
             get() = PrefSortDirection.Unknown
     }
@@ -61,7 +61,7 @@ sealed interface PrefWikiVolumesFilter {
     @NestedSealed
     sealed interface Name : PrefWikiVolumesFilter {
         @TypeLabel("name_unknown")
-        object Unknown : Name
+        data object Unknown : Name
 
         @TypeLabel("name_contains")
         @JsonClass(generateAdapter = true)
@@ -71,7 +71,7 @@ sealed interface PrefWikiVolumesFilter {
     @NestedSealed
     sealed interface DateAdded : PrefWikiVolumesFilter {
         @TypeLabel("date_added_unknown")
-        object Unknown : DateAdded
+        data object Unknown : DateAdded
 
         @TypeLabel("date_added_in_range")
         @JsonClass(generateAdapter = true)
@@ -81,7 +81,7 @@ sealed interface PrefWikiVolumesFilter {
     @NestedSealed
     sealed interface DateLastUpdated : PrefWikiVolumesFilter {
         @TypeLabel("date_last_updated_unknown")
-        object Unknown : DateLastUpdated
+        data object Unknown : DateLastUpdated
 
         @TypeLabel("date_last_updated_in_range")
         @JsonClass(generateAdapter = true)
@@ -94,7 +94,7 @@ sealed interface PrefRecentVolumesFilter {
     @NestedSealed
     sealed interface DateAdded : PrefRecentVolumesFilter {
         @TypeLabel("date_added_unknown")
-        object Unknown : DateAdded
+        data object Unknown : DateAdded
 
         @TypeLabel("date_added_in_range")
         @JsonClass(generateAdapter = true)

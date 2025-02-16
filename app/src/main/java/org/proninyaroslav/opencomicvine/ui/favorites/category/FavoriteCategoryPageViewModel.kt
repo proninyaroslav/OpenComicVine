@@ -205,5 +205,5 @@ class FavoriteCategoryPageViewModel @Inject constructor(
 }
 
 sealed interface FavoriteCategoryPageEffect {
-    object Refresh : FavoriteCategoryPageEffect
+    data object Refresh : FavoriteCategoryPageEffect
 }

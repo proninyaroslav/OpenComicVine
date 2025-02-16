@@ -44,12 +44,12 @@ class DatePickerViewModel @Inject constructor() : ViewModel() {
 }
 
 sealed interface DatePickerState {
-    object Initial : DatePickerState
+    data object Initial : DatePickerState
 
     data class Show<T>(
         val dialogType: T,
         val range: Pair<Long, Long>?
     ) : DatePickerState
 
-    object Hide : DatePickerState
+    data object Hide : DatePickerState
 }
