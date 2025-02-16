@@ -115,7 +115,7 @@ enum class HomeDestination(
     override val parent: Destination? = AppDestination.Home
 
     companion object {
-        private val routeToDestinationMap = values().associateBy { it.route }
+        private val routeToDestinationMap = entries.associateBy { it.route }
         fun fromRoute(route: String?): HomeDestination? = routeToDestinationMap[route]
     }
 }
@@ -172,7 +172,7 @@ enum class WikiDestination(
     override val parent: Destination? = AppDestination.Wiki
 
     companion object {
-        private val routeToDestinationMap = values().associateBy { it.route }
+        private val routeToDestinationMap = entries.associateBy { it.route }
         fun fromRoute(route: String?): WikiDestination? = routeToDestinationMap[route]
     }
 }
@@ -227,7 +227,7 @@ enum class FavoritesDestination(
     override val parent: Destination? = AppDestination.Favorites
 
     companion object {
-        private val routeToDestinationMap = values().associateBy { it.route }
+        private val routeToDestinationMap = entries.associateBy { it.route }
         fun fromRoute(route: String?): FavoritesDestination? = routeToDestinationMap[route]
     }
 }
@@ -272,6 +272,6 @@ enum class SearchDestination(
     override val parent: Destination? = AppDestination.Search
 
     companion object {
-        private val routeToDestinationMap = values().associateBy { it.route }
+        private val routeToDestinationMap = entries.associateBy { it.route }
     }
 }

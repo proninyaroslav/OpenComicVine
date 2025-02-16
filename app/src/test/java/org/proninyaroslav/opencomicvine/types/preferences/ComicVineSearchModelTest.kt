@@ -20,7 +20,7 @@ class ComicVineSearchModelTest {
             when (it) {
                 PrefSearchFilter.Resources.All -> {
                     assertEquals(
-                        ComicVineSearchResourceType.values().toSet(),
+                        ComicVineSearchResourceType.entries.toSet(),
                         it.toComicVineResourceType()
                     )
                 }
