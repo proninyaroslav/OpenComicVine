@@ -255,7 +255,7 @@ private fun TopAppBarLayout(
         }
         val layoutHeight = heightPx.roundToInt()
 
-        layout(constraints.maxWidth, layoutHeight) {
+        layout(constraints.maxWidth, layoutHeight.coerceAtLeast(0)) {
             // Search bar
             searchBarPlaceable.placeRelative(
                 x = if (actionIconsPlaceableWidth > 0) {
