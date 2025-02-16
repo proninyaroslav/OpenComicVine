@@ -135,13 +135,13 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    // Fallback import for components that aren"t in Material 3
+    implementation("androidx.compose.material:material")
 
     //noinspection GradleDependency // Upgrades requires upgrading TargetAPI
     implementation("androidx.activity:activity-compose:1.9.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-    // Fallback import for components that aren"t in Material 3
-    implementation("androidx.compose.material:material")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
     // Room
     implementation("androidx.room:room-runtime:$roomVersion")
