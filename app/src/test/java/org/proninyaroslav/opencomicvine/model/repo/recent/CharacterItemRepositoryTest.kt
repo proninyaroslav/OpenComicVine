@@ -19,7 +19,6 @@ import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingReposit
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingCharacterRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingCharacterRepositoryImpl
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CharacterItemRepositoryTest {
     lateinit var repo: PagingCharacterRepository
 

@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.MoviesResponse
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.filter.MoviesFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class MoviesRepositoryTest {
     lateinit var repo: MoviesRepository
 

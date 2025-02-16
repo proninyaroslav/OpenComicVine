@@ -29,7 +29,6 @@ import org.proninyaroslav.opencomicvine.types.sort.VolumesSort
 import retrofit2.Response
 import java.io.IOException
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class VolumesRepositoryTest {
     lateinit var repo: VolumesRepository
 

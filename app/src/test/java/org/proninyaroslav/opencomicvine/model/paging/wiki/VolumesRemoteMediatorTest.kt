@@ -24,7 +24,6 @@ import org.proninyaroslav.opencomicvine.model.repo.VolumesRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.wiki.PagingVolumeRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class VolumesRemoteMediatorTest {
     lateinit var mediator: VolumesRemoteMediator
 

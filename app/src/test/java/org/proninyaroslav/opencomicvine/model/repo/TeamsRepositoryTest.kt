@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.TeamInfo
 import org.proninyaroslav.opencomicvine.types.TeamsResponse
 import org.proninyaroslav.opencomicvine.types.filter.TeamsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TeamsRepositoryTest {
     lateinit var repo: TeamsRepository
 

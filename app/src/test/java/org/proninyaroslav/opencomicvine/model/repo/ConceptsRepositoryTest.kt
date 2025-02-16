@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.ConceptsResponse
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.filter.ConceptsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ConceptsRepositoryTest {
     lateinit var repo: ConceptsRepository
 

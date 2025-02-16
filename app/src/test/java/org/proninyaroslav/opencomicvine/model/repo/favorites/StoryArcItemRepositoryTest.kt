@@ -19,7 +19,6 @@ import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingReposit
 import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.PagingStoryArcRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.PagingStoryArcRepositoryImpl
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StoryArcItemRepositoryTest {
     lateinit var repo: PagingStoryArcRepository
 

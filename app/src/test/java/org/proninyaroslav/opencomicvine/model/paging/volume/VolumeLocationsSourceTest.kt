@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.LocationsRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class VolumeLocationsSourceTest {
     lateinit var source: VolumeLocationsSource
 

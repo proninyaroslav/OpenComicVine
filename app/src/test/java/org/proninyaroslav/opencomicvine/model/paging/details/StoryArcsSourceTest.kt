@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.model.repo.StoryArcsRepository
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StoryArcsSourceTest {
     lateinit var source: StoryArcsSource
 

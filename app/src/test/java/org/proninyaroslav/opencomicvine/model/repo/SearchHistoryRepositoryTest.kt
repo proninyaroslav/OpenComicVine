@@ -15,7 +15,6 @@ import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.SearchHistoryDao
 import java.util.*
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SearchHistoryRepositoryTest {
     lateinit var repo: SearchHistoryRepository
 

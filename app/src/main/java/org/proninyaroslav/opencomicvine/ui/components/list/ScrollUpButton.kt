@@ -37,7 +37,6 @@ import org.proninyaroslav.opencomicvine.ui.theme.OpenComicVineTheme
 
 val ScrollUpButtonHeight = 40.0.dp
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ScrollUpButton(
     visible: Boolean,

@@ -22,7 +22,6 @@ import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 import org.proninyaroslav.opencomicvine.model.repo.SearchRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SearchSourceTest {
     lateinit var source: SearchSource
 

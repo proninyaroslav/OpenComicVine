@@ -15,7 +15,6 @@ import org.proninyaroslav.opencomicvine.model.db.AppDatabase
 import org.proninyaroslav.opencomicvine.model.db.FavoritesDao
 import java.util.*
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class FavoritesRepositoryTest {
     lateinit var repo: FavoritesRepository
 

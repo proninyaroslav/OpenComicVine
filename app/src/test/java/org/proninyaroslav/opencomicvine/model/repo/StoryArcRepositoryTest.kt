@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.StoryArcInfo
 import org.proninyaroslav.opencomicvine.types.StoryArcsResponse
 import org.proninyaroslav.opencomicvine.types.filter.StoryArcsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StoryArcRepositoryTest {
     lateinit var repo: StoryArcsRepository
 

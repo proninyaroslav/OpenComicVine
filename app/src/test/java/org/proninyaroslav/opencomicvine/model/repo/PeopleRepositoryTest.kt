@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.PersonInfo
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.filter.PeopleFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PeopleRepositoryTest {
     lateinit var repo: PeopleRepository
 

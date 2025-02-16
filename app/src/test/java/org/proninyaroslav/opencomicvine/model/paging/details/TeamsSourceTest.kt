@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.model.repo.TeamsRepository
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TeamsSourceTest {
     lateinit var source: TeamsSource
 

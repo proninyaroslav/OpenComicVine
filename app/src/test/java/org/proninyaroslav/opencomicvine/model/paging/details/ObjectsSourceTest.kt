@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.model.repo.ObjectsRepository
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ObjectsSourceTest {
     lateinit var source: ObjectsSource
 

@@ -111,7 +111,6 @@ private fun SwipeArea(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun AnimatedHideAppBar(
     visible: Boolean,

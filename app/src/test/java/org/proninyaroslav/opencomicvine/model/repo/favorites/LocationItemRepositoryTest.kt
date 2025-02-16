@@ -19,7 +19,6 @@ import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingReposit
 import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.PagingLocationRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.favorites.PagingLocationRepositoryImpl
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LocationItemRepositoryTest {
     lateinit var repo: PagingLocationRepository
 

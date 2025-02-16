@@ -82,7 +82,6 @@ fun FavoriteFilledTonalButton(
 }
 
 @Composable
-@OptIn(ExperimentalAnimationApi::class)
 private fun AnimatedIcon(
     isFavorite: Boolean,
     modifier: Modifier = Modifier,

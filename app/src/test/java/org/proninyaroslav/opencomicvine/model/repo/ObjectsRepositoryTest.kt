@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.ObjectsResponse
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.filter.ObjectsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ObjectsRepositoryTest {
     lateinit var repo: ObjectsRepository
 

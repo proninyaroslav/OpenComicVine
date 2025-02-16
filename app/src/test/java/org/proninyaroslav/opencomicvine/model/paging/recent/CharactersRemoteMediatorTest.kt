@@ -24,7 +24,6 @@ import org.proninyaroslav.opencomicvine.model.repo.ComicVineResult
 import org.proninyaroslav.opencomicvine.model.repo.paging.ComicVinePagingRepository
 import org.proninyaroslav.opencomicvine.model.repo.paging.recent.PagingCharacterRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CharactersRemoteMediatorTest {
     lateinit var mediator: CharactersRemoteMediator
 

@@ -24,7 +24,6 @@ import org.proninyaroslav.opencomicvine.types.filter.CharactersFilter
 import org.proninyaroslav.opencomicvine.types.sort.CharactersSort
 import org.proninyaroslav.opencomicvine.types.sort.ComicVineSortDirection
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CharactersRepositoryTest {
     lateinit var repo: CharactersRepository
 

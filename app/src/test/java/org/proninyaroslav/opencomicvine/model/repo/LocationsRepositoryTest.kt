@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.types.LocationsResponse
 import org.proninyaroslav.opencomicvine.types.StatusCode
 import org.proninyaroslav.opencomicvine.types.filter.LocationsFilter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LocationsRepositoryTest {
     lateinit var repo: LocationsRepository
 

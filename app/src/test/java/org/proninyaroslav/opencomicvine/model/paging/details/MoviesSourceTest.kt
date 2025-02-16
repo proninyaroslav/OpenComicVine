@@ -20,7 +20,6 @@ import org.proninyaroslav.opencomicvine.model.repo.MoviesRepository
 import org.proninyaroslav.opencomicvine.model.repo.FavoriteFetchResult
 import org.proninyaroslav.opencomicvine.model.repo.FavoritesRepository
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class MoviesSourceTest {
     lateinit var source: MoviesSource
 
