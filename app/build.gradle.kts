@@ -124,7 +124,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
 
     // Android Material View
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
 
     // Compose Core
     implementation(platform("androidx.compose:compose-bom:2025.02.00"))
