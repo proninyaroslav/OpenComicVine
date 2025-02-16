@@ -153,7 +153,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Paging 3.0
-    implementation("androidx.paging:paging-compose:3.2.1")
+    implementation("androidx.paging:paging-compose:3.3.6")
     implementation("androidx.room:room-paging:$roomVersion")
 
     // Hilt
