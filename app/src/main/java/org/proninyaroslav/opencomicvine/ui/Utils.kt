@@ -186,7 +186,6 @@ fun Bitmap.CompressFormat.getMimeType(): String = when (this) {
     else -> "image/webp"
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> PagerState.visibilityWrapper(
     page: Int,

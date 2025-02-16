@@ -69,7 +69,6 @@ data class VolumeOtherInfoState(
     val objects: Flow<PagingData<VolumeObjectItem>>,
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VolumeOtherInfo(
     state: VolumeOtherInfoState?,

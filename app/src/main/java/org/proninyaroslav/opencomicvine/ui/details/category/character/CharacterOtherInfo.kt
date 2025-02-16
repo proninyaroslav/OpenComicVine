@@ -74,7 +74,6 @@ data class CharacterOtherInfoState(
 
 private val IssueCardWidth = 150.dp
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CharacterOtherInfo(
     state: CharacterOtherInfoState?,

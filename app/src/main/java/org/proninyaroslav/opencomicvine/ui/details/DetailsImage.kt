@@ -76,7 +76,6 @@ fun DetailsImage(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsImage(
     modifier: Modifier = Modifier,

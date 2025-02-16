@@ -619,7 +619,7 @@ private fun InfoTag(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SearchItemCardImpl(
     modifier: Modifier = Modifier,

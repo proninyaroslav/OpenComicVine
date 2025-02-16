@@ -68,7 +68,6 @@ data class IssueOtherInfoState(
     val storyArcs: Flow<PagingData<StoryArcItem>>,
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun IssueOtherInfo(
     state: IssueOtherInfoState?,

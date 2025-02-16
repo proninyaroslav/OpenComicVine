@@ -50,7 +50,6 @@ data class DetailsPagerTab(
     @StringRes val text: Int,
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailsPagerCard(
     modifier: Modifier = Modifier,
@@ -117,7 +116,6 @@ fun DetailsPagerCard(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 private fun PreviewDetailsPagerCard() {

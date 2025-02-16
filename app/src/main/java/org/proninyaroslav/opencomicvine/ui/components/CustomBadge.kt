@@ -33,7 +33,6 @@ import org.proninyaroslav.opencomicvine.ui.theme.OpenComicVineTheme
 
 val DefaultCustomBadgeSize = 16.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomBadge(
     modifier: Modifier = Modifier,

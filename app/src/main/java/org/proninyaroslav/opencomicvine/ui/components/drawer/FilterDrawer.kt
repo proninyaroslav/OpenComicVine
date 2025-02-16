@@ -300,7 +300,6 @@ fun FilterSectionHeader(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterSelectableChipItem(
     modifier: Modifier = Modifier,
@@ -324,7 +323,6 @@ fun FilterSelectableChipItem(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterElevatedSelectableChipItem(
     modifier: Modifier = Modifier,
@@ -351,7 +349,6 @@ fun FilterElevatedSelectableChipItem(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectableChipItemIcon(
     modifier: Modifier = Modifier,
