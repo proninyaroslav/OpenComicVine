@@ -358,7 +358,10 @@ private fun PreviewAuthForm_Error() {
     }
 }
 
-@Preview(name = "Expanded width", device = Devices.TABLET)
+@Preview(
+    name = "Expanded width",
+    device = "spec:width=1280dp,height=800dp,dpi=480"
+)
 @Composable
 private fun PreviewAuthPage_ExpandedWidth() {
     OpenComicVineTheme {
