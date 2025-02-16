@@ -150,7 +150,7 @@ dependencies {
 
     // Navigation Compose
     implementation("androidx.navigation:navigation-compose:$navVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Paging 3.0
     implementation("androidx.paging:paging-compose:3.2.1")
