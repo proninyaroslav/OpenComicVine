@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "org.proninyaroslav.opencomicvine"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "org.proninyaroslav.opencomicvine"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 5
         versionName = "1.1.2"
 
@@ -118,8 +118,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // AndroidX Core
-    //noinspection GradleDependency // Upgrades requires upgrading TargetAPI
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -139,8 +138,7 @@ dependencies {
     // Fallback import for components that aren"t in Material 3
     implementation("androidx.compose.material:material")
 
-    //noinspection GradleDependency // Upgrades requires upgrading TargetAPI
-    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.activity:activity-compose:1.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
