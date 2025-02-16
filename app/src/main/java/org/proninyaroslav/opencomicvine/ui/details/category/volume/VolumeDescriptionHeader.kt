@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.details.category.volume
 
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -109,7 +110,8 @@ private fun PreviewVolumeDescriptionHeader_Loading() {
 
 @Preview(
     name = "Loading with expanded width",
-    device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"
+    uiMode = UI_MODE_TYPE_NORMAL,
+    device = "spec:width=1280dp,height=800dp,dpi=480"
 )
 @Composable
 private fun PreviewVolumeDescriptionHeader_LoadingWithExpandedWidth() {

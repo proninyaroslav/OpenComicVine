@@ -19,6 +19,7 @@
 
 package org.proninyaroslav.opencomicvine.ui.details
 
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
@@ -81,7 +82,8 @@ private fun PreviewDetailsPlaceholderText_Loading() {
 
 @Preview(
     name = "Expanded width",
-    device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"
+    uiMode = UI_MODE_TYPE_NORMAL,
+    device = "spec:width=1280dp,height=800dp,dpi=480"
 )
 @Composable
 private fun PreviewDetailsPlaceholderText_ExpandedWidth() {
@@ -96,7 +98,8 @@ private fun PreviewDetailsPlaceholderText_ExpandedWidth() {
 
 @Preview(
     name = "Loading with expanded width",
-    device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"
+    uiMode = UI_MODE_TYPE_NORMAL,
+    device = "spec:width=1280dp,height=800dp,dpi=480"
 )
 @Composable
 private fun PreviewDetailsPlaceholderText_LoadingWithExpandedWidth() {

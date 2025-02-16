@@ -20,6 +20,7 @@
 package org.proninyaroslav.opencomicvine.ui.details
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -193,7 +194,8 @@ private fun PreviewComicVineBannerTopBar_VeryLongName() {
 
 @Preview(
     name = "Loading and expanded width",
-    device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480"
+    uiMode = UI_MODE_TYPE_NORMAL,
+    device = "spec:width=1280dp,height=800dp,dpi=480"
 )
 @Composable
 private fun PreviewComicVineBannerTopBar_LoadingAndExpandedWidth() {
