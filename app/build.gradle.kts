@@ -117,10 +117,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // AndroidX Core
+    //noinspection GradleDependency // Upgrades requires upgrading TargetAPI
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
 
     // Android Material View
     implementation("com.google.android.material:material:1.11.0")
