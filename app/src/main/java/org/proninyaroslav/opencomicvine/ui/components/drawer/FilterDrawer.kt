@@ -149,7 +149,7 @@ fun FilterPermanentDrawer(
                 drawerContent()
                 item { ApplyButtonSpacer() }
             }
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxHeight()
                     .sizeIn(maxWidth = DividerDefaults.Thickness)

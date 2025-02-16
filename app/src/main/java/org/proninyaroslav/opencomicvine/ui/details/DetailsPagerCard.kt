@@ -107,7 +107,7 @@ fun DetailsPagerCard(
                 )
             }
         }
-        Divider()
+        HorizontalDivider()
         HorizontalPager(
             state = pagerState,
             pageContent = pages,

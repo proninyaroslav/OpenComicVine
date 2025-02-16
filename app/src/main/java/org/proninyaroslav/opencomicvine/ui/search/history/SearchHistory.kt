@@ -129,7 +129,7 @@ private fun LazyItemScope.HistoryItem(
         },
         modifier = modifier
             .clickable(onClick = onClick)
-            .animateItemPlacement(),
+            .animateItem(),
     )
 }
 
