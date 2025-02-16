@@ -306,7 +306,7 @@ private fun Modifier.revealSwipeable(
     val maxFactor =
         if (RevealDirection.StartToEnd in directions) SwipeableDefaults.StandardResistanceFactor else SwipeableDefaults.StiffResistanceFactor
 
-    Modifier.swipeable(
+    this.swipeable(
         state = state,
         anchors = anchors,
         thresholds = thresholds,
