@@ -19,7 +19,6 @@
 
 package org.proninyaroslav.opencomicvine.ui.details.category.issue
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
