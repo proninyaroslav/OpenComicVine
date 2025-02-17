@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Yaroslav Pronin <proninyaroslav@mail.ru>
+ * Copyright (C) 2023-2025 Yaroslav Pronin <proninyaroslav@mail.ru>
  *
  * This file is part of OpenComicVine.
  *
@@ -22,7 +22,9 @@ package org.proninyaroslav.opencomicvine.ui.components.chip
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +47,7 @@ fun OpenContentChip(
     modifier: Modifier = Modifier,
 ) {
     val direction = LocalLayoutDirection.current
+    val color = LocalContentColor.current;
     CompositionLocalProvider(LocalLayoutDirection provides direction.inverse()) {
         SuggestionChip(
             label = {
@@ -64,6 +67,14 @@ fun OpenContentChip(
                     contentDescription = stringResource(R.string.open),
                 )
             },
+            border = SuggestionChipDefaults.suggestionChipBorder(
+                enabled = true,
+                borderColor = color.copy(alpha = 0.5f),
+            ),
+            colors = SuggestionChipDefaults.suggestionChipColors(
+                labelColor = color,
+                iconContentColor = color,
+            ),
             onClick = onClick,
             modifier = modifier,
         )
