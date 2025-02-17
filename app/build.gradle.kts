@@ -112,7 +112,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ui.test.junit4)
-
+   
     // Debug
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
@@ -175,7 +175,6 @@ dependencies {
 
     // Accompanist
     implementation(libs.accompanist.webview)
-    implementation(libs.accompanist.systemuicontroller)
 
     // Moshi
     implementation(libs.moshi)

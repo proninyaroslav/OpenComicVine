@@ -23,15 +23,17 @@ import android.app.UiModeManager
 import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.*
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.color.ColorContrast.isContrastAvailable
-import com.google.android.material.internal.EdgeToEdgeUtils
 
 private val LightColors = lightColorScheme(
     primary = primaryLight,
@@ -261,10 +263,6 @@ private val HighContrastDarkColors = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
-@Suppress("Unused", "UnusedReceiverParameter")
-val ColorScheme.systemBarsColor: Color
-    get() = Color.Transparent
-
 @Composable
 fun selectSchemeForContrast(isDark: Boolean): ColorScheme {
     val context = LocalContext.current
@@ -296,9 +294,6 @@ fun OpenComicVineTheme(
     dynamicColor: Boolean = !LocalInspectionMode.current,
     content: @Composable () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = !darkTheme
-
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
@@ -306,13 +301,6 @@ fun OpenComicVineTheme(
         }
 
         else -> selectSchemeForContrast(darkTheme)
-    }
-
-    LaunchedEffect(systemUiController, useDarkIcons, colorScheme) {
-        systemUiController.setSystemBarsColor(
-            color = colorScheme.systemBarsColor,
-            darkIcons = useDarkIcons
-        )
     }
 
     MaterialTheme(

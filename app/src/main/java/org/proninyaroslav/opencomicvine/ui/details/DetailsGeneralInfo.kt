@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Yaroslav Pronin <proninyaroslav@mail.ru>
+ * Copyright (C) 2023-2025 Yaroslav Pronin <proninyaroslav@mail.ru>
  *
  * This file is part of OpenComicVine.
  *
@@ -60,8 +60,8 @@ fun DetailsGeneralInfo(
     DetailsExpandableCard(
         title = stringResource(R.string.details_general_information),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+            contentColor = MaterialTheme.colorScheme.onSurface,
         ),
         expanded = expanded,
         onHeaderClick = { expanded = !expanded },
@@ -122,10 +122,10 @@ private fun Item(
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val (containerColor, contentColor) = if (index.isOdd()) {
-        colorScheme.run { secondaryContainer to onSecondaryContainer }
+        colorScheme.run { surfaceContainer to onSurface }
     } else {
         colorScheme.run {
-            primaryContainer.copy(alpha = 0.25f) to onSecondaryContainer
+            surfaceContainerHighest to onSurface
         }
     }
 

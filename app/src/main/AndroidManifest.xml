@@ -20,6 +20,7 @@
         tools:targetApi="35">
         <activity
             android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true"
             android:theme="@style/Theme.OpenComicVine.SplashScreen">
             <intent-filter>
@@ -40,12 +41,15 @@
         </activity>
         <activity
             android:name=".ui.image_viewer.ImageViewerActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".ui.auth.AuthActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".ui.crash_report.CrashReportActivity"
+            android:windowSoftInputMode="adjustResize"
             android:excludeFromRecents="true"
             android:exported="false"
             android:finishOnTaskLaunch="true"
