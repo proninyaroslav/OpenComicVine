@@ -2,11 +2,11 @@ import org.jetbrains.kotlin.konan.file.File
 import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -103,99 +103,99 @@ dependencies {
     val hiltVersion: String by project
 
     // Testing
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("io.mockk:mockk:1.13.14")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
-    testImplementation("androidx.room:room-testing:$roomVersion")
-    testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.8")
-
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.kotest.assertions.core)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ui.test.junit4)
+   
     // Debug
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
     // AndroidX Core
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.core.splashscreen)
+    implementation(libs.appcompat)
 
     // Android Material View
-    implementation("com.google.android.material:material:1.12.0")
+    implementation(libs.material)
 
     // Compose Core
-    implementation(platform("androidx.compose:compose-bom:2025.02.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.ui:ui-util")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.ui.util)
+    implementation(libs.material3)
+    implementation(libs.material3.window.size)
+    implementation(libs.androidx.ui.tooling.preview)
     // Fallback import for components that aren"t in Material 3
-    implementation("androidx.compose.material:material")
+    implementation(libs.androidx.material)
 
-    implementation("androidx.activity:activity-compose:1.10.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // Room
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     // Navigation Compose
-    implementation("androidx.navigation:navigation-compose:$navVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Paging 3.0
-    implementation("androidx.paging:paging-compose:3.3.6")
-    implementation("androidx.room:room-paging:$roomVersion")
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.room.paging)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    ksp("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.coil.compose)
 
     // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.2")
+    implementation(libs.androidx.datastore.preferences)
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
+    implementation(libs.accompanist.webview)
 
     // Moshi
-    implementation("com.squareup.moshi:moshi:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
+    implementation(libs.moshi)
+    implementation(libs.moshi.adapters)
+    ksp(libs.moshi.kotlin.codegen)
 
     // moshi-sealed
     // TODO: https://github.com/ZacSweers/MoshiX/issues/530
     //noinspection GradleDependency
-    implementation("dev.zacsweers.moshix:moshi-sealed-runtime:$moshiSealedVersion")
+    implementation(libs.moshi.sealed.runtime)
     //noinspection GradleDependency
-    ksp("dev.zacsweers.moshix:moshi-sealed-codegen:$moshiSealedVersion")
+    ksp(libs.moshi.sealed.codegen)
 
     // ACRA
-    implementation("ch.acra:acra-mail:$acraVersion")
-    implementation("ch.acra:acra-dialog:$acraVersion")
+    implementation(libs.acra.mail)
+    implementation(libs.acra.dialog)
 
     // Other
-    implementation("com.github.skydoves:sandwich:$sandwichVersion")
-    implementation("com.github.skydoves:sandwich-retrofit:$sandwichVersion")
-    implementation("com.github.SmartToolFactory:Compose-Image:1.2.2")
-    implementation("com.github.alorma:compose-settings-ui-m3:1.0.3")
-    implementation("io.github.fornewid:placeholder-material3:1.0.1")
+    implementation(libs.sandwich)
+    implementation(libs.sandwich.retrofit)
+    implementation(libs.compose.image)
+    implementation(libs.compose.settings.ui.m3)
+    implementation(libs.placeholder.material3)
 }
