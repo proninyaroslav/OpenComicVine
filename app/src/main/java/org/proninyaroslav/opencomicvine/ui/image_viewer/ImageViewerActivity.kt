@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2024 Yaroslav Pronin <proninyaroslav@mail.ru>
+ * Copyright (C) 2023-2025 Yaroslav Pronin <proninyaroslav@mail.ru>
  *
  * This file is part of OpenComicVine.
  *
