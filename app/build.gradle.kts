@@ -105,7 +105,7 @@ dependencies {
     // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.13.14")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
     testImplementation("androidx.room:room-testing:$roomVersion")
     testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
@@ -175,7 +175,6 @@ dependencies {
 
     // Accompanist
     implementation("com.google.accompanist:accompanist-webview:$accompanistVersion")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
 
     // Moshi
     implementation("com.squareup.moshi:moshi:$moshiVersion")

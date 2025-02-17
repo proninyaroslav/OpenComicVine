@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Yaroslav Pronin <proninyaroslav@mail.ru>
+ * Copyright (C) 2023-2024 Yaroslav Pronin <proninyaroslav@mail.ru>
  *
  * This file is part of OpenComicVine.
  *
@@ -23,6 +23,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -47,7 +48,7 @@ class ImageViewerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
 
         setContent {
             val snackbarState = remember { SnackbarHostState() }

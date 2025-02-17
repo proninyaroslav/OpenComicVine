@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Yaroslav Pronin <proninyaroslav@mail.ru>
+ * Copyright (C) 2023-2024 Yaroslav Pronin <proninyaroslav@mail.ru>
  *
  * This file is part of OpenComicVine.
  *
@@ -21,6 +21,7 @@ package org.proninyaroslav.opencomicvine.ui.crash_report
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -28,7 +29,6 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
 import org.acra.ReportField
 import org.acra.dialog.CrashReportDialogHelper
@@ -42,7 +42,7 @@ class CrashReportActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
 
         helper = CrashReportDialogHelper(this, intent)
 
