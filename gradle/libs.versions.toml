@@ -1,53 +1,53 @@
 [versions]
-pluginAndroid = "8.8.1"
-pluginLibrary = "8.8.1"
-pluginKotlin = "2.1.10"
-pluginKotlinCompose = "2.1.10"
-pluginKsp = "2.1.10-1.0.30"
+pluginAndroid = "8.12.0"
+pluginLibrary = "8.12.0"
+pluginKotlin = "2.2.0"
+pluginKotlinCompose = "2.2.0"
+pluginKsp = "2.2.0-2.0.2"
 
-coreKtx = "1.15.0"
-lifecycle = "2.8.7"
-appcompat = "1.7.0"
+coreKtx = "1.16.0"
+lifecycle = "2.9.2"
+appcompat = "1.7.1"
 material = "1.12.0"
-composeBom = "2025.02.00"
+composeBom = "2025.07.00"
 pagingCompose = "3.3.6"
-activityCompose = "1.10.0"
+activityCompose = "1.10.1"
 coreSplashscreen = "1.0.1"
-navigationCompose = "2.8.7"
+navigationCompose = "2.9.3"
 hiltNavigationCompose = "1.2.0"
 
-room = "2.6.1"
-datastorePreferences = "1.1.2"
+room = "2.7.2"
+datastorePreferences = "1.1.7"
 
 moshi = "1.15.2"
-moshiSealed = "0.23.0"
+moshiSealed = "0.31.0"
 
-retrofit = "2.11.0"
-okhttp = "5.0.0-alpha.12"
+retrofit = "3.0.0"
+okhttp = "5.1.0"
 
-hilt = "2.54"
+hilt = "2.57"
 
-placeholderMaterial3 = "1.0.1"
+placeholderMaterial3 = "2.0.0"
 composeSettingsUiM3 = "1.0.3"
 
 composeImage = "1.2.2"
 coilCompose = "2.7.0"
 
-sandwich = "2.0.9"
+sandwich = "2.1.2"
 
-accompanist = "0.34.0"
+accompanist = "0.36.0"
 
 acra = "5.12.0"
 
 
 junit = "4.13.2"
-mockk = "1.13.14"
-uiTestJunit4 = "1.7.8"
-espressoCore = "3.6.1"
-junitVersion = "1.2.1"
-kotestAssertionsCore = "5.8.0"
-hiltAndroidTesting = "2.54"
-kotlinxCoroutinesTest = "1.7.3"
+mockk = "1.14.5"
+uiTestJunit4 = "1.8.3"
+espressoCore = "3.7.0"
+junitVersion = "1.3.0"
+kotestAssertionsCore = "5.9.1"
+hiltAndroidTesting = "2.57"
+kotlinxCoroutinesTest = "1.10.2"
 
 
 [libraries]
