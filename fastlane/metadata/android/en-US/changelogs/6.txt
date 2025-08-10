@@ -1,0 +1,3 @@
+- Android 15 support
+- Contrast theme support
+- Other fixes and improvements

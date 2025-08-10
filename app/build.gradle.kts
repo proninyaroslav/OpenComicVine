@@ -17,8 +17,8 @@ android {
         applicationId = "org.proninyaroslav.opencomicvine"
         minSdk = 21
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.1.2"
+        versionCode = 6
+        versionName = "1.1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -74,7 +74,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     packaging {
@@ -91,17 +91,6 @@ ksp {
 }
 
 dependencies {
-    val navVersion: String by project
-    val roomVersion: String by project
-    val retrofitVersion: String by project
-    val okhttpVersion: String by project
-    val moshiVersion: String by project
-    val moshiSealedVersion: String by project
-    val accompanistVersion: String by project
-    val acraVersion: String by project
-    val sandwichVersion: String by project
-    val hiltVersion: String by project
-
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
