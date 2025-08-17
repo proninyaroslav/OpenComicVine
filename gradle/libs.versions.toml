@@ -1,5 +1,5 @@
 [versions]
-pluginAndroid = "8.12.0"
+pluginAndroid = "8.11.1"
 pluginLibrary = "8.12.0"
 pluginKotlin = "2.2.0"
 pluginKotlinCompose = "2.2.0"
