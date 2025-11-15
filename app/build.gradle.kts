@@ -11,11 +11,11 @@ plugins {
 
 android {
     namespace = "org.proninyaroslav.opencomicvine"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "org.proninyaroslav.opencomicvine"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         versionCode = 6
         versionName = "1.1.3"
@@ -101,7 +101,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ui.test.junit4)
-   
+
     // Debug
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
