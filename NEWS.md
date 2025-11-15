@@ -1,3 +1,14 @@
+### Version 1.1.4 (2025-11-15)
+
+* Fixed a crash on startup
+* Android 6.0 is minimal supported version
+
+### Version 1.1.3 (2025-08-17)
+
+* Android 15 support
+* Contrast theme support
+* Other fixes and improvements
+
 ### Version 1.1.2 (2024-01-17)
 
 Fixed crash if Roman numerals are used in an issue.

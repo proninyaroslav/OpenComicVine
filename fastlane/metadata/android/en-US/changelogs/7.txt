@@ -1,0 +1,2 @@
+- Fixed a crash on startup
+- Android 6.0 is minimal supported version
