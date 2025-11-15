@@ -17,8 +17,8 @@ android {
         applicationId = "org.proninyaroslav.opencomicvine"
         minSdk = 23
         targetSdk = 35
-        versionCode = 6
-        versionName = "1.1.3"
+        versionCode = 7
+        versionName = "1.1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -71,10 +71,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     packaging {
@@ -178,10 +174,7 @@ dependencies {
     ksp(libs.moshi.kotlin.codegen)
 
     // moshi-sealed
-    // TODO: https://github.com/ZacSweers/MoshiX/issues/530
-    //noinspection GradleDependency
     implementation(libs.moshi.sealed.runtime)
-    //noinspection GradleDependency
     ksp(libs.moshi.sealed.codegen)
 
     // ACRA
