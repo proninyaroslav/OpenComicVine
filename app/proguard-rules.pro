@@ -24,11 +24,5 @@
 
 # --- Moshi sealed:type support ---
 -keep class **JsonAdapter { *; }
--keepattributes RuntimeVisibleAnnotations
-
-# Keep sealed hierarchy types (Poko + sealed:type)
--if interface * extends kotlin.sealed.SealedInterface
--keep class <1> { *; }
-
--if abstract class * extends kotlin.sealed.SealedClass
--keep class <1> { *; }
+-keep @com.squareup.moshi.JsonClass class * { *; }
+-keepattributes *Annotation*,Signature
